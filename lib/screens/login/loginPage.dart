@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import '../../firebase_options.dart';
 import '../counsellor/counsellorHomePage.dart';
 import '../user/userHomePage.dart';
 import 'registerPage.dart';
@@ -26,16 +27,12 @@ class _LoginDemoState extends State<LoginDemo> {
   final _passwordController = TextEditingController();
   var islogin = false;
 
-  Future<FirebaseApp> _initializeFirebase() async {
-    FirebaseApp firebaseApp = await Firebase.initializeApp();
-    return firebaseApp;
-  }
+
 
   static Future<User?> loginUsingEmailPassword(
       {required String email,
         required String password,
         required BuildContext context}) async {
-    log("Done");
     FirebaseAuth auth = FirebaseAuth.instance;
     User? user;
     try {
@@ -77,7 +74,7 @@ class _LoginDemoState extends State<LoginDemo> {
       //   elevation: 0,
       // ),
       body: FutureBuilder(
-          future: Firebase.initializeApp(),
+        future: Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
               var children2 = [
@@ -164,11 +161,11 @@ class _LoginDemoState extends State<LoginDemo> {
                             if (user != null && _selectedRole[1]) {
                               Navigator.of(context).push(MaterialPageRoute(
                                   builder: (context) =>
-                                      const userHomePage()));
+                                       userHomePage(user: user)));
                             } else if (user != null && _selectedRole[0]) {
                               Navigator.of(context).push(MaterialPageRoute(
                                   builder: (context) =>
-                                  const counsellorHomePage()));
+                                      counsellorHomePage(user: user)));
                             } else {
                               Fluttertoast.showToast(
                                 msg: "Invalid email or password", // message

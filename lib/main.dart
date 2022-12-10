@@ -2,11 +2,13 @@
 import 'package:counselling_cell_application/screens/login/registerPage.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'firebase_options.dart';
 import 'screens/counsellor/counsellorHomePage.dart';
 import 'screens/user/userHomePage.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   runApp(const MyApp());
 }
 

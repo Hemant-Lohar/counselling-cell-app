@@ -1,15 +1,20 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../login/loginPage.dart';
 
 class userHomePage extends StatefulWidget {
+  final User user;
   const userHomePage({
     super.key,
+    required this.user,
   });
   @override
-  _userHomePageState createState() => _userHomePageState();
+  _userHomePageState createState() => _userHomePageState(this.user);
 }
 class _userHomePageState extends State<userHomePage> {
-  _userHomePageState();
+  User user;
+  late String username= user.email.toString();
+  _userHomePageState(this.user);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,8 +36,8 @@ class _userHomePageState extends State<userHomePage> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const Text("Welcome!\nThis is Your Homepage!",
-                  style: TextStyle(
+               Text("Welcome $username !\nThis is Your Homepage.",
+                  style:const  TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
                       fontSize: 30)),
@@ -52,14 +57,14 @@ class _userHomePageState extends State<userHomePage> {
           // Important: Remove any padding from the ListView.
           padding: EdgeInsets.zero,
           children: [
-            const DrawerHeader(
-              decoration: BoxDecoration(
+            DrawerHeader(
+              decoration: const BoxDecoration(
                 color: Colors.white,
               ),
               child: Text(
-                "User_Name",
+                username,
                 textAlign: TextAlign.justify,
-                style: TextStyle(color: Colors.black, fontSize: 20),
+                style: const TextStyle(color: Colors.black, fontSize: 20),
               ),
             ),
             ListTile(

@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 
@@ -6,15 +7,22 @@ import '../login/loginPage.dart';
 
 
 class counsellorHomePage extends StatefulWidget {
+  final User user;
   const counsellorHomePage({
     super.key,
+    required this.user,
   });
   @override
-  _counsellorHomePage createState() => _counsellorHomePage();
+  _counsellorHomePageState createState() => _counsellorHomePageState(this.user);
 }
 
-class _counsellorHomePage extends State<counsellorHomePage> {
-  _counsellorHomePage();
+class _counsellorHomePageState extends State<counsellorHomePage> {
+  User user;
+  late String username= user.email.toString();
+  _counsellorHomePageState(this.user);
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,8 +44,8 @@ class _counsellorHomePage extends State<counsellorHomePage> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const Text("Welcome counsellor!\nThis is Your Homepage!",
-                  style: TextStyle(
+               Text("Welcome $username !\nThis is Your Homepage.",
+                  style: const TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
                       fontSize: 30)),
@@ -56,14 +64,14 @@ class _counsellorHomePage extends State<counsellorHomePage> {
           // Important: Remove any padding from the ListView.
           padding: EdgeInsets.zero,
           children: [
-            const DrawerHeader(
-              decoration: BoxDecoration(
+            DrawerHeader(
+              decoration: const BoxDecoration(
                 color: Colors.white,
               ),
               child: Text(
-                "Counsellor_Name",
+                username,
                 textAlign: TextAlign.justify,
-                style: TextStyle(
+                style: const TextStyle(
                     color: Colors.black,
                     fontSize: 20
                 ),
