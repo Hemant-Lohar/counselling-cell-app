@@ -1,4 +1,5 @@
 import 'package:counselling_cell_application/mainPage.dart';
+import 'package:counselling_cell_application/screens/login/registerPage.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -12,10 +13,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MainPage(),
+      home: const Register(),
     );
   }
 }
