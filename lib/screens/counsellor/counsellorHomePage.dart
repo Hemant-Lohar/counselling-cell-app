@@ -1,22 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:camera/camera.dart';
+
 import '../login/loginPage.dart';
 
-class userHomePage extends StatefulWidget {
-  const userHomePage({
+
+
+class counsellorHomePage extends StatefulWidget {
+  const counsellorHomePage({
     super.key,
   });
   @override
-  _userHomePageState createState() => _userHomePageState();
+  _counsellorHomePage createState() => _counsellorHomePage();
 }
-class _userHomePageState extends State<userHomePage> {
-  _userHomePageState();
+
+class _counsellorHomePage extends State<counsellorHomePage> {
+  _counsellorHomePage();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text(
-          "Homepage for user",
+          "Homepage for counsellor",
           style: TextStyle(
             color: Colors.black,
           ),
@@ -31,15 +36,14 @@ class _userHomePageState extends State<userHomePage> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const Text("Welcome!\nThis is Your Homepage!",
+              const Text("Welcome counsellor!\nThis is Your Homepage!",
                   style: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
                       fontSize: 30)),
-              ElevatedButton(
-                  onPressed: () {
+              ElevatedButton(onPressed: (){
 
-                  }, child: const Text("Video calling demo")),
+              }, child: const Text("Video calling demo")),
             ],
           ),
         ),
@@ -57,13 +61,16 @@ class _userHomePageState extends State<userHomePage> {
                 color: Colors.white,
               ),
               child: Text(
-                "User_Name",
+                "Counsellor_Name",
                 textAlign: TextAlign.justify,
-                style: TextStyle(color: Colors.black, fontSize: 20),
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 20
+                ),
               ),
             ),
             ListTile(
-              title: const Text('Sessions'),
+              title: const Text('Reports'),
               onTap: () {
                 // Update the state of the app
                 // ...
@@ -72,7 +79,7 @@ class _userHomePageState extends State<userHomePage> {
               },
             ),
             ListTile(
-              title: const Text('Recommendation'),
+              title: const Text('Events'),
               onTap: () {
                 // Update the state of the app
                 // ...
@@ -81,7 +88,7 @@ class _userHomePageState extends State<userHomePage> {
               },
             ),
             ListTile(
-              title: const Text('Prescriptions'),
+              title: const Text('Users'),
               onTap: () {
                 // Update the state of the app
                 // ...
@@ -99,8 +106,10 @@ class _userHomePageState extends State<userHomePage> {
                 );
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const LoginDemo()),
+                  MaterialPageRoute(
+                      builder: (context) => const LoginDemo()),
                 );
+
               },
             ),
           ],

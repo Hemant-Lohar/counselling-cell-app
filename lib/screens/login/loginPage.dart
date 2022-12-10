@@ -4,14 +4,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
+import '../counsellor/counsellorHomePage.dart';
+import '../user/userHomePage.dart';
 import 'registerPage.dart';
 
 const List<Widget> role = <Widget>[Text('Counsellor'), Text('User')];
 final List<bool> _selectedRole = <bool>[true, false];
 
-// var _usernameController = TextEditingController();
-// var _passwordController = TextEditingController();
+
 class LoginDemo extends StatefulWidget {
   const LoginDemo({
     super.key,
@@ -35,6 +35,7 @@ class _LoginDemoState extends State<LoginDemo> {
       {required String email,
         required String password,
         required BuildContext context}) async {
+    log("Done");
     FirebaseAuth auth = FirebaseAuth.instance;
     User? user;
     try {
@@ -76,7 +77,7 @@ class _LoginDemoState extends State<LoginDemo> {
       //   elevation: 0,
       // ),
       body: FutureBuilder(
-          future: _initializeFirebase(),
+          future: Firebase.initializeApp(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
               var children2 = [
@@ -97,7 +98,7 @@ class _LoginDemoState extends State<LoginDemo> {
                         ],
                       ),
                       image: DecorationImage(
-                          image: AssetImage('assets/images/logo.png'),
+                          image: AssetImage('assets/logo.png'),
                           fit: BoxFit.fitWidth,
                           alignment: Alignment.bottomLeft)),
                 ),
@@ -154,27 +155,28 @@ class _LoginDemoState extends State<LoginDemo> {
                         const SizedBox(height: 40),
                         ElevatedButton(
                           onPressed: () async {
-                            // User? user = await loginUsingEmailPassword(
-                            //     email: _emailController.text,
-                            //     password: _passwordController.text,
-                            //     context: context);
-                            // log(user.toString());
-                            // if (user != null && _selectedRole[1]) {
-                            //   Navigator.of(context).push(MaterialPageRoute(
-                            //       builder: (context) =>
-                            //           HomePage(user: user.email.toString())));
-                            // } else if (user != null && _selectedRole[0]) {
-                            //   Navigator.of(context).push(MaterialPageRoute(
-                            //       builder: (context) =>
-                            //       const counsellorHomePage()));
-                            // } else {
-                            //   Fluttertoast.showToast(
-                            //     msg: "Invalid email or password", // message
-                            //     toastLength: Toast.LENGTH_SHORT, // length
-                            //     gravity: ToastGravity.CENTER,
-                            //     timeInSecForIosWeb: 1, // location// duration
-                            //   );
-                            // }
+
+                            User? user = await loginUsingEmailPassword(
+                                email: _emailController.text,
+                                password: _passwordController.text,
+                                context: context);
+                            log(user.toString());
+                            if (user != null && _selectedRole[1]) {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) =>
+                                      const userHomePage()));
+                            } else if (user != null && _selectedRole[0]) {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) =>
+                                  const counsellorHomePage()));
+                            } else {
+                              Fluttertoast.showToast(
+                                msg: "Invalid email or password", // message
+                                toastLength: Toast.LENGTH_SHORT, // length
+                                gravity: ToastGravity.CENTER,
+                                timeInSecForIosWeb: 1, // location// duration
+                              );
+                            }
                           },
                           style: ElevatedButton.styleFrom(
                             primary: Colors.black,
