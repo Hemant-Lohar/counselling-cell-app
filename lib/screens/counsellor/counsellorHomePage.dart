@@ -1,8 +1,10 @@
+import 'package:counselling_cell_application/screens/counsellor/addUser.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 
 import '../login/loginPage.dart';
+import 'userList.dart';
 
 
 
@@ -39,7 +41,7 @@ class _counsellorHomePageState extends State<counsellorHomePage> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(36.0),
-        child: Center(
+        child: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -49,9 +51,19 @@ class _counsellorHomePageState extends State<counsellorHomePage> {
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
                       fontSize: 30)),
+              const SizedBox(
+                height: 30,
+              ),
               ElevatedButton(onPressed: (){
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const AddUser()),
+                );
 
-              }, child: const Text("Video calling demo")),
+              }, child: const Text("Add new user",style:TextStyle(
+                fontSize: 20,
+              ),)),
             ],
           ),
         ),
@@ -102,7 +114,11 @@ class _counsellorHomePageState extends State<counsellorHomePage> {
                 // ...
                 // Then close the drawer
 
-                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const UserList()),
+                );
               },
             ),
             ListTile(
