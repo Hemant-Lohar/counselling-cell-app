@@ -12,27 +12,24 @@ import 'registerPage.dart';
 const List<Widget> role = <Widget>[Text('Counsellor'), Text('User')];
 final List<bool> _selectedRole = <bool>[true, false];
 
-
-class LoginDemo extends StatefulWidget {
-  const LoginDemo({
+class LoginPage extends StatefulWidget {
+  const LoginPage({
     super.key,
   });
 
   @override
-  _LoginDemoState createState() => _LoginDemoState();
+  _LoginPageState createState() => _LoginPageState();
 }
 
-class _LoginDemoState extends State<LoginDemo> {
+class _LoginPageState extends State<LoginPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   var islogin = false;
 
-
-
   static Future<User?> loginUsingEmailPassword(
       {required String email,
-        required String password,
-        required BuildContext context}) async {
+      required String password,
+      required BuildContext context}) async {
     FirebaseAuth auth = FirebaseAuth.instance;
     User? user;
     try {
@@ -52,7 +49,7 @@ class _LoginDemoState extends State<LoginDemo> {
     return user;
   }
 
-  _LoginDemoState();
+  _LoginPageState();
   @override
   void dispose() {
     _emailController.dispose();
@@ -63,18 +60,9 @@ class _LoginDemoState extends State<LoginDemo> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      // appBar: AppBar(
-      //   title: const Text(
-      //     "Login",
-      //     style: TextStyle(
-      //       color: Colors.black,
-      //     ),
-      //   ),
-      //   backgroundColor: Colors.transparent,
-      //   elevation: 0,
-      // ),
       body: FutureBuilder(
-        future: Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform),
+          future: Firebase.initializeApp(
+              options: DefaultFirebaseOptions.currentPlatform),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
               var children2 = [
@@ -115,7 +103,7 @@ class _LoginDemoState extends State<LoginDemo> {
                             });
                           },
                           borderRadius:
-                          const BorderRadius.all(Radius.circular(22)),
+                              const BorderRadius.all(Radius.circular(22)),
                           borderColor: Colors.black,
                           selectedBorderColor: Colors.black,
                           selectedColor: Colors.white,
@@ -152,7 +140,6 @@ class _LoginDemoState extends State<LoginDemo> {
                         const SizedBox(height: 40),
                         ElevatedButton(
                           onPressed: () async {
-
                             User? user = await loginUsingEmailPassword(
                                 email: _emailController.text,
                                 password: _passwordController.text,
@@ -161,11 +148,11 @@ class _LoginDemoState extends State<LoginDemo> {
                             if (user != null && _selectedRole[1]) {
                               Navigator.of(context).push(MaterialPageRoute(
                                   builder: (context) =>
-                                       userHomePage(user: user)));
+                                      userHomePage(user: user)));
                             } else if (user != null && _selectedRole[0]) {
                               Navigator.of(context).push(MaterialPageRoute(
                                   builder: (context) =>
-                                      counsellorHomePage(user: user)));
+                                      CounsellorHomePage()));
                             } else {
                               Fluttertoast.showToast(
                                 msg: "Invalid email or password", // message
