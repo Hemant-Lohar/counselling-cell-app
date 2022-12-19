@@ -5,7 +5,6 @@ import 'package:flutter/foundation.dart';
 class UserModal extends ChangeNotifier {
   String username = "";
   String useremail = "";
-  String userpassword = "";
   String userdepartment ="";
   String userclass = "";
   String userdivision = "";
@@ -21,21 +20,21 @@ class UserModal extends ChangeNotifier {
     activeIndex = index;
     notifyListeners();
   }
-  saveUsername(String name) {
-    username = name;
-    notifyListeners();
-  }
-  saveuserage(String age) {
-    userage = age;
-    notifyListeners();
-  }
-  savegender(String gender) {
-    usergender = gender;
-    notifyListeners();
-  }
-  savemobile(String mobile) {
-    usermobile = mobile;
-    notifyListeners();
-  }
+  // saveUsername(String name) {
+  //   username = name;
+  //   notifyListeners();
+  // }
+  // saveuserage(String age) {
+  //   userage = age;
+  //   notifyListeners();
+  // }
+  // savegender(String gender) {
+  //   usergender = gender;
+  //   notifyListeners();
+  // }
+  // savemobile(String mobile) {
+  //   usermobile = mobile;
+  //   notifyListeners();
+  // }
  
 }
