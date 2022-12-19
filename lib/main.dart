@@ -1,13 +1,17 @@
+
+import 'package:counselling_cell_application/screens/counsellor/counsellorPage.dart';
+import 'package:counselling_cell_application/screens/login/loginPage.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+
 import 'firebase_options.dart';
-import 'screens/counsellor/counsellorHomePage.dart';
-import 'screens/login/registerPage.dart';
-import 'screens/user/userHomePage.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
@@ -22,8 +26,25 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const Register(),
+      home: const MainPage(),
     );
   }
 }
 
+class MainPage extends StatelessWidget {
+  const MainPage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) => Scaffold(
+        body: StreamBuilder<User?>(
+          stream: FirebaseAuth.instance.authStateChanges(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return const CounsellorPage();
+            } else {
+              return const LoginPage();
+            }
+          },
+        ),
+      );
+}
