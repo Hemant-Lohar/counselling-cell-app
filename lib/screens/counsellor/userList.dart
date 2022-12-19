@@ -13,10 +13,6 @@ class _UserListState extends State<UserList> {
   Widget build(BuildContext context) {
     return Scaffold(
         resizeToAvoidBottomInset: false,
-        appBar: AppBar(
-        title: const Text("User List"),
-    backgroundColor: Colors.blue,
-    ),
       body: Container(
         padding: const EdgeInsets.all(10),
         height: MediaQuery.of(context).size.height,
@@ -24,13 +20,6 @@ class _UserListState extends State<UserList> {
         color: Colors.white,
         child: Column(
           children: [
-            // const SizedBox(
-            //   child: Text("User List",style: TextStyle(
-            //       color: Colors.black,
-            //       fontSize: 20,
-            //       fontWeight: FontWeight.bold
-            //   ),),
-            // ),
             StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance.collection('users').snapshots(),
               builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -47,7 +36,7 @@ class _UserListState extends State<UserList> {
                       itemBuilder: (context, index) {
                         return Container(
                           margin: const EdgeInsets.all(10),
-                          padding: EdgeInsets.only(left: 10),
+                          padding: const EdgeInsets.only(left: 10),
                           decoration: BoxDecoration(
                             color: Colors.blue,
                             borderRadius: BorderRadius.circular(10),
@@ -61,7 +50,7 @@ class _UserListState extends State<UserList> {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Text(
-                                    docs[index]['fname'].toString(),
+                                    docs[index]['name'].toString(),
                                     style: const TextStyle(
                                       fontSize: 20,
                                     ),

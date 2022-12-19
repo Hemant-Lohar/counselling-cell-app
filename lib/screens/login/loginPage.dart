@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:counselling_cell_application/screens/counsellor/counsellorPage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -152,7 +153,7 @@ class _LoginPageState extends State<LoginPage> {
                             } else if (user != null && _selectedRole[0]) {
                               Navigator.of(context).push(MaterialPageRoute(
                                   builder: (context) =>
-                                      CounsellorHomePage()));
+                                      CounsellorPage()));
                             } else {
                               Fluttertoast.showToast(
                                 msg: "Invalid email or password", // message
@@ -163,7 +164,7 @@ class _LoginPageState extends State<LoginPage> {
                             }
                           },
                           style: ElevatedButton.styleFrom(
-                            primary: Colors.black,
+                            backgroundColor: Colors.black,
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 40, vertical: 16),
                             shape: const StadiumBorder(),
@@ -214,5 +215,17 @@ class _LoginPageState extends State<LoginPage> {
             );
           }),
     );
+  }
+}
+
+
+Future Logout() async {
+  // showDialog(context: context, barrierDismissible: false,
+  // builder: (context) => const Center(child: CircularProgressIndicator()));
+
+  try {
+    await FirebaseAuth.instance.signOut();
+  } on FirebaseAuthException catch (e) {
+    print(e);
   }
 }

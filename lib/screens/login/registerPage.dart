@@ -146,7 +146,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                 }
               },
               style: ElevatedButton.styleFrom(
-                primary: Colors.black,
+                backgroundColor: Colors.black,
                 padding:
                     const EdgeInsets.symmetric(horizontal: 40, vertical: 16),
                 shape: const StadiumBorder(),
@@ -294,6 +294,7 @@ class _UserDetailsState extends State<UserDetails> {
             ),
             TextFormField(
               controller: _passwordController,
+              obscureText: true,
               decoration: const InputDecoration(
                 labelText: "Password",
               ),
@@ -301,6 +302,7 @@ class _UserDetailsState extends State<UserDetails> {
             ),
             TextFormField(
               controller: _confirmPasswordController,
+              obscureText: true,
               decoration: const InputDecoration(
                 labelText: "Confirm Password",
               ),
@@ -315,7 +317,7 @@ class _UserDetailsState extends State<UserDetails> {
                 modal.changeIndex(modal.activeIndex - 1);
               },
               style: ElevatedButton.styleFrom(
-                primary: Colors.black,
+                backgroundColor: Colors.black,
                 padding:
                     const EdgeInsets.symmetric(horizontal: 40, vertical: 16),
                 shape: const StadiumBorder(),
@@ -345,15 +347,21 @@ class _UserDetailsState extends State<UserDetails> {
                       department: modal.userdepartment,
                       division: modal.userdivision);
 
-                  await signUp(_useremailController.text, _passwordController.text)
+                  await signUp(
+                          _useremailController.text, _passwordController.text)
                       .then((value) => {createUser(user)})
-                      .then((value) => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const LoginPage()),
-                          ))
-                      .then((value) =>
-                          {Provider.of<UserModal>(context).dispose()});
+                      .then((value) => {
+                            Navigator.popUntil(
+                              context,
+                              ModalRoute.withName('/'),
+                            ),
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const LoginPage()),
+                            )
+                          })
+                      .then((value) => Navigator.pop(context, UserModal));
                 }
               },
               style: ElevatedButton.styleFrom(
@@ -410,9 +418,9 @@ Future signUp(String email, String password) async {
 
   try {
     await FirebaseAuth.instance.createUserWithEmailAndPassword(
-    email: email,
-    password: password,
-  );
+      email: email,
+      password: password,
+    );
   } on FirebaseAuthException catch (e) {
     print(e);
   }
