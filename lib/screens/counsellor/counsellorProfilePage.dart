@@ -28,7 +28,7 @@ class _CounsellorProfileState extends State<CounsellorProfile> {
               children: [
                 const Center(
                   child: CircleAvatar(
-                    backgroundColor: Colors.black,
+                    backgroundColor: Colors.black26,
                     radius: 60,
                   ),
                 ),
@@ -38,21 +38,12 @@ class _CounsellorProfileState extends State<CounsellorProfile> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Text('Name: $name',
+                      Text('Email: $name',
                           style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               color: Colors.black,
                               fontSize: 16)),
-                      Text('Name: $name',
-                          style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
-                              fontSize: 16)),
-                      Text('Name: $name',
-                          style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
-                              fontSize: 16)),
+                      
                       const SizedBox(
                         height: 40,
                       ),
