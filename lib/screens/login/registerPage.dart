@@ -326,12 +326,11 @@ class _UserDetailsState extends State<UserDetails> {
               height: 40,
             ),
             ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
                 if (formKey.currentState?.validate() ?? false) {
                   //next
                   // modal.changeIndex(modal.activeIndex + 1);
                   modal.useremail = _useremailController.text;
-                  modal.userpassword = _passwordController.text;
 
                   Firebase.initializeApp(
                       options: DefaultFirebaseOptions.currentPlatform);
@@ -346,7 +345,7 @@ class _UserDetailsState extends State<UserDetails> {
                       department: modal.userdepartment,
                       division: modal.userdivision);
 
-                  signUp(modal.username, modal.userpassword)
+                  await signUp(_useremailController.text, _passwordController.text)
                       .then((value) => {createUser(user)})
                       .then((value) => Navigator.push(
                             context,
@@ -358,7 +357,7 @@ class _UserDetailsState extends State<UserDetails> {
                 }
               },
               style: ElevatedButton.styleFrom(
-                primary: Colors.black,
+                backgroundColor: Colors.black,
                 padding:
                     const EdgeInsets.symmetric(horizontal: 40, vertical: 16),
                 shape: const StadiumBorder(),
@@ -409,14 +408,14 @@ Future signUp(String email, String password) async {
   // showDialog(context: context, barrierDismissible: false,
   // builder: (context) => const Center(child: CircularProgressIndicator()));
 
-  // try {
+  try {
     await FirebaseAuth.instance.createUserWithEmailAndPassword(
-    email: email.trim(),
-    password: password.trim(),
+    email: email,
+    password: password,
   );
-  // } on FirebaseAuthException catch (e) {
-//     print(e);
-//   }
+  } on FirebaseAuthException catch (e) {
+    print(e);
+  }
 }
 
 Future createUser(MyUser user) async {
