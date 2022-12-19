@@ -1,6 +1,6 @@
-import 'package:counselling_cell_application/screens/counsellor/CdataClass.dart';
 import 'package:counselling_cell_application/screens/counsellor/counsellorHomePage.dart';
 import 'package:counselling_cell_application/screens/counsellor/counsellorProfilePage.dart';
+import 'package:counselling_cell_application/screens/counsellor/session.dart';
 import 'package:counselling_cell_application/screens/counsellor/userList.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -19,59 +19,66 @@ class _CounsellorPageState extends State<CounsellorPage> {
   final screens = [
     const CounsellorHomePage(),
     const UserList(),
-    const Center(child: Text('Profile', style: TextStyle(fontSize: 40)))
+    const Session()
   ];
 
   @override
   Widget build(BuildContext context) {
     final username = FirebaseAuth.instance.currentUser!.email!;
     String name = username.substring(0, username.indexOf('@'));
-    return ChangeNotifierProvider( create: ((context) => CdataClass()),
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text('Hi, $name'),
-          actions: <Widget>[
-            InkWell(
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const CounsellorProfile()));
-                },
-                child: const Padding(
-                  padding: EdgeInsets.all(10),
-                  child: CircleAvatar(
-                    backgroundColor: Colors.white,
-                    child: Text('H'),
-                  ),
-                ))
-          ],
+    String initial = username[0].toUpperCase();
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          'Hi, $name',
+          style: const TextStyle(color: Colors.black),
         ),
-        body: screens[currentIndex],
-        bottomNavigationBar: BottomNavigationBar(
-            backgroundColor: Colors.blue,
-            selectedItemColor: Colors.white,
-            showUnselectedLabels: false,
-            currentIndex: currentIndex,
-            onTap: (index) => setState(() => currentIndex = index),
-            items: const [
-              BottomNavigationBarItem(
-                icon: Icon(Icons.home),
-                label: 'Home',
-                backgroundColor: Colors.blue,
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.group),
-                label: 'Users',
-                backgroundColor: Colors.blue,
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.person),
-                label: 'Profile',
-                backgroundColor: Colors.blue,
-              ),
-            ]),
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        actions: <Widget>[
+          InkWell(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const CounsellorProfile()));
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(10),
+                child: CircleAvatar(
+                  backgroundColor: Color.fromARGB(255, 51, 51, 51),
+                  child: Text(
+                    initial,
+                    style: const TextStyle(color: Colors.white),
+                  ),
+                ),
+              ))
+        ],
       ),
+      body: screens[currentIndex],
+      bottomNavigationBar: BottomNavigationBar(
+          backgroundColor: Colors.blue,
+          selectedItemColor: Colors.white,
+          showUnselectedLabels: false,
+          currentIndex: currentIndex,
+          onTap: (index) => setState(() => currentIndex = index),
+          items: const [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              label: 'Home',
+              backgroundColor: Colors.blue,
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.group),
+              label: 'Users',
+              backgroundColor: Colors.blue,
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.class_),
+              label: 'Sessions',
+              backgroundColor: Colors.blue,
+            ),
+          ]),
     );
   }
 }
