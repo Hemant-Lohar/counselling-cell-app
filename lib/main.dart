@@ -2,6 +2,7 @@
 import 'package:counselling_cell_application/DataClass.dart';
 import 'package:counselling_cell_application/screens/counsellor/counsellorPage.dart';
 import 'package:counselling_cell_application/screens/login/loginPage.dart';
+import 'package:counselling_cell_application/screens/user/userPage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -45,7 +46,7 @@ class MainPage extends StatelessWidget {
           stream: FirebaseAuth.instance.authStateChanges(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              return const CounsellorPage();
+              return const UserPage();
             } else {
               return const LoginPage();
             }
