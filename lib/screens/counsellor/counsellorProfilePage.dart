@@ -28,7 +28,7 @@ class _CounsellorProfileState extends State<CounsellorProfile> {
               children: [
                 const Center(
                   child: CircleAvatar(
-                    backgroundColor: Colors.black26,
+                    backgroundColor: Colors.black,
                     radius: 60,
                   ),
                 ),
@@ -43,7 +43,7 @@ class _CounsellorProfileState extends State<CounsellorProfile> {
                               fontWeight: FontWeight.bold,
                               color: Colors.black,
                               fontSize: 16)),
-                      
+
                       const SizedBox(
                         height: 40,
                       ),
@@ -62,7 +62,7 @@ class _CounsellorProfileState extends State<CounsellorProfile> {
                               });
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.black,
+                          //backgroundColor: Colors.black,
                           padding: const EdgeInsets.symmetric(
                               horizontal: 40, vertical: 16),
                           shape: const StadiumBorder(),

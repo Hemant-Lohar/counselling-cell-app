@@ -146,7 +146,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                 }
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.black,
+                // backgroundColor: Colors.black,
                 padding:
                     const EdgeInsets.symmetric(horizontal: 40, vertical: 16),
                 shape: const StadiumBorder(),
@@ -317,7 +317,7 @@ class _UserDetailsState extends State<UserDetails> {
                 modal.changeIndex(modal.activeIndex - 1);
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.black,
+                // backgroundColor: Colors.black,
                 padding:
                     const EdgeInsets.symmetric(horizontal: 40, vertical: 16),
                 shape: const StadiumBorder(),
@@ -365,7 +365,7 @@ class _UserDetailsState extends State<UserDetails> {
                 }
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.black,
+                shadowColor: Colors.black,
                 padding:
                     const EdgeInsets.symmetric(horizontal: 40, vertical: 16),
                 shape: const StadiumBorder(),
