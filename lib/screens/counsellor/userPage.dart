@@ -8,42 +8,38 @@ import 'addUser.dart';
 import 'counsellorHomePage.dart';
 import 'counsellorProfilePage.dart';
 import 'viewUser.dart';
-class UserPage extends StatefulWidget {
 
+class UserPage extends StatefulWidget {
   const UserPage({Key? key, required this.id});
   final String id;
-
 
   @override
   State<UserPage> createState() => _UserPageState(this.id);
 }
 
 class _UserPageState extends State<UserPage> {
-
   final String id;
 
   _UserPageState(this.id);
 
-
   int currentIndex = 0;
-
 
   @override
   Widget build(BuildContext context) {
     final screens = [
-      ViewUser(id:id),
+      ViewUser(id: id),
       AddUser(id: id),
       const Session(),
     ];
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'User: $id',
-          style: const TextStyle(color: Colors.black),
-        ),
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-      ),
+      // appBar: AppBar(
+      //   title: Text(
+      //     'User: $id',
+      //     style: const TextStyle(color: Colors.black),
+      //   ),
+      //   elevation: 0,
+      //   backgroundColor: Colors.transparent,
+      // ),
       body: screens[currentIndex],
       bottomNavigationBar: BottomNavigationBar(
           backgroundColor: Colors.blue,
@@ -67,9 +63,7 @@ class _UserPageState extends State<UserPage> {
               label: 'Case History',
               backgroundColor: Colors.blue,
             ),
-          ]
-      ),
-
+          ]),
     );
   }
 }

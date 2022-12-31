@@ -47,7 +47,7 @@ class _CounsellorPageState extends State<CounsellorPage> {
               child: Padding(
                 padding: const EdgeInsets.all(10),
                 child: CircleAvatar(
-                  backgroundColor: Color.fromARGB(255, 51, 51, 51),
+                  backgroundColor: const Color.fromARGB(255, 51, 51, 51),
                   child: Text(
                     initial,
                     style: const TextStyle(color: Colors.white),
