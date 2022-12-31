@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+import 'userPage.dart';
+
 class UserList extends StatefulWidget {
   const UserList({Key? key}) : super(key: key);
 
@@ -41,86 +43,38 @@ class _UserListState extends State<UserList> {
                           return Container(
                             margin: const EdgeInsets.all(10),
                             padding: const EdgeInsets.only(left: 10),
-                            decoration: BoxDecoration(
-                              color: Colors.black12,
-                              borderRadius: BorderRadius.circular(10),
-                              // border: Border.all(color: Colors.black, width: 1)
-                            ),
+                            // decoration: BoxDecoration(
+                            //   color: Colors.indigoAccent,
+                            //   borderRadius: BorderRadius.circular(10),
+                            //   // border: Border.all(color: Colors.black, width: 1)
+                            // ),
                             height: 50,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    const CircleAvatar(
-                                      backgroundColor: Colors.blue,
-                                    ),
-                                    const SizedBox(
-                                      width: 10,
-                                    ),
-                                    Text(
-                                      docs[index]['name'].toString(),
-                                      style: const TextStyle(
-                                        fontSize: 16,
-                                      ),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ],
+                            child: ElevatedButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            UserPage( id: docs[index]['id'].toString(),)),
+                                  );
+                                },
+                                style: ElevatedButton.styleFrom(
+                                 // backgroundColor: Colors.black,
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 0, vertical: 8),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(10.0)),
                                 ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    ElevatedButton(
-                                      onPressed: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  AddUser(id: docs[index]['id'].toString())),
-                                        );
-                                      },
-                                      style: ElevatedButton.styleFrom(
-                                       // backgroundColor: Colors.black,
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 0, vertical: 8),
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(10.0)),
-                                      ),
-                                      child: const Icon(Icons.edit),
-                                    ),
-                                    const SizedBox(
-                                      width: 20,
-                                    ),
-                                    ElevatedButton(
-                                      onPressed: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  const ViewUser()),
-                                        );
-                                      },
-                                      style: ElevatedButton.styleFrom(
-                                        //backgroundColor: Colors.black,
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 8, vertical: 8),
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(10.0)),
-                                      ),
-                                      child: const Text('View'),
-                                    ),
-                                    const SizedBox(
-                                      width: 8,
-                                    ),
-                                  ],
+                                child:Text(
+                                  docs[index]['name'].toString(),
+                                  style: const TextStyle(
+                                    fontSize: 16,
+
+                                  ),
+                                  textAlign: TextAlign.center,
                                 ),
-                              ],
-                            ),
+                              ),
                           );
                         });
                   }

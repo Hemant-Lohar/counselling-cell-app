@@ -203,11 +203,4 @@ class _AddUserState extends State<AddUser> {
     return true;
   }
 }
-// _referralController
-// _familydetailsController
-// _reasonreferralController
-// _complaintController
-// _historyController
-// _familyhistoryController
-// _observationController
-// _reccomendationController
+

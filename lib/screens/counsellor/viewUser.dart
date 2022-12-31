@@ -5,13 +5,17 @@ import 'package:flutter/material.dart';
 import 'counsellorHomePage.dart';
 
 class ViewUser extends StatefulWidget {
-  const ViewUser({super.key});
-
+  ViewUser({super.key,required this.id});
+  final String id;
   @override
-  State<ViewUser> createState() => _ViewUserState();
+  State<ViewUser> createState() => _ViewUserState(this.id);
 }
 
 class _ViewUserState extends State<ViewUser> {
+  String id;
+
+  _ViewUserState(this.id);
+
 
   @override
   Widget build(BuildContext context) {
