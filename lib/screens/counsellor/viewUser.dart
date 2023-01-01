@@ -27,7 +27,9 @@ class _ViewUserState extends State<ViewUser> {
         ),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 40.0),
-          child: ListView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
                 stream: FirebaseFirestore.instance
@@ -48,21 +50,29 @@ class _ViewUserState extends State<ViewUser> {
                     var dept = output['department']; // <-- Your value
                     var clas = output['class']; // <-- Your value
                     var division = output['division'];
+                    var referedby = output['referral'];
+                    var familydetails = output['familydetails'];
+                    var familyhistory = output['familyhistory'];
+                    var reasonreferral = output['reasonreferral'];
+                    var observation = output['observation'];
+                    var reccomendation = output['observation'];
+
                     var initial = name[0].toUpperCase(); // <-- Your value
                     return Center(
                       child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           CircleAvatar(
                             backgroundColor: Colors.black45,
                             radius: 60,
                             child: Text(
                               initial,
-                              style: const TextStyle(color: Colors.white,fontSize: 56),
+                              style: const TextStyle(
+                                  color: Colors.white, fontSize: 56),
                             ),
                           ),
-                          const SizedBox(height:40),
+                          const SizedBox(height: 40),
                           Text('Name: $name',
                               style: const TextStyle(
                                   fontWeight: FontWeight.bold,
@@ -119,6 +129,50 @@ class _ViewUserState extends State<ViewUser> {
                           const SizedBox(
                             height: 10,
                           ),
+                          const Divider(
+                            height: 10,
+                            thickness: 2,
+                            indent: 20,
+                            endIndent: 0,
+                            color: Colors.grey,
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Text('Reffered By: $referedby',
+                              style: const TextStyle(
+                                  color: Colors.black, fontSize: 16)),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Text('Familydetails: $familydetails',
+                              style: const TextStyle(
+                                  color: Colors.black, fontSize: 16)),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Text('Reason for Reffered: $reasonreferral',
+                              style: const TextStyle(
+                                  color: Colors.black, fontSize: 16)),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Text('Family History: $familyhistory',
+                              style: const TextStyle(
+                                  color: Colors.black, fontSize: 16)),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Text('Observation: $observation',
+                              style: const TextStyle(
+                                  color: Colors.black, fontSize: 16)),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Text('Reccomendation: $reccomendation',
+                              style: const TextStyle(
+                                  color: Colors.black, fontSize: 16)),
+                          
                         ],
                       ),
                     );
@@ -132,3 +186,5 @@ class _ViewUserState extends State<ViewUser> {
         ));
   }
 }
+
+
