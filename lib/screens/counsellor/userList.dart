@@ -14,76 +14,110 @@ class UserList extends StatefulWidget {
 }
 
 class _UserListState extends State<UserList> {
+  String name = "";
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body:Container(
-          padding: const EdgeInsets.all(10),
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
-          color: Colors.white,
-          child: Column(
-            children: [
-              StreamBuilder<QuerySnapshot>(
-                stream:
-                    FirebaseFirestore.instance.collection('users').snapshots(),
-                builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  } else {
-                    final docs = snapshot.data!.docs;
-                    return ListView.builder(
-                        scrollDirection: Axis.vertical,
-                        shrinkWrap: true,
-                        itemCount: docs.length,
-                        itemBuilder: (context, index) {
-                          return Container(
-                            margin: const EdgeInsets.all(10),
-                            padding: const EdgeInsets.only(left: 10),
-                            // decoration: BoxDecoration(
-                            //   color: Colors.indigoAccent,
-                            //   borderRadius: BorderRadius.circular(10),
-                            //   // border: Border.all(color: Colors.black, width: 1)
-                            // ),
-                            height: 50,
-                            child: ElevatedButton(
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            UserPage( id: docs[index]['id'].toString(),)),
-                                  );
-                                },
-                                style: ElevatedButton.styleFrom(
-                                 // backgroundColor: Colors.black,
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 0, vertical: 8),
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(10.0)),
-                                ),
-                                child:Text(
-                                  docs[index]['name'].toString(),
-                                  style: const TextStyle(
-                                    fontSize: 16,
-
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                          );
-                        });
-                  }
+        appBar: AppBar(
+            title: Card(
+              child: TextField(
+                decoration: const InputDecoration(
+                    prefixIcon: Icon(Icons.search), hintText: 'Search...'),
+                onChanged: (val) {
+                  setState(() {
+                    name = val;
+                  });
                 },
               ),
-            ],
-          ),
-        ),
+            )),
+        body: StreamBuilder<QuerySnapshot>(
+          stream: FirebaseFirestore.instance.collection('users').snapshots(),
+          builder: (context, snapshots) {
+            return (snapshots.connectionState == ConnectionState.waiting)
+                ? const Center(
+              child: CircularProgressIndicator(),
+            )
+                : ListView.builder(
+                itemCount: snapshots.data!.docs.length,
+                itemBuilder: (context, index) {
+                  var data = snapshots.data!.docs[index].data()
+                  as Map<String, dynamic>;
 
-    );
+                  if (name.isEmpty) {
+                    return ListTile(
+                      title: Text(
+                        data['name'],
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                            color: Colors.black54,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      subtitle: Text(
+                        data['id'],
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                            color: Colors.black54,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      onTap:(){
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  UserPage( id: data['id'].toString(),)),
+                        );
+
+                      } ,
+                      // leading: CircleAvatar(
+                      //   backgroundImage: NetworkImage(data['image']),
+                      // ),
+                    );
+                  }
+                  if (data['name']
+                      .toString()
+                      .toLowerCase()
+                      .startsWith(name.toLowerCase())) {
+                    return ListTile(
+                      title: Text(
+                        data['name'],
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                            color: Colors.black54,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      subtitle: Text(
+                        data['id'],
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                            color: Colors.black54,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      onTap:(){
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  UserPage( id: data['id'].toString(),)),
+                        );
+
+                      } ,
+                      // leading: CircleAvatar(
+                      //   backgroundImage: NetworkImage(data['image']),
+                      // ),
+                    );
+                  }
+                  return Container();
+                });
+          },
+        ));
   }
 }

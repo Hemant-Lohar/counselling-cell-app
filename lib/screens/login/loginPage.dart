@@ -1,12 +1,13 @@
 import 'dart:developer';
 
-import 'package:counselling_cell_application/screens/counsellor/counsellorPage.dart';
-import 'package:counselling_cell_application/screens/user/userPage.dart';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import '../../firebase_options.dart';
+import '../counsellor/counsellorPage.dart';
+import '../user/userPage.dart';
 import 'registerPage.dart';
 
 const List<Widget> role = <Widget>[Text('Counsellor'), Text('User')];
@@ -152,7 +153,7 @@ class _LoginPageState extends State<LoginPage> {
                             } else if (user != null && _selectedRole[0]) {
                               Navigator.of(context).push(MaterialPageRoute(
                                   builder: (context) =>
-                                      CounsellorPage()));
+                                      const CounsellorPage()));
                             } else {
                               Fluttertoast.showToast(
                                 msg: "Invalid email or password", // message
