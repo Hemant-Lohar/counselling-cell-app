@@ -31,7 +31,6 @@ class _ViewUserState extends State<ViewUser> {
               mainAxisAlignment: MainAxisAlignment.start,
               mainAxisSize: MainAxisSize.max,
               textDirection: TextDirection.ltr,
-
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
@@ -61,125 +60,211 @@ class _ViewUserState extends State<ViewUser> {
                       var observation = output['observation'];
                       var reccomendation = output['observation'];
 
-                      var initial = name[0].toUpperCase(); // <-- Your value
-                      return Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            CircleAvatar(
-                              backgroundColor: Colors.black45,
-                              radius: 60,
-                              child: Text(
-                                initial,
-                                style: const TextStyle(
-                                    color: Colors.white, fontSize: 56),
+                      var initial = name[0].toUpperCase();
+                      // print(output.containsValue('referral'));
+                      
+                      if (output.containsKey('referral')) {
+                        return Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              CircleAvatar(
+                                backgroundColor: Colors.black45,
+                                radius: 60,
+                                child: Text(
+                                  initial,
+                                  style: const TextStyle(
+                                      color: Colors.white, fontSize: 56),
+                                ),
                               ),
-                            ),
-                            const SizedBox(height: 40),
-                            Text('Name: $name',
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
-                                    fontSize: 16)),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Text('Age: $age',
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
-                                    fontSize: 16)),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Text('Gender: $gender',
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
-                                    fontSize: 16)),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Text('Department: $dept',
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
-                                    fontSize: 16)),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Text('Class: $clas',
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
-                                    fontSize: 16)),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Text('Division: $division',
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
-                                    fontSize: 16)),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Text('Mobile: $mobile',
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
-                                    fontSize: 16)),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            const Divider(
-                              height: 10,
-                              thickness: 2,
-                              indent: 20,
-                              endIndent: 0,
-                              color: Colors.grey,
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Text('Reffered By: $referedby',
-                                style: const TextStyle(
-                                    color: Colors.black, fontSize: 16)),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Text('Familydetails: $familydetails',
-                                style: const TextStyle(
-                                    color: Colors.black, fontSize: 16)),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Text('Reason for Reffered: $reasonreferral',
-                                style: const TextStyle(
-                                    color: Colors.black, fontSize: 16)),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Text('Family History: $familyhistory',
-                                style: const TextStyle(
-                                    color: Colors.black, fontSize: 16)),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Text('Observation: $observation',
-                                style: const TextStyle(
-                                    color: Colors.black, fontSize: 16)),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Text('Reccomendation: $reccomendation',
-                                style: const TextStyle(
-                                    color: Colors.black, fontSize: 16)),
+                              const SizedBox(height: 40),
+                              Text('Name: $name',
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                      fontSize: 16)),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Text('Age: $age',
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                      fontSize: 16)),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Text('Gender: $gender',
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                      fontSize: 16)),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Text('Department: $dept',
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                      fontSize: 16)),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Text('Class: $clas',
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                      fontSize: 16)),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Text('Division: $division',
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                      fontSize: 16)),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Text('Mobile: $mobile',
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                      fontSize: 16)),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              const Divider(
+                                height: 10,
+                                thickness: 2,
+                                indent: 20,
+                                endIndent: 0,
+                                color: Colors.grey,
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Text('Reffered By: $referedby',
+                                  style: const TextStyle(
+                                      color: Colors.black, fontSize: 16)),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Text('Familydetails: $familydetails',
+                                  style: const TextStyle(
+                                      color: Colors.black, fontSize: 16)),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Text('Reason for Reffered: $reasonreferral',
+                                  style: const TextStyle(
+                                      color: Colors.black, fontSize: 16)),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Text('Family History: $familyhistory',
+                                  style: const TextStyle(
+                                      color: Colors.black, fontSize: 16)),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Text('Observation: $observation',
+                                  style: const TextStyle(
+                                      color: Colors.black, fontSize: 16)),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Text('Reccomendation: $reccomendation',
+                                  style: const TextStyle(
+                                      color: Colors.black, fontSize: 16)),
+                            ],
+                          ),
+                        );
+                      } else {
+                        return Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              CircleAvatar(
+                                backgroundColor: Colors.black45,
+                                radius: 60,
+                                child: Text(
+                                  initial,
+                                  style: const TextStyle(
+                                      color: Colors.white, fontSize: 56),
+                                ),
+                              ),
+                              const SizedBox(height: 40),
+                              Text('Name: $name',
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                      fontSize: 16)),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Text('Age: $age',
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                      fontSize: 16)),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Text('Gender: $gender',
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                      fontSize: 16)),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Text('Department: $dept',
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                      fontSize: 16)),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Text('Class: $clas',
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                      fontSize: 16)),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Text('Division: $division',
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                      fontSize: 16)),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Text('Mobile: $mobile',
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                      fontSize: 16)),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              const Divider(
+                                height: 10,
+                                thickness: 2,
+                                indent: 20,
+                                endIndent: 0,
+                                color: Colors.grey,
+                              ),
+                            ],
+                          ),
+                        );
+                      } // <-- Your value
 
-                          ],
-                        ),
-                      );
                     }
 
                     return const Center(child: CircularProgressIndicator());
@@ -191,5 +276,4 @@ class _ViewUserState extends State<ViewUser> {
         ));
   }
 }
-
 
