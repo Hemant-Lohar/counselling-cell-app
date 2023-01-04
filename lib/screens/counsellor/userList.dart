@@ -22,8 +22,9 @@ class _UserListState extends State<UserList> {
         appBar: AppBar(
             title: Card(
           child: TextField(
+            textAlignVertical: TextAlignVertical.center,
             decoration: const InputDecoration(
-                prefixIcon: Icon(Icons.search), hintText: 'Search...'),
+                prefixIcon: Icon(Icons.search), hintText: 'Search'),
             onChanged: (val) {
               setState(() {
                 name = val;
