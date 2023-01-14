@@ -1,9 +1,10 @@
 import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:counselling_cell_application/screens/counsellor/addSessionWithUser.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:date_time_picker/date_time_picker.dart';
+
+import 'addSession.dart';
+// import 'package:date_time_picker/date_time_picker.dart';
 
 class Session extends StatefulWidget {
   const Session({super.key});
@@ -13,122 +14,141 @@ class Session extends StatefulWidget {
 }
 
 class _SessionState extends State<Session> {
+
+  final String dateTime =
+      "${DateTime.now().day.toString().padLeft(2,"0")}/${DateTime.now().month.toString().padLeft(2,"0")}/${DateTime.now().year}";
+  @override
+  void initState() {
+
+
+    log("Date:$dateTime");
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-          title: const Center(
-        child: Text("Sessions"),
-      )),
-      body: Column(
-        children: [
-          Center(
-            child: ElevatedButton(
-              onPressed: () async {
-                showAlertDialog(context);
-                // final city = <String, String>{
-                //   "name": "Los Angeles",
-                //   "state": "CA",
-                //   "country": "USA"
-                // };
-                // await FirebaseFirestore.instance
-                //     .collection("users")
-                //     .doc("sangram@gmail.com")
-                //     .collection("session")
-                //     .doc("1234")
-                //     .set(city);
-              },
-              style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12), // <-- Radius
-                ),
-              ),
-              child: const Icon(Icons.add),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  showAlertDialog(BuildContext context) async {
-    DateTime dateTime=DateTime.now();
-    TextEditingController _date = TextEditingController();
-    TextEditingController _time = TextEditingController();
-    // show the dialog
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text("Schedule a session"),
-          content: Column(
-            children: [
-              TextField(
-                controller: _date,
-                decoration: const InputDecoration(
-                  icon: Icon(Icons.calendar_month),
-                  labelText: "Select a date",
-                ),
-                onTap: () async {
-                  await showDatePicker(
-                          context: context,
-                          initialDate:dateTime,
-                          firstDate: DateTime.now(),
-                          lastDate: DateTime(2100))
-                      .then((pickedDate) {
-                    if (pickedDate != null) {
-                      setState(() {
-                        _date.text =
-                            "${pickedDate.day}/${pickedDate.month}/${pickedDate.year}";
-                        dateTime=DateTime(pickedDate.year,pickedDate.month,pickedDate.day,dateTime.hour,dateTime.minute);
-                      });
-                    }
-                    return null;
-                  });
-                },
-              ),
-              TextField(
-                controller: _time,
-                decoration: const InputDecoration(
-                  icon: Icon(Icons.access_time),
-                  labelText: "Select Time",
-                ),
-                onTap: () async {
-                  await showTimePicker(
-                    context: context,
-                    initialTime: TimeOfDay.fromDateTime(dateTime),
-
-                  ).then((pickedTime) {
-                    if (pickedTime != null) {
-                      setState(() {
-                        _time.text =
-                            "${pickedTime.hour}:${pickedTime.minute} ";
-                        dateTime=DateTime(dateTime.year,dateTime.month,dateTime.day,pickedTime.hour,pickedTime.minute);
-                      });
-                    }
-                    return null;
-                  });
-                },
-              ),
-
-            ],
-          ),
-          actions: [
-            TextButton(
-              child: const Text("Cancel"),
+        appBar: AppBar(
+            title: Center(
+                child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text("Upcoming Sessions"),
+            IconButton(
+              icon: const Icon(Icons.add_sharp),
               onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-            TextButton(
-              child: const Text("OK"),
-              onPressed: () {
-                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const AddSession()),
+                );
               },
             ),
           ],
-        );
-      },
-    );
+        ))),
+        body: SingleChildScrollView(
+          child: Column(
+              children: [
+            const Text("Today"),
+            StreamBuilder<QuerySnapshot>(
+              stream: FirebaseFirestore.instance
+                  .collection('counsellor')
+                  .doc("counsellor@gmail.com")
+                  .collection("session")
+                  .where("date", isEqualTo: dateTime)
+                  .snapshots(),
+              builder: (context, snapshots) {
+                return (snapshots.connectionState == ConnectionState.waiting)
+                    ? const Center(
+                  child: CircularProgressIndicator(),
+                )
+                    : ListView.builder(
+                  physics: const NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                    itemCount: snapshots.data!.docs.length,
+                    itemBuilder: (context, index) {
+                      var data = snapshots.data!.docs[index].data()
+                      as Map<String, dynamic>;
+                      return ListTile(
+                        title: Text(
+                          "${data["timeStart"]}-${data["timeEnd"]}",
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            color: Colors.black,
+                            fontSize: 20,
+
+                            // fontWeight: FontWeight.bold
+                          ),
+                        ),
+                        subtitle: Text(
+                          data['username'],
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                              color: Colors.black54,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        onTap: () {
+
+                        }
+
+                        // leading: CircleAvatar(
+                        //   backgroundImage: NetworkImage(data['image']),
+                        // ),
+                      );
+                    });
+              },
+            ),
+            const Text("Later On"),
+            StreamBuilder<QuerySnapshot>(
+              stream: FirebaseFirestore.instance
+                  .collection('counsellor')
+                  .doc("counsellor@gmail.com")
+                  .collection("session")
+                  .where("date", isGreaterThan: dateTime)
+                  .snapshots(),
+              builder: (context, snapshots) {
+                return (snapshots.connectionState == ConnectionState.waiting)
+                    ? const Center(
+                  child: CircularProgressIndicator(),
+                )
+                    : ListView.builder(
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: snapshots.data!.docs.length,
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) {
+                      var data = snapshots.data!.docs[index].data()
+                      as Map<String, dynamic>;
+                      return ListTile(
+                        title: Text(
+                          "${data['date']}",
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            color: Colors.black,
+                            fontSize: 20,
+                            // fontWeight: FontWeight.bold
+                          ),
+                        ),
+                        subtitle: Text(
+                          "${data['username']} at ${data["timeStart"]}",
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                              color: Colors.black54,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold),
+                        ),
+
+                        onTap: () {},
+                        // leading: CircleAvatar(
+                        //   backgroundImage: NetworkImage(data['image']),
+                        // ),
+                      );
+                    });
+              },
+            ),
+          ]),
+        ));
   }
 }

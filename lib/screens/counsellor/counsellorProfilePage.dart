@@ -40,7 +40,7 @@ class _CounsellorProfileState extends State<CounsellorProfile> {
                     var data = snapshot.data!.data();
                     var name = data!['name']; // <-- Your value
                     var initial =
-                        name[0].toString().toUpperCase(); // <-- Your value
+                        name[0].toString().toUpperCase(); //
                     return Center(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
