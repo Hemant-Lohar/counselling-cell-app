@@ -113,8 +113,7 @@ class _UserListState extends State<UserList> {
                         //   //   backgroundImage: NetworkImage(data['image']),
                         //   // ),
                         // );
-                      }
-                      if (data['name']
+                      } else if (data['name']
                           .toString()
                           .toLowerCase()
                           .startsWith(name.toLowerCase())) {
@@ -151,7 +150,7 @@ class _UserListState extends State<UserList> {
                             ),
                           ),
                         );
-                      }
+                      } 
                       return Container();
                     });
           },
