@@ -1,9 +1,6 @@
-import 'package:counselling_cell_application/screens/counsellor/addUser.dart';
-import 'package:counselling_cell_application/screens/counsellor/viewUser.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
 import 'userPage.dart';
 
 class UserList extends StatefulWidget {
@@ -152,8 +149,10 @@ class _UserListState extends State<UserList> {
                         );
                       } 
                       return Container();
-                    });
+                    }
+                    );
           },
-        ));
+        )
+    );
   }
 }

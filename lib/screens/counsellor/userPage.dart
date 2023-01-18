@@ -1,5 +1,6 @@
 import 'package:counselling_cell_application/screens/counsellor/session.dart';
 import 'package:counselling_cell_application/screens/counsellor/userList.dart';
+import 'package:counselling_cell_application/screens/counsellor/userSession.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -29,7 +30,7 @@ class _UserPageState extends State<UserPage> {
     final screens = [
       ViewUser(id: id),
       AddUser(id: id),
-      const Session(),
+      UserSession(id: id),
     ];
     return Scaffold(
       // appBar: AppBar(
