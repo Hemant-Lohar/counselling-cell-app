@@ -161,6 +161,7 @@ class _AddUserState extends State<AddUser> {
       String familyhistory,
       String observation,
       String reccomendation) async {
+    DateTime dateTime=DateTime.now();
     await FirebaseFirestore.instance.collection('users').doc(id).update({
       "referral": referral,
       "familydetails": familydetails,
@@ -169,7 +170,8 @@ class _AddUserState extends State<AddUser> {
       "history": history,
       "familyhistory": familyhistory,
       "observation": observation,
-      "reccomendation": reccomendation
+      "reccomendation": reccomendation,
+      "doj": "${dateTime.day}/${dateTime.month}/${dateTime.year}"
     });
   }
 

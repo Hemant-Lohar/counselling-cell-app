@@ -1,4 +1,5 @@
 import 'package:counselling_cell_application/screens/login/loginPage.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -15,7 +16,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Consumer<DataClass>(builder: (context, modal, child) {
-      String name = modal.username;
+      String name = FirebaseAuth.instance.currentUser!.email!;
       return Scaffold(
           appBar: AppBar(
             leading: const BackButton(color: Colors.black),
@@ -30,6 +31,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                   child: CircleAvatar(
                     backgroundColor: Colors.black26,
                     radius: 60,
+
                   ),
                 ),
                 const SizedBox(height: 40),
@@ -50,6 +52,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                       ElevatedButton(
                         onPressed: () {
                           Logout().then((value) => {
+
                                 Navigator.popUntil(
                                   context,
                                   ModalRoute.withName('/'),
