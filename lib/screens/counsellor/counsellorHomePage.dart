@@ -1,9 +1,11 @@
-import 'package:counselling_cell_application/screens/login/loginPage.dart';
+
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
-
+import 'package:firebase_messaging/firebase_messaging.dart';
 class CounsellorHomePage extends StatefulWidget {
   const CounsellorHomePage({Key? key}) : super(key: key);
 
@@ -26,18 +28,13 @@ class _CounsellorHomePageState extends State<CounsellorHomePage> {
                 const SizedBox(
                   height: 30,
                 ),
-                ElevatedButton(onPressed: () {
-                  Navigator.push(
-                    context,
-                    // ignore: prefer_const_constructors
-                    MaterialPageRoute(builder: (context) => LoginPage()),
-                  );
-            }, child: const Text("Logout"))
+                // ElevatedButton(onPressed: () async{
+                //
+                // }, child: const Text("Send"))
               ]),
             )));
   }
 }
-
 
 // import 'package:counselling_cell_application/screens/counsellor/addUser.dart';
 // import 'package:firebase_auth/firebase_auth.dart';
@@ -46,8 +43,6 @@ class _CounsellorHomePageState extends State<CounsellorHomePage> {
 
 // import '../login/loginPage.dart';
 // import 'userList.dart';
-
-
 
 // class counsellorHomePage extends StatefulWidget {
 //   final User user;
@@ -63,8 +58,6 @@ class _CounsellorHomePageState extends State<CounsellorHomePage> {
 //   User user;
 //   late String username= user.email.toString();
 //   _counsellorHomePageState(this.user);
-
-
 
 //   @override
 //   Widget build(BuildContext context) {
@@ -183,4 +176,3 @@ class _CounsellorHomePageState extends State<CounsellorHomePage> {
 //     );
 //   }
 // }
-

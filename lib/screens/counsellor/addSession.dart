@@ -17,9 +17,10 @@ class _AddSessionState extends State<AddSession> {
   final TextEditingController _timeEnd = TextEditingController();
   final TextEditingController _agenda = TextEditingController();
   DateTime dateTime = DateTime.now();
-  final modeList = ["Online", "Offline"];
-  String selectedMode = "Online";
-  var selectedUser;
+  bool selectedMode = true;           // true->online , false->offline
+  String mode="Online";
+  static String selectUser(String option) => option;
+  String  selectedUser="";
   String userid = "";
 
   @override
@@ -123,6 +124,22 @@ class _AddSessionState extends State<AddSession> {
               ),
               const SizedBox(height: 30),
               Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Container(padding: const EdgeInsets.fromLTRB(60.0,10.0,10.0,10.0),child: Text(mode)),
+                    Switch(value: selectedMode, onChanged: (bool value){
+                      setState(() {
+                        selectedMode=value;
+                        mode= value ? "Online" : "Offline";
+                        log(selectedMode.toString());
+                      });
+                    }),
+
+
+
+                  ]
+              ),
+              Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                 const Text("User:  "),
@@ -148,7 +165,7 @@ class _AddSessionState extends State<AddSession> {
                           width: 150,
                           height: 100,
                           child: Autocomplete(
-
+                            displayStringForOption: selectUser,
                             optionsBuilder:
                                 (TextEditingValue textEditingValue) {
                               if (textEditingValue.text == '') {
@@ -159,9 +176,14 @@ class _AddSessionState extends State<AddSession> {
                                     textEditingValue.text.toLowerCase());
                               });
                             },
-                            onSelected: (String User) {
-                              selectedUser = User;
-                              userid = userlist[User].toString();
+                            onSelected: (String user) {
+                              // setState(() {
+                              //   selectedUser = User;
+                              //   userid = userlist[User].toString();
+                              //   log("$selectedUser $userid");
+                              // });
+                              selectedUser=user;
+                              userid = userlist[user].toString();
                               log("$selectedUser $userid");
                             },
                           ),
@@ -186,21 +208,7 @@ class _AddSessionState extends State<AddSession> {
                   },
                 ),
               ]),
-              DropdownButton(
-                value: selectedMode,
-                onChanged: (String? value) {
-                  // This is called when the user selects an item.
-                  setState(() {
-                    selectedMode = value!;
-                  });
-                },
-                items: modeList.map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-              ),
+
               const SizedBox(height: 30),
               SizedBox(
                 width: 350,
@@ -226,7 +234,7 @@ class _AddSessionState extends State<AddSession> {
                           "user": userid,
                           "username": selectedUser,
                           "agenda": _agenda.text,
-                          "mode": selectedMode,
+                          "mode": selectedMode ? "Online" : "Offline",
                         };
                         final dt = DateTime(dateTime.year, dateTime.month,
                                 dateTime.day, dateTime.hour)

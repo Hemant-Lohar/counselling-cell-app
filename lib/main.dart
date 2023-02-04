@@ -1,4 +1,7 @@
 
+import 'dart:developer';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:counselling_cell_application/DataClass.dart';
 import 'package:counselling_cell_application/screens/counsellor/counsellorPage.dart';
 import 'package:counselling_cell_application/screens/login/loginPage.dart';
@@ -15,6 +18,7 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
   runApp(const MyApp());
 }
 
@@ -41,11 +45,12 @@ class MainPage extends StatelessWidget {
   const MainPage({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) => Scaffold(
+  Widget build(BuildContext context) =>Scaffold(
         body: StreamBuilder<User?>(
           stream: FirebaseAuth.instance.authStateChanges(),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
+          builder: (context, snapshot){
+            if (snapshot.hasData){
+
               return const CounsellorPage();
             } else {
               return const LoginPage();
@@ -54,3 +59,4 @@ class MainPage extends StatelessWidget {
         ),
       );
 }
+
