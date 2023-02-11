@@ -44,6 +44,7 @@ dependencies:
   date_time_picker:
   firebase_messaging:
   jitsi_meet_wrapper:
+  html:
 dev_dependencies:
   flutter_test:
     sdk: flutter

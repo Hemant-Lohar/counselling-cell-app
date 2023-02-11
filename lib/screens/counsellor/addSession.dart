@@ -17,10 +17,10 @@ class _AddSessionState extends State<AddSession> {
   final TextEditingController _timeEnd = TextEditingController();
   final TextEditingController _agenda = TextEditingController();
   DateTime dateTime = DateTime.now();
-  bool selectedMode = true;           // true->online , false->offline
-  String mode="Online";
+  bool selectedMode = true; // true->online , false->offline
+  String mode = "Online";
   static String selectUser(String option) => option;
-  String  selectedUser="";
+  String selectedUser = "";
   String userid = "";
 
   @override
@@ -123,25 +123,21 @@ class _AddSessionState extends State<AddSession> {
                 ],
               ),
               const SizedBox(height: 30),
-              Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Container(padding: const EdgeInsets.fromLTRB(60.0,10.0,10.0,10.0),child: Text(mode)),
-                    Switch(value: selectedMode, onChanged: (bool value){
+              Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+                Container(
+                    padding: const EdgeInsets.fromLTRB(60.0, 10.0, 10.0, 10.0),
+                    child: Text(mode)),
+                Switch(
+                    value: selectedMode,
+                    onChanged: (bool value) {
                       setState(() {
-                        selectedMode=value;
-                        mode= value ? "Online" : "Offline";
+                        selectedMode = value;
+                        mode = value ? "Online" : "Offline";
                         log(selectedMode.toString());
                       });
                     }),
-
-
-
-                  ]
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
+              ]),
+              Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                 const Text("User:  "),
                 StreamBuilder<QuerySnapshot>(
                   stream: FirebaseFirestore.instance
@@ -182,7 +178,7 @@ class _AddSessionState extends State<AddSession> {
                               //   userid = userlist[User].toString();
                               //   log("$selectedUser $userid");
                               // });
-                              selectedUser=user;
+                              selectedUser = user;
                               userid = userlist[user].toString();
                               log("$selectedUser $userid");
                             },
@@ -208,7 +204,6 @@ class _AddSessionState extends State<AddSession> {
                   },
                 ),
               ]),
-
               const SizedBox(height: 30),
               SizedBox(
                 width: 350,
@@ -287,27 +282,26 @@ class _AddSessionState extends State<AddSession> {
         .collection('counsellor')
         .doc("counsellor@gmail.com")
         .collection("session")
+        .where("date", isEqualTo: session["date"])
         .get();
     final List<DocumentSnapshot> documents = snapShot.docs;
     for (var doc in documents) {
       // log(doc.id.substring(8,12));
       // log(doc.id.substring(12,16));
-      if (doc["date"] == session["date"]) {
-        if (start > int.parse(doc.id.substring(8, 12)) &&
-            start < int.parse(doc.id.substring(12, 16))) {
-          log("Conflict with starting time");
-          return false;
-        }
-        if (end > int.parse(doc.id.substring(8, 12)) &&
-            end < int.parse(doc.id.substring(12, 16))) {
-          log("Conflict with ending time");
-          return false;
-        }
-        if (start < int.parse(doc.id.substring(8, 12)) &&
-            end > int.parse(doc.id.substring(12, 16))) {
-          log("Schedule overlap");
-          return false;
-        }
+      if (start > int.parse(doc["timeStart"].toString().replaceAll(":","")) &&
+          start < int.parse(doc["timeEnd"].toString().replaceAll(":",""))) {
+        log("Conflict with starting time");
+        return false;
+      }
+      if (end > int.parse(doc["timeStart"].toString().replaceAll(":","")) &&
+          end < int.parse(doc["timeEnd"].toString().replaceAll(":",""))) {
+        log("Conflict with ending time");
+        return false;
+      }
+      if (start < int.parse(doc["timeStart"].toString().replaceAll(":","")) &&
+          end > int.parse(doc["timeEnd"].toString().replaceAll(":",""))) {
+        log("Schedule overlap");
+        return false;
       }
     }
 

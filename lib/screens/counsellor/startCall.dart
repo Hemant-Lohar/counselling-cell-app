@@ -5,7 +5,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'dart:convert';
 import 'package:jitsi_meet_wrapper/jitsi_meet_wrapper.dart';
 import 'dart:io';
-
+import 'dart:html' as html;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 class Call extends StatefulWidget {
@@ -30,9 +30,9 @@ class _CallState extends State<Call> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+      return Scaffold(
         appBar: AppBar(
-          title: const Text('Jitsi Meet Wrapper Test'),
+          title: const Text("Session in Progress"),
           leading: const BackButton(color: Colors.white),
         ),
         body: Container(
@@ -40,6 +40,8 @@ class _CallState extends State<Call> {
           child: buildMeetConfig(),
         ),
       );
+
+
   }
 
   Widget buildMeetConfig() {
@@ -96,7 +98,14 @@ class _CallState extends State<Call> {
             height: 64.0,
             width: double.maxFinite,
             child: ElevatedButton(
-              onPressed: () => _joinMeeting(),
+              onPressed: () {
+                if(kIsWeb){
+                  html.window.open("https://meet.jit.si/CounsellingCell", "Ongoing Session");
+                }
+                else{
+                  _joinMeeting();
+                }
+              },
               style: ButtonStyle(
                 backgroundColor:
                 MaterialStateColor.resolveWith((states) => Colors.blue),
@@ -155,57 +164,63 @@ class _CallState extends State<Call> {
     );
 
     log("JitsiMeetingOptions: $options");
-    await JitsiMeetWrapper.joinMeeting(
-      options: options,
-      listener: JitsiMeetingListener(
-        onOpened: () => log("onOpened"),
-        onConferenceWillJoin: (url) {
-          log("onConferenceWillJoin: url: $url");
-        },
-        onConferenceJoined: (url) {
-          log("onConferenceJoined: url: $url");
-        },
-        onConferenceTerminated: (url, error) {
-          log("onConferenceTerminated: url: $url, error: $error");
-          JitsiMeetWrapper.hangUp();
-        },
-        onAudioMutedChanged: (isMuted) {
-          log("onAudioMutedChanged: isMuted: $isMuted");
-        },
-        onVideoMutedChanged: (isMuted) {
-          log("onVideoMutedChanged: isMuted: $isMuted");
-        },
-        onScreenShareToggled: (participantId, isSharing) {
-          log(
-            "onScreenShareToggled: participantId: $participantId, "
-                "isSharing: $isSharing",
-          );
-        },
-        onParticipantJoined: (email, name, role, participantId) {
-          log(
-            "onParticipantJoined: email: $email, name: $name, role: $role, "
-                "participantId: $participantId",
-          );
-        },
-        onParticipantLeft: (participantId) {
-          log("onParticipantLeft: participantId: $participantId");
-        },
-        onParticipantsInfoRetrieved: (participantsInfo, requestId) {
-          log(
-            "onParticipantsInfoRetrieved: participantsInfo: $participantsInfo, "
-                "requestId: $requestId",
-          );
-        },
-        onChatMessageReceived: (senderId, message, isPrivate) {
-          log(
-            "onChatMessageReceived: senderId: $senderId, message: $message, "
-                "isPrivate: $isPrivate",
-          );
-        },
-        onChatToggled: (isOpen) => log("onChatToggled: isOpen: $isOpen"),
-        onClosed: () => log("onClosed"),
-      ),
-    );
+    try{
+      await JitsiMeetWrapper.joinMeeting(
+        options: options,
+        listener: JitsiMeetingListener(
+          onOpened: () => log("onOpened"),
+          onConferenceWillJoin: (url) {
+            log("onConferenceWillJoin: url: $url");
+          },
+          onConferenceJoined: (url) {
+            log("onConferenceJoined: url: $url");
+          },
+          onConferenceTerminated: (url, error) {
+            log("onConferenceTerminated: url: $url, error: $error");
+            JitsiMeetWrapper.hangUp();
+          },
+          onAudioMutedChanged: (isMuted) {
+            log("onAudioMutedChanged: isMuted: $isMuted");
+          },
+          onVideoMutedChanged: (isMuted) {
+            log("onVideoMutedChanged: isMuted: $isMuted");
+          },
+          onScreenShareToggled: (participantId, isSharing) {
+            log(
+              "onScreenShareToggled: participantId: $participantId, "
+                  "isSharing: $isSharing",
+            );
+          },
+          onParticipantJoined: (email, name, role, participantId) {
+            log(
+              "onParticipantJoined: email: $email, name: $name, role: $role, "
+                  "participantId: $participantId",
+            );
+          },
+          onParticipantLeft: (participantId) {
+            log("onParticipantLeft: participantId: $participantId");
+          },
+          onParticipantsInfoRetrieved: (participantsInfo, requestId) {
+            log(
+              "onParticipantsInfoRetrieved: participantsInfo: $participantsInfo, "
+                  "requestId: $requestId",
+            );
+          },
+          onChatMessageReceived: (senderId, message, isPrivate) {
+            log(
+              "onChatMessageReceived: senderId: $senderId, message: $message, "
+                  "isPrivate: $isPrivate",
+            );
+          },
+          onChatToggled: (isOpen) => log("onChatToggled: isOpen: $isOpen"),
+          onClosed: () => log("onClosed"),
+        ),
+      );
+    }
+    catch(error){
+      log(error.toString());
+    }
+
   }
 
   Widget _buildTextField({
