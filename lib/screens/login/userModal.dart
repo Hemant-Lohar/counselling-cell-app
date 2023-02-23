@@ -10,7 +10,7 @@ class UserModal extends ChangeNotifier {
   String userage = "";
   String usermobile = "";
   String usergender ="";
-  
+  bool assessment=true;
 
   int activeIndex = 0;
   int totalIndex = 3;

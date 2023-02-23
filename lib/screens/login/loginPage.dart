@@ -226,6 +226,6 @@ Future Logout() async {
   try {
     await FirebaseAuth.instance.signOut();
   } on FirebaseAuthException catch (e) {
-    print(e);
+    log(e.toString());
   }
 }

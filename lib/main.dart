@@ -51,7 +51,7 @@ class MainPage extends StatelessWidget {
           builder: (context, snapshot){
             if (snapshot.hasData){
 
-              return const CounsellorPage();
+              return const UserPage();
             } else {
               return const LoginPage();
             }

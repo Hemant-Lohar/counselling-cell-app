@@ -105,7 +105,7 @@ class _AddUserState extends State<AddUser> {
               ),
               TextFormField(
                   controller: _reccomendationController,
-                  decoration: const InputDecoration(hintText: "Recomendations"),
+                  decoration: const InputDecoration(hintText: "Recommendations"),
                   maxLines: null,
                   validator: RequiredValidator(errorText: "Required")),
               const SizedBox(
@@ -152,15 +152,8 @@ class _AddUserState extends State<AddUser> {
     );
   }
 
-  addtofirebase(
-      String referral,
-      String familydetails,
-      String reasonreferral,
-      String complaint,
-      String history,
-      String familyhistory,
-      String observation,
-      String reccomendation) async {
+  addtofirebase(String referral,String familydetails,String reasonreferral,String complaint,
+      String history,String familyhistory,String observation,String reccomendation) async {
     DateTime dateTime=DateTime.now();
     await FirebaseFirestore.instance.collection('users').doc(id).update({
       "referral": referral,
@@ -171,7 +164,8 @@ class _AddUserState extends State<AddUser> {
       "familyhistory": familyhistory,
       "observation": observation,
       "reccomendation": reccomendation,
-      "doj": "${dateTime.day}/${dateTime.month}/${dateTime.year}"
+      "doj": "${dateTime.day}/${dateTime.month}/${dateTime.year}",
+
     });
   }
 

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:counselling_cell_application/screens/login/userModal.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -345,7 +347,9 @@ class _UserDetailsState extends State<UserDetails> {
                       mobile: int.parse(modal.usermobile),
                       uclass: modal.userclass,
                       department: modal.userdepartment,
-                      division: modal.userdivision);
+                      division: modal.userdivision,
+                      assessment: true
+                  );
 
                   await signUp(
                           _useremailController.text, _passwordController.text)
@@ -388,6 +392,7 @@ class MyUser {
   final String uclass;
   final String division;
   final String department;
+  final bool assessment;
 
   MyUser({
     this.id = '',
@@ -398,6 +403,7 @@ class MyUser {
     required this.uclass,
     required this.department,
     required this.division,
+    required this.assessment
   });
 
   Map<String, dynamic> toJson() => {
@@ -408,7 +414,8 @@ class MyUser {
         'mobile': mobile,
         'class': uclass,
         'department': department,
-        'division': division
+        'division': division,
+        'assessment': assessment
       };
 }
 
@@ -422,7 +429,7 @@ Future signUp(String email, String password) async {
       password: password,
     );
   } on FirebaseAuthException catch (e) {
-    print(e);
+    log(e.toString());
   }
 }
 
