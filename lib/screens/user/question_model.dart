@@ -45,6 +45,15 @@ List<Question> getQuestions() {
       Answer("All of the above", 4),
     ],
   ));
+  list.add(Question(
+    "Who is the CEO of Tata sons?",
+    [
+      Answer("Sir Ratan Tata", 1),
+      Answer("Gautam Adano", 2),
+      Answer("Mukesh Ambani", 3),
+      Answer("N Chandrasekaran", 4),
+    ],
+  ));
 
   list.add(Question(
     "Flutter user dart as a language?",

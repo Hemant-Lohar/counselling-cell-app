@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:counselling_cell_application/screens/user/userProfilePage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
+import 'package:camera/camera.dart';
 import 'assesmentPage.dart';
 
 class UserPage extends StatefulWidget {
@@ -27,12 +27,13 @@ class _UserPageState extends State<UserPage> {
           const Text(
               "Welcome User, Take a short assessment to improve your experience"),
           ElevatedButton(
-              onPressed: () {
-
+              onPressed: ()async{
+                final cameraList = await availableCameras();
+                final x = cameraList.last;
                 Navigator.push(
                   context,
                   // ignore: prefer_const_constructors
-                  MaterialPageRoute(builder: (context) => QuizScreen()),
+                  MaterialPageRoute(builder: (context) => QuizScreen(camera : x)),
                 );
               },
               child: const Text("Take Assessment")),

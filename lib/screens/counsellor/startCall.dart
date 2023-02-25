@@ -5,7 +5,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'dart:convert';
 import 'package:jitsi_meet_wrapper/jitsi_meet_wrapper.dart';
 import 'dart:io';
-import 'dart:html' as html;
+import 'package:universal_html/html.dart' as html;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 class Call extends StatefulWidget {

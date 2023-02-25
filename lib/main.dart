@@ -1,17 +1,15 @@
-
 import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:counselling_cell_application/DataClass.dart';
-import 'package:counselling_cell_application/screens/counsellor/counsellorPage.dart';
-import 'package:counselling_cell_application/screens/login/loginPage.dart';
-import 'package:counselling_cell_application/screens/user/userPage.dart';
+import 'DataClass.dart';
+import 'screens/counsellor/counsellorPage.dart';
+import 'screens/user/userPage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'firebase_options.dart';
+import 'screens/login/loginPage.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
