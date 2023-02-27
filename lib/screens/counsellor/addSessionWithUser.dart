@@ -7,7 +7,7 @@ class AddSessionWithUser extends StatefulWidget {
   const AddSessionWithUser({Key? key,required this.user}) : super(key: key);
   final String user;
   @override
-  State<AddSessionWithUser> createState() => _AddSessionWithUserState(this.user);
+  State<AddSessionWithUser> createState() => _AddSessionWithUserState();
 }
 
 class _AddSessionWithUserState extends State<AddSessionWithUser> {
@@ -17,14 +17,13 @@ class _AddSessionWithUserState extends State<AddSessionWithUser> {
   final TextEditingController _timeEnd = TextEditingController();
   final TextEditingController _agenda = TextEditingController();
   DateTime dateTime = DateTime.now();
-  final modeList =["Online","Offline"];
-  String selectedMode="Online";
-  String user;
-  _AddSessionWithUserState(this.user);
+  bool selectedMode=true;
+  String mode = "Online";
+  late String user;
   String username="";
   @override
   void initState(){
-
+    user=widget.user;
     FirebaseFirestore.instance.collection("users").doc(user).get().then((value){
       username=value.data()!["name"];
       log(username);
@@ -63,7 +62,8 @@ class _AddSessionWithUserState extends State<AddSessionWithUser> {
                         .then((pickedDate) {
                       if (pickedDate != null) {
                         setState(() {
-                          _date.text ="${pickedDate.day.toString().padLeft(2,"0")}/${pickedDate.month.toString().padLeft(2,"0")}/${pickedDate.year}";
+                          _date.text =
+                          "${pickedDate.day.toString().padLeft(2,"0")}/${pickedDate.month.toString().padLeft(2,"0")}/${pickedDate.year}";
                           dateTime = DateTime(pickedDate.year, pickedDate.month,
                               pickedDate.day, dateTime.hour, dateTime.minute);
                         });
@@ -130,29 +130,21 @@ class _AddSessionWithUserState extends State<AddSessionWithUser> {
               ),
 
               const SizedBox(height: 30),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Text("User: $user"),
-
-                  DropdownButton(
-                    value: selectedMode,
-                    onChanged: (String? value) {
-                      // This is called when the user selects an item.
-                      setState(() {
-                        selectedMode
-                        = value!;
-                      });
-                    },
-                    items: modeList.map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
-                  ),
-                ],
-              ),
+              Text("User: $user"),
+            Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+              Container(
+                  padding: const EdgeInsets.fromLTRB(60.0, 10.0, 10.0, 10.0),
+                  child: Text(mode)),
+              Switch(
+                  value: selectedMode,
+                  onChanged: (bool value) {
+                    setState(() {
+                      selectedMode = value;
+                      mode = value ? "Online" : "Offline";
+                      log(selectedMode.toString());
+                    });
+                  }),
+            ]),
 
               const SizedBox(height: 30),
               Container(
@@ -178,7 +170,7 @@ class _AddSessionWithUserState extends State<AddSessionWithUser> {
                           "user": user,
                           "username": username,
                           "agenda": _agenda.text,
-                          "mode": selectedMode,
+                          "mode":  selectedMode ? "Online" : "Offline",
                         };
                         final dt = DateTime(dateTime.year,dateTime.month,dateTime.day,dateTime.hour).toString().substring(0,10).replaceAll("-", "");
                         final docId="$dt${_timeStart.text.replaceAll(":", "")}${_timeEnd.text.replaceAll(":", "")}";
@@ -226,26 +218,30 @@ class _AddSessionWithUserState extends State<AddSessionWithUser> {
     final end=int.parse(docId.substring(12,16));
     // log(docId);
     final snapShot = await FirebaseFirestore.instance
-        .collection('counsellor').doc("counsellor@gmail.com").collection("session").get();
+        .collection('counsellor')
+        .doc("counsellor@gmail.com")
+        .collection("session")
+        .where("date", isEqualTo: session["date"])
+        .get();
     final List<DocumentSnapshot> documents = snapShot.docs;
     for (var doc in documents) {
       // log(doc.id.substring(8,12));
       // log(doc.id.substring(12,16));
-      if(doc["date"]==session["date"]){
-        if( start>int.parse(doc.id.substring(8,12)) && start<int.parse(doc.id.substring(12,16))){
-          log("Conflict with starting time");
-          return false;
-        }
-        if( end>int.parse(doc.id.substring(8,12)) && end<int.parse(doc.id.substring(12,16))){
-          log("Conflict with ending time");
-          return false;
-        }
-        if(start<int.parse(doc.id.substring(8,12)) && end>int.parse(doc.id.substring(12,16))){
-          log("Schedule overlap");
-          return false;
-        }
+      if (start > int.parse(doc["timeStart"].toString().replaceAll(":","")) &&
+          start < int.parse(doc["timeEnd"].toString().replaceAll(":",""))) {
+        log("Conflict with starting time");
+        return false;
       }
-
+      if (end > int.parse(doc["timeStart"].toString().replaceAll(":","")) &&
+          end < int.parse(doc["timeEnd"].toString().replaceAll(":",""))) {
+        log("Conflict with ending time");
+        return false;
+      }
+      if (start < int.parse(doc["timeStart"].toString().replaceAll(":","")) &&
+          end > int.parse(doc["timeEnd"].toString().replaceAll(":",""))) {
+        log("Schedule overlap");
+        return false;
+      }
     }
 
     return true;

@@ -42,15 +42,18 @@ class MyApp extends StatelessWidget {
 class MainPage extends StatelessWidget {
   const MainPage({Key? key}) : super(key: key);
 
+
   @override
   Widget build(BuildContext context) =>Scaffold(
         body: StreamBuilder<User?>(
           stream: FirebaseAuth.instance.authStateChanges(),
           builder: (context, snapshot){
-            if (snapshot.hasData){
 
-              return const UserPage();
-            } else {
+            if (snapshot.hasData){
+              return snapshot.data!.email.toString()=="counsellor@gmail.com" ? const CounsellorPage():const UserPage();
+
+            }
+            else{
               return const LoginPage();
             }
           },

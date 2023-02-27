@@ -9,24 +9,20 @@ class UserSession extends StatefulWidget {
   final String id;
 
   @override
-  State<UserSession> createState() => _UserSessionState(this.id);
+  State<UserSession> createState() => _UserSessionState();
 }
 
 class _UserSessionState extends State<UserSession> {
-  final String id;
-  _UserSessionState(this.id);
+  late final String id;
+
   // String username="";
   final String dateTime =
       "${DateTime.now().day.toString().padLeft(2,"0")}/${DateTime.now().month.toString().padLeft(2,"0")}/${DateTime.now().year}";
-  // @override
-  // void initState(){
-  //
-  //   FirebaseFirestore.instance.collection("users").doc(id).get().then((value){
-  //     username=value.data()!["name"];
-  //     log(username);
-  //   });
-  //   super.initState();
-  // }
+  @override
+  void initState(){
+    super.initState();
+    id=widget.id;
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -119,7 +115,7 @@ class _UserSessionState extends State<UserSession> {
                         physics: const NeverScrollableScrollPhysics(),
                         itemCount: snapshots.data!.docs.length,
                         shrinkWrap: true,
-                        itemBuilder: (context, index) {
+                        itemBuilder: (context, index){
                           var data = snapshots.data!.docs[index].data()
                           as Map<String, dynamic>;
                           return ListTile(
