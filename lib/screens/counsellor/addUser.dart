@@ -1,3 +1,4 @@
+import 'package:counselling_cell_application/theme/palette.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -31,8 +32,9 @@ class _AddUserState extends State<AddUser> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        leading: const BackButton(color: Colors.black),
-        backgroundColor: Colors.transparent,
+        title: const Text("Case History", style: TextStyle(fontSize: 16),),
+        leading: const BackButton(color: Colors.white),
+        backgroundColor: Palette.secondary,
         elevation: 0,
       ),
       body: Form(
@@ -44,7 +46,7 @@ class _AddUserState extends State<AddUser> {
             children: [
               TextFormField(
                   controller: _referralController,
-                  decoration: const InputDecoration(hintText: "Refered By"),
+                  decoration: const InputDecoration(hintText: "Refered By", hintStyle: TextStyle(fontSize: 14)),
                   maxLines: null,
                   validator: RequiredValidator(errorText: "Required")),
               const SizedBox(
@@ -52,7 +54,7 @@ class _AddUserState extends State<AddUser> {
               ),
               TextFormField(
                   controller: _familydetailsController,
-                  decoration: const InputDecoration(hintText: "Family Details"),
+                  decoration: const InputDecoration(hintText: "Family Details", hintStyle: TextStyle(fontSize: 14)),
                   maxLines: null,
                   validator: RequiredValidator(errorText: "Required")),
               const SizedBox(
@@ -61,7 +63,7 @@ class _AddUserState extends State<AddUser> {
               TextFormField(
                   controller: _reasonreferralController,
                   decoration:
-                      const InputDecoration(hintText: "Reason for Refered"),
+                      const InputDecoration(hintText: "Reason for Refered", hintStyle: TextStyle(fontSize: 14)),
                   maxLines: null,
                   validator: RequiredValidator(errorText: "Required")),
               const SizedBox(
@@ -70,7 +72,7 @@ class _AddUserState extends State<AddUser> {
               TextFormField(
                   controller: _complaintController,
                   decoration:
-                      const InputDecoration(hintText: "Present Complaints"),
+                      const InputDecoration(hintText: "Present Complaints", hintStyle: TextStyle(fontSize: 14)),
                   maxLines: null,
                   validator: RequiredValidator(errorText: "Required")),
               const SizedBox(
@@ -79,7 +81,7 @@ class _AddUserState extends State<AddUser> {
               TextFormField(
                   controller: _historyController,
                   decoration: const InputDecoration(
-                      hintText: "History for Metal or physical illness"),
+                      hintText: "History for Metal or physical illness", hintStyle: TextStyle(fontSize: 14)),
                   maxLines: null,
                   validator: RequiredValidator(errorText: "Required")),
               const SizedBox(
@@ -88,7 +90,7 @@ class _AddUserState extends State<AddUser> {
               TextFormField(
                   controller: _familyhistoryController,
                   decoration: const InputDecoration(
-                      hintText: "Family history for Mental illness"),
+                      hintText: "Family history for Mental illness", hintStyle: TextStyle(fontSize: 14)),
                   maxLines: null,
                   validator: RequiredValidator(errorText: "Required")),
               const SizedBox(
@@ -97,7 +99,7 @@ class _AddUserState extends State<AddUser> {
               TextFormField(
                   controller: _observationController,
                   decoration: const InputDecoration(
-                      hintText: "Observation during history session"),
+                      hintText: "Observation during history session", hintStyle: TextStyle(fontSize: 14)),
                   maxLines: null,
                   validator: RequiredValidator(errorText: "Required")),
               const SizedBox(
@@ -105,7 +107,7 @@ class _AddUserState extends State<AddUser> {
               ),
               TextFormField(
                   controller: _reccomendationController,
-                  decoration: const InputDecoration(hintText: "Recommendations"),
+                  decoration: const InputDecoration(hintText: "Recommendations", hintStyle: TextStyle(fontSize: 14)),
                   maxLines: null,
                   validator: RequiredValidator(errorText: "Required")),
               const SizedBox(
@@ -140,10 +142,10 @@ class _AddUserState extends State<AddUser> {
                   style: ElevatedButton.styleFrom(
                     //backgroundColor: Colors.black,
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 40, vertical: 16),
+                        horizontal: 20, vertical: 14),
                     shape: const StadiumBorder(),
                   ),
-                  child: const Text("Add Details")),
+                  child: const Text("Add Details" , style: TextStyle(fontSize: 14))),
               const SizedBox(height: 40)
             ],
           ),

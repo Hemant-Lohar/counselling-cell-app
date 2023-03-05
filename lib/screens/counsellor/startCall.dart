@@ -5,7 +5,6 @@ import 'package:permission_handler/permission_handler.dart';
 import 'dart:convert';
 import 'package:jitsi_meet_wrapper/jitsi_meet_wrapper.dart';
 import 'dart:io';
-import 'package:universal_html/html.dart' as html;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 class Call extends StatefulWidget {
@@ -99,12 +98,12 @@ class _CallState extends State<Call> {
             width: double.maxFinite,
             child: ElevatedButton(
               onPressed: () {
-                if(kIsWeb){
-                  html.window.open("https://meet.jit.si/CounsellingCell", "Ongoing Session");
-                }
-                else{
+                // if(kIsWeb){
+                  // html.window.open("https://meet.jit.si/CounsellingCell", "Ongoing Session");
+                // }
+                // else{
                   _joinMeeting();
-                }
+                // }
               },
               style: ButtonStyle(
                 backgroundColor:

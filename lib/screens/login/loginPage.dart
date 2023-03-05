@@ -58,6 +58,7 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
@@ -124,7 +125,7 @@ class _LoginPageState extends State<LoginPage> {
                               hintStyle: TextStyle(color: Colors.grey),
                               enabledBorder: UnderlineInputBorder(
                                   borderSide: BorderSide(color: Colors.grey))),
-                          style: const TextStyle(color: Colors.black),
+                          style: const TextStyle(color: Colors.black, fontSize: 14),
                         ),
                         const SizedBox(height: 20),
                         TextFormField(
@@ -135,7 +136,7 @@ class _LoginPageState extends State<LoginPage> {
                               hintStyle: TextStyle(color: Colors.grey),
                               enabledBorder: UnderlineInputBorder(
                                   borderSide: BorderSide(color: Colors.grey))),
-                          style: const TextStyle(color: Colors.black),
+                          style: const TextStyle(color: Colors.black, fontSize: 14),
                         ),
 
                         const SizedBox(height: 40),
@@ -166,12 +167,12 @@ class _LoginPageState extends State<LoginPage> {
                           style: ElevatedButton.styleFrom(
                           //  backgroundColor: Colors.black,
                             padding: const EdgeInsets.symmetric(
-                                horizontal: 40, vertical: 16),
+                                horizontal: 32, vertical: 10),
                             shape: const StadiumBorder(),
                           ),
                           child: const Text(
                             'Login',
-                            style: TextStyle(color: Colors.white, fontSize: 18),
+                            style: TextStyle(color: Colors.white, fontSize: 16),
                           ),
                         ),
                         const SizedBox(
@@ -191,7 +192,7 @@ class _LoginPageState extends State<LoginPage> {
                             padding: EdgeInsets.all(10.0),
                             child: Text(
                               "Don't have an account? Register here",
-                              style: TextStyle(color: Colors.black),
+                              style: TextStyle(color: Colors.black,fontSize: 12),
                               textAlign: TextAlign.center,
                             ),
                           ),

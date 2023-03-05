@@ -1,6 +1,7 @@
 import 'package:counselling_cell_application/screens/counsellor/session.dart';
 import 'package:counselling_cell_application/screens/counsellor/userList.dart';
 import 'package:counselling_cell_application/screens/counsellor/userSession.dart';
+import 'package:counselling_cell_application/theme/palette.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -43,8 +44,8 @@ class _UserPageState extends State<UserPage> {
       // ),
       body: screens[currentIndex],
       bottomNavigationBar: BottomNavigationBar(
-          backgroundColor: Colors.blue,
-          selectedItemColor: Colors.white,
+          backgroundColor: Colors.white,
+          selectedItemColor: Palette.primary,
           showUnselectedLabels: false,
           currentIndex: currentIndex,
           onTap: (index) => setState(() => currentIndex = index),
@@ -52,17 +53,17 @@ class _UserPageState extends State<UserPage> {
             BottomNavigationBarItem(
               icon: Icon(Icons.account_circle_sharp),
               label: 'Basic Info',
-              backgroundColor: Colors.blue,
+              backgroundColor: Palette.primary,
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.edit),
               label: 'Add Info',
-              backgroundColor: Colors.blue,
+              backgroundColor: Palette.primary,
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.history),
               label: 'Case History',
-              backgroundColor: Colors.blue,
+              backgroundColor: Palette.primary,
             ),
           ]),
     );

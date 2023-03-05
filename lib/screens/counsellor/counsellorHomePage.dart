@@ -1,4 +1,3 @@
-
 import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -6,6 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+
+import '../../theme/Palette.dart';
+import 'counsellorProfilePage.dart';
+
 class CounsellorHomePage extends StatefulWidget {
   const CounsellorHomePage({Key? key}) : super(key: key);
 
@@ -18,13 +21,41 @@ class _CounsellorHomePageState extends State<CounsellorHomePage> {
   Widget build(BuildContext context) {
     final username = FirebaseAuth.instance.currentUser!.email!;
     String name = username.substring(0, username.indexOf('@'));
+    String initial = username[0].toUpperCase();
     return Scaffold(
+        appBar: AppBar(
+          title: Text(
+            'Hi, $name',
+            style: const TextStyle(color: Colors.white, fontSize: 16),
+          ),
+          elevation: 0,
+          backgroundColor: Palette.primary[50],
+          actions: <Widget>[
+            InkWell(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const CounsellorProfile()));
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: CircleAvatar(
+                    backgroundColor: Colors.black,
+                    child: Text(
+                      initial,
+                      style: const TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ))
+          ],
+        ),
         body: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 30),
+            padding: const EdgeInsets.symmetric(horizontal: 16),
             child: SingleChildScrollView(
               child: Column(children: [
                 Text("Welcome $name !\nThis is Your Homepage.",
-                    style: const TextStyle(color: Colors.black, fontSize: 30)),
+                  style: const TextStyle(color: Colors.black, fontSize: 16)),
                 const SizedBox(
                   height: 30,
                 ),
