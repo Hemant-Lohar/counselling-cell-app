@@ -103,6 +103,7 @@ class _LoginPageState extends State<LoginPage> {
                                 _selectedRole[i] = i == index;
                               }
                             });
+                            _emailController.text=_passwordController.text="";
                           },
                           borderRadius:
                               const BorderRadius.all(Radius.circular(22)),
@@ -147,15 +148,15 @@ class _LoginPageState extends State<LoginPage> {
                                 password: _passwordController.text,
                                 context: context);
                             log(user.toString());
-                            if (user != null && _selectedRole[1]) {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) =>
-                                      const UserPage()));
-                            } else if (user != null && _selectedRole[0]) {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) =>
-                                      const CounsellorPage()));
-                            } else {
+                            if (user != null && user.email=="counsellor@gmail.com" && _selectedRole[0]) {
+                              if(!mounted)return;
+                              Navigator.popUntil(context, ModalRoute.withName('/'));
+                              Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => const CounsellorPage()));
+                            }  else if (user != null  && _emailController.text!="counsellor@gmail.com" && _selectedRole[1] ) {
+                              if(!mounted)return;
+                              Navigator.popUntil(context, ModalRoute.withName('/'));
+                              Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => const UserPage()));
+                            }else {
                               Fluttertoast.showToast(
                                 msg: "Invalid email or password", // message
                                 toastLength: Toast.LENGTH_SHORT, // length

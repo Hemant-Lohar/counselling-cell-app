@@ -259,10 +259,10 @@ class _QuizScreenState extends State<QuizScreen> {
             FirebaseFirestore.instance
                 .collection("users")
                 .doc(_username)
-                .update({"assessment": true,"score":_score,"emotion":labels[maxx]});
+                .update({"assessment": false,"score":_score,"emotion":labels[maxx]});
             Navigator.pushAndRemoveUntil(
                 context,
-                MaterialPageRoute(builder: (BuildContext context) => UserPage()),
+                MaterialPageRoute(builder: (BuildContext context) => const UserPage()),
                 ModalRoute.withName('/') // Replace this with your root screen's route name (usually '/')
             );
           },

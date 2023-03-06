@@ -170,10 +170,11 @@ class _SessionState extends State<Session> {
                                       child: const Text("Start"),
                                       onTap: () async {
                                         await Future.delayed(Duration.zero);
+                                        if(!mounted)return;
                                         Navigator.push(
                                             context,
                                             MaterialPageRoute(
-                                                builder: (context) => Call()));
+                                                builder: (context) => Call(id: snapshots.data!.docs[index].id)));
                                       },
                                     ),
                                     PopupMenuItem<String>(

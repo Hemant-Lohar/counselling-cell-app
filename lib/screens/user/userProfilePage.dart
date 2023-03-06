@@ -53,15 +53,11 @@ class _UserProfilePageState extends State<UserProfilePage> {
                         onPressed: () {
                           Logout().then((value) => {
 
-                                Navigator.popUntil(
-                                  context,
-                                  ModalRoute.withName('/'),
-                                ),
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => const LoginPage()),
-                                )
+                          Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(builder: (BuildContext context) => const LoginPage()),
+                          ModalRoute.withName('/') // Replace this with your root screen's route name (usually '/')
+                          ),
                               });
                         },
                         style: ElevatedButton.styleFrom(

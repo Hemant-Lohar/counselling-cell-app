@@ -57,8 +57,6 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   camera:
-  path_provider:
-  path:
   fluttertoast: ^8.0.9
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

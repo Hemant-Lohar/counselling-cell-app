@@ -3,9 +3,13 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
+import 'counsellorPage.dart';
+
 class AddSessionWithUser extends StatefulWidget {
-  const AddSessionWithUser({Key? key, required this.user}) : super(key: key);
+  const AddSessionWithUser({Key? key, required this.user, required this.request})
+      : super(key: key);
   final String user;
+  final String request;
   @override
   State<AddSessionWithUser> createState() => _AddSessionWithUserState();
 }
@@ -18,11 +22,13 @@ class _AddSessionWithUserState extends State<AddSessionWithUser> {
   DateTime dateTime = DateTime.now();
   bool selectedMode = true;
   String mode = "Online";
-  late String user;
+  String user = "";
+  String request = "";
   String username = "";
   @override
   void initState() {
     user = widget.user;
+    request = widget.request;
     FirebaseFirestore.instance
         .collection("users")
         .doc(user)
@@ -33,6 +39,7 @@ class _AddSessionWithUserState extends State<AddSessionWithUser> {
     });
     super.initState();
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -55,6 +62,7 @@ class _AddSessionWithUserState extends State<AddSessionWithUser> {
                   decoration: const InputDecoration(
                     icon: Icon(Icons.calendar_month),
                     labelText: "Select a date",
+
                   ),
                   onTap: () async {
                     await showDatePicker(
@@ -108,37 +116,34 @@ class _AddSessionWithUserState extends State<AddSessionWithUser> {
                         },
                       ),
                     ),
-                    const SizedBox(
-                      height: 30,
-                    ),
-                    SizedBox(
-                      width: 150,
-                      child: TextField(
-                        style: const TextStyle(fontSize: 14),
-                        controller: _timeEnd,
-                        decoration: const InputDecoration(
-                          icon: Icon(Icons.access_time_filled_sharp),
-                          labelText: "End Time",
-                        ),
-                        onTap: () async {
-                          await showTimePicker(
-                            context: context,
-                            initialTime: TimeOfDay.fromDateTime(
-                                dateTime.add(const Duration(minutes: 30))),
-                          ).then((pickedTime) {
-                            if (pickedTime != null) {
-                              setState(() {
-                                _timeEnd.text =
-                                    "${pickedTime.hour.toString().padLeft(2, "0")}:${pickedTime.minute.toString().padLeft(2, "0")}";
-                              });
-                            }
-                          });
-                        },
+                  ]),
+                const SizedBox(
+                    height: 30,
+                  ),
+                SizedBox(
+                    width: 150,
+                    child: TextField(
+                      controller: _timeEnd,
+                      decoration: const InputDecoration(
+                        icon: Icon(Icons.access_time_filled_sharp),
+                        labelText: "End Time",
                       ),
+                      onTap: () async {
+                        await showTimePicker(
+                          context: context,
+                          initialTime: TimeOfDay.fromDateTime(
+                              dateTime.add(const Duration(minutes: 30))),
+                        ).then((pickedTime) {
+                          if (pickedTime != null) {
+                            setState(() {
+                              _timeEnd.text =
+                                  "${pickedTime.hour.toString().padLeft(2, "0")}:${pickedTime.minute.toString().padLeft(2, "0")}";
+                            });
+                          }
+                        });
+                      },
                     ),
-                  ],
-                ),
-                const SizedBox(height: 30),
+                  ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
@@ -148,6 +153,7 @@ class _AddSessionWithUserState extends State<AddSessionWithUser> {
                     ),
                   ],
                 ),
+
                 const SizedBox(height: 10),
                 Row(mainAxisAlignment: MainAxisAlignment.start, children: [
                   Text(mode),
@@ -172,17 +178,8 @@ class _AddSessionWithUserState extends State<AddSessionWithUser> {
                 ),
                 const SizedBox(height: 30),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  crossAxisAlignment: CrossAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    ElevatedButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: const Text("Cancel")),
-                    const SizedBox(
-                      width: 40,
-                    ),
                     ElevatedButton(
                         onPressed: () async {
                           final session = <String, String>{
@@ -195,7 +192,7 @@ class _AddSessionWithUserState extends State<AddSessionWithUser> {
                             "mode": selectedMode ? "Online" : "Offline",
                           };
                           final dt = DateTime(dateTime.year, dateTime.month,
-                                  dateTime.day, dateTime.hour)
+                              dateTime.day, dateTime.hour)
                               .toString()
                               .substring(0, 10)
                               .replaceAll("-", "");
@@ -217,20 +214,50 @@ class _AddSessionWithUserState extends State<AddSessionWithUser> {
                                 .set(session);
                             Fluttertoast.showToast(
                                 msg: "Session added successfully");
-
-                            Navigator.pop(context);
+                            if (request == "") {
+                              if (!mounted) return;
+                              Navigator.pop(context);
+                            } else {
+                              await FirebaseFirestore.instance
+                                  .collection('counsellor')
+                                  .doc('counsellor@gmail.com')
+                                  .collection("Requests")
+                                  .doc(request)
+                                  .delete()
+                                  .then((value) async {
+                                await FirebaseFirestore.instance
+                                    .collection("users")
+                                    .doc(user)
+                                    .update({"requested": false});
+                                if (!mounted) return;
+                                Navigator.pushAndRemoveUntil(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (BuildContext context) =>
+                                        const CounsellorPage()),
+                                    ModalRoute.withName(
+                                        '/') // Replace this with your root screen's route name (usually '/')
+                                );
+                              });
+                            }
                           } else {
                             Fluttertoast.showToast(
                                 msg: "This time is not available");
                           }
                         },
                         child: const Text("Add")),
+                    ElevatedButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Text("Cancel")),
                   ],
                 )
-              ],
-            ),
+                ],
+              ),
           ),
-        ));
+        )
+    );
   }
 
   Future<bool> validate(String docId, Map<String, String> session) async {

@@ -11,7 +11,7 @@ class UserModal extends ChangeNotifier {
   String usermobile = "";
   String usergender ="";
   bool assessment=true;
-
+  bool firstTime = true;
   int activeIndex = 0;
   int totalIndex = 3;
 

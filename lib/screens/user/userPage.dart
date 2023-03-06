@@ -38,6 +38,7 @@ class _UserPageState extends State<UserPage> {
       setState(() {
         showAssessment = data["assessment"];
         showRequestButton = !data["requested"];
+        firstSession=data["firstTime"];
         name = data["name"];
         initial = username[0].toUpperCase();
       });
@@ -57,6 +58,9 @@ class _UserPageState extends State<UserPage> {
           elevation: 0,
           backgroundColor: Colors.transparent,
           actions: <Widget>[
+            IconButton(icon: const Icon(Icons.notifications, color: Colors.black,),onPressed: (){
+
+            },),
             InkWell(
                 onTap: () {
                   Navigator.push(
@@ -73,7 +77,8 @@ class _UserPageState extends State<UserPage> {
                       style: const TextStyle(color: Colors.white),
                     ),
                   ),
-                ))
+                )),
+
           ],
         ),
         body: Padding(
@@ -253,19 +258,6 @@ class _UserPageState extends State<UserPage> {
             Container(
                 padding: const EdgeInsets.all(3.0),
                 child: const Text("Is this your first interaction:")),
-            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              Container(
-                  padding: const EdgeInsets.all(10.0), child: Text(first)),
-              Switch(
-                  value: firstSession,
-                  onChanged: (bool value) {
-                    setState(() {
-                      firstSession = value;
-                      first = value ? "Yes" : "No";
-                      //log(selectedMode.toString());
-                    });
-                  }),
-            ]),
           ],
         );
       }),
@@ -284,12 +276,13 @@ class _UserPageState extends State<UserPage> {
               "name": name,
               "problem": _problemController.text,
               "mode": mode,
+              "firstTime": firstSession ? "true" : "false"
             };
             final docId = DateTime.now().toString();
             await FirebaseFirestore.instance
                 .collection("counsellor")
                 .doc("counsellor@gmail.com")
-                .collection(firstSession ? "NewRequests" : "Requests")
+                .collection("Requests")
                 .doc(docId)
                 .set(request)
                 .then((value) async {
@@ -299,6 +292,7 @@ class _UserPageState extends State<UserPage> {
                   .doc(username)
                   .update({
                 "requested": true,
+                "firstTime": false
               }).then((value) {
                 Navigator.pushAndRemoveUntil(
                     context,

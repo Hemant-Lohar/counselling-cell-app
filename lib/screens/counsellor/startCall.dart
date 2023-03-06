@@ -1,51 +1,76 @@
 import 'dart:developer';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:counselling_cell_application/screens/counsellor/counsellorHomePage.dart';
+import 'package:counselling_cell_application/screens/counsellor/session.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'dart:convert';
 import 'package:jitsi_meet_wrapper/jitsi_meet_wrapper.dart';
 import 'dart:io';
+import 'package:universal_html/html.dart' as html;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
-class Call extends StatefulWidget {
-  const Call({Key? key}) : super(key: key);
 
+import 'counsellorPage.dart';
+
+class Call extends StatefulWidget {
+  const Call({Key? key, required this.id}) : super(key: key);
+  final String id;
 
   @override
   State<Call> createState() => _CallState();
 }
 
 class _CallState extends State<Call> {
-
+  String id = "";
+  String user = "";
   bool isAudioMuted = true;
   bool isAudioOnly = false;
   bool isVideoMuted = true;
-
+  final _observationController = TextEditingController();
+  final _reccomendationController = TextEditingController();
+  final _timeEndController = TextEditingController();
   @override
-  void initState(){
+  void initState() {
     super.initState();
+    id = widget.id;
+    log(id);
+    FirebaseFirestore.instance
+        .collection("counsellor")
+        .doc("counsellor@gmail.com")
+        .collection("session")
+        .doc(id)
+        .get()
+        .then((DocumentSnapshot doc) {
+      final data = doc.data() as Map<String, dynamic>;
+      setState(() {
+        user = data["user"];
+        log(user.toString());
+      });
+    });
   }
 
 
   @override
   Widget build(BuildContext context) {
-      return Scaffold(
-        appBar: AppBar(
-          title: const Text("Session in Progress"),
-          leading: const BackButton(color: Colors.white),
-        ),
-        body: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: buildMeetConfig(),
-        ),
-      );
-
-
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Session in Progress"),
+        leading: const BackButton(color: Colors.white),
+      ),
+      body: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: buildMeetConfig(),
+      ),
+    );
   }
 
   Widget buildMeetConfig() {
     return SingleChildScrollView(
       child: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           const SizedBox(height: 16.0),
           // _buildTextField(
@@ -98,16 +123,16 @@ class _CallState extends State<Call> {
             width: double.maxFinite,
             child: ElevatedButton(
               onPressed: () {
-                // if(kIsWeb){
-                  // html.window.open("https://meet.jit.si/CounsellingCell", "Ongoing Session");
-                // }
-                // else{
+                if (kIsWeb) {
+                  html.window.open(
+                      "https://meet.jit.si/CounsellingCell", "Ongoing Session");
+                } else {
                   _joinMeeting();
-                // }
+                }
               },
               style: ButtonStyle(
                 backgroundColor:
-                MaterialStateColor.resolveWith((states) => Colors.blue),
+                    MaterialStateColor.resolveWith((states) => Colors.blue),
               ),
               child: const Text(
                 "Join Meeting",
@@ -116,6 +141,113 @@ class _CallState extends State<Call> {
             ),
           ),
           const SizedBox(height: 48.0),
+          SizedBox(
+            width: double.maxFinite,
+            child: TextField(
+              keyboardType: TextInputType.text,
+              controller: _observationController,
+              decoration: const InputDecoration(
+                icon: Icon(Icons.receipt),
+                labelText: "Observations",
+              ),
+            ),
+          ),
+          const SizedBox(height: 60.0),
+          SizedBox(
+            width: double.maxFinite,
+            child: TextField(
+              keyboardType: TextInputType.text,
+              controller: _reccomendationController,
+              decoration: const InputDecoration(
+                icon: Icon(Icons.medical_services),
+                labelText: "Recommendations",
+              ),
+            ),
+          ),
+          const SizedBox(height: 60.0),
+          SizedBox(
+            child: TextField(
+              controller: _timeEndController,
+              decoration: const InputDecoration(
+                icon: Icon(Icons.access_time_filled_sharp),
+                labelText: "End Time",
+              ),
+              onTap: () async {
+                await showTimePicker(
+                  context: context,
+                  initialTime: TimeOfDay.now(),
+                ).then((pickedTime) {
+                  if (pickedTime != null) {
+                    setState(() {
+                      _timeEndController.text =
+                          "${pickedTime.hour.toString().padLeft(2, "0")}:${pickedTime.minute.toString().padLeft(2, "0")}";
+                    });
+                  }
+                });
+              },
+            ),
+          ),
+          const SizedBox(height: 60.0),
+          SizedBox(
+            height: 64.0,
+            width: double.maxFinite,
+            child: ElevatedButton(
+              onPressed: () async {
+                await FirebaseFirestore.instance
+                    .collection("counsellor")
+                    .doc("counsellor@gmail.com")
+                    .collection("session")
+                    .doc(id)
+                    .get()
+                    .then((DocumentSnapshot doc) {
+                  var data = doc.data() as Map<String, dynamic>;
+                  data.addAll({
+                    "observation": _observationController.text,
+                    "recommendation": _reccomendationController.text,
+                    "timeEnd": _timeEndController.text
+                  });
+                  FirebaseFirestore.instance
+                      .collection("counsellor")
+                      .doc("counsellor@gmail.com")
+                      .collection("completed")
+                      .doc(id)
+                      .set(data);
+                  FirebaseFirestore.instance
+                      .collection("users")
+                      .doc(user)
+                      .collection("completed")
+                      .doc(id)
+                      .set(data);
+                });
+                FirebaseFirestore.instance
+                    .collection("counsellor")
+                    .doc("counsellor@gmail.com")
+                    .collection("session")
+                    .doc(id).delete();
+                FirebaseFirestore.instance
+                    .collection("users")
+                    .doc(user)
+                    .collection("session")
+                    .doc(id)
+                    .delete();
+
+                Fluttertoast.showToast(msg: "Session data is saved");
+                _observationController.text = "";
+                _reccomendationController.text = "";
+                _timeEndController.text = "";
+                if(!mounted)return;
+                Navigator.pop(context);
+              },
+              style: ButtonStyle(
+                backgroundColor:
+                    MaterialStateColor.resolveWith((states) => Colors.blue),
+              ),
+              child: const Text(
+                "Conclude Session",
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -187,13 +319,13 @@ class _CallState extends State<Call> {
           onScreenShareToggled: (participantId, isSharing) {
             log(
               "onScreenShareToggled: participantId: $participantId, "
-                  "isSharing: $isSharing",
+              "isSharing: $isSharing",
             );
           },
           onParticipantJoined: (email, name, role, participantId) {
             log(
               "onParticipantJoined: email: $email, name: $name, role: $role, "
-                  "participantId: $participantId",
+              "participantId: $participantId",
             );
           },
           onParticipantLeft: (participantId) {
@@ -202,24 +334,22 @@ class _CallState extends State<Call> {
           onParticipantsInfoRetrieved: (participantsInfo, requestId) {
             log(
               "onParticipantsInfoRetrieved: participantsInfo: $participantsInfo, "
-                  "requestId: $requestId",
+              "requestId: $requestId",
             );
           },
           onChatMessageReceived: (senderId, message, isPrivate) {
             log(
               "onChatMessageReceived: senderId: $senderId, message: $message, "
-                  "isPrivate: $isPrivate",
+              "isPrivate: $isPrivate",
             );
           },
           onChatToggled: (isOpen) => log("onChatToggled: isOpen: $isOpen"),
           onClosed: () => log("onClosed"),
         ),
       );
-    }
-    catch(error){
+    } catch (error) {
       log(error.toString());
     }
-
   }
 
   Widget _buildTextField({

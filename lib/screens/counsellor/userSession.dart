@@ -2,7 +2,6 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:counselling_cell_application/screens/counsellor/addSessionWithUser.dart';
-import 'package:counselling_cell_application/theme/palette.dart';
 import 'package:flutter/material.dart';
 
 class UserSession extends StatefulWidget {
@@ -24,7 +23,6 @@ class _UserSessionState extends State<UserSession> {
     super.initState();
     id = widget.id;
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,13 +49,27 @@ class _UserSessionState extends State<UserSession> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => AddSessionWithUser(user: id)),
+                            builder: (context) => AddSessionWithUser(user: id, request: "")),
                       );
                     },
                   ),
                 ),
               ],
             ))),
+                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //   children: [
+                //     Text(id),
+                //     IconButton(
+                //       icon: const Icon(Icons.add_sharp),
+                //       onPressed: () {
+                //         Navigator.push(
+                //           context,
+                //           MaterialPageRoute(builder: (context) =>AddSessionWithUser(user: id,request: "")),
+                //         );
+                //       },
+                //     ),
+                //   ],
+                // ))),
         body: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(10.0),
@@ -86,9 +98,9 @@ class _UserSessionState extends State<UserSession> {
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10)),
                                 tileColor: Palette.tileback,
-                                leading: const CircleAvatar(
+                                leading: CircleAvatar(
                                   backgroundColor: Palette.primary,
-                                  child: Text(
+                                  child: const Text(
                                     "H",
                                     style: TextStyle(color: Colors.white),
                                   ),

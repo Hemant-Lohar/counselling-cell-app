@@ -1,7 +1,6 @@
 import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:counselling_cell_application/theme/Palette.dart';
-import 'package:hexcolor/hexcolor.dart';
 import 'DataClass.dart';
 import 'screens/counsellor/counsellorPage.dart';
 import 'screens/user/userPage.dart';
