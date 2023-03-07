@@ -43,6 +43,7 @@ class _CounsellorHomePageState extends State<CounsellorHomePage> {
     String initial = username[0].toUpperCase();
     return Scaffold(
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           title: Text(
             'Hi, $name',
             style: const TextStyle(color: Colors.white, fontSize: 16),
@@ -74,7 +75,7 @@ class _CounsellorHomePageState extends State<CounsellorHomePage> {
             child: SingleChildScrollView(
               child: Column(children: [
                 Text("Welcome $name !\nThis is Your Homepage.",
-                  style: const TextStyle(color: Colors.black, fontSize: 16)),
+                    style: const TextStyle(color: Colors.black, fontSize: 16)),
                 const SizedBox(
                   height: 30,
                 ),
@@ -86,6 +87,7 @@ class _CounsellorHomePageState extends State<CounsellorHomePage> {
               ]),
             )));
   }
+
   Widget getRequests() {
     return StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
@@ -129,7 +131,7 @@ class _CounsellorHomePageState extends State<CounsellorHomePage> {
                     shrinkWrap: true,
                     itemBuilder: (context, index) {
                       var data = snapshots.data!.docs[index].data()
-                      as Map<String, dynamic>;
+                          as Map<String, dynamic>;
                       return ListTile(
                         contentPadding: const EdgeInsets.all(8.0),
                         horizontalTitleGap: 0.0,
@@ -163,7 +165,7 @@ class _CounsellorHomePageState extends State<CounsellorHomePage> {
                                 onPressed: () {
                                   Future.delayed(
                                       const Duration(seconds: 0),
-                                          () => showDialog(
+                                      () => showDialog(
                                           context: context,
                                           builder: (BuildContext context) {
                                             return getAlertDialog(data["user"],
@@ -241,7 +243,7 @@ class _CounsellorHomePageState extends State<CounsellorHomePage> {
                     shrinkWrap: true,
                     itemBuilder: (context, index) {
                       var data = snapshots.data!.docs[index].data()
-                      as Map<String, dynamic>;
+                          as Map<String, dynamic>;
                       return ListTile(
                         contentPadding: const EdgeInsets.all(8.0),
                         horizontalTitleGap: 0.0,
@@ -275,7 +277,7 @@ class _CounsellorHomePageState extends State<CounsellorHomePage> {
                                 onPressed: () {
                                   Future.delayed(
                                       const Duration(seconds: 0),
-                                          () => showDialog(
+                                      () => showDialog(
                                           context: context,
                                           builder: (BuildContext context) {
                                             return getAlertDialog(data["user"],
@@ -314,20 +316,20 @@ class _CounsellorHomePageState extends State<CounsellorHomePage> {
       title: const Text("Mention reason for rejection"),
       content: StatefulBuilder(
           builder: (BuildContext context, StateSetter setState) {
-            return Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextField(
-                  keyboardType: TextInputType.text,
-                  controller: reasonController,
-                  decoration: const InputDecoration(
-                    icon: Icon(Icons.question_answer),
-                    labelText: "Reason",
-                  ),
-                ),
-              ],
-            );
-          }),
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              keyboardType: TextInputType.text,
+              controller: reasonController,
+              decoration: const InputDecoration(
+                icon: Icon(Icons.question_answer),
+                labelText: "Reason",
+              ),
+            ),
+          ],
+        );
+      }),
       actions: <Widget>[
         TextButton(
           onPressed: () {
@@ -369,10 +371,10 @@ class _CounsellorHomePageState extends State<CounsellorHomePage> {
                     context,
                     MaterialPageRoute(
                         builder: (BuildContext context) =>
-                        const CounsellorPage()),
+                            const CounsellorPage()),
                     ModalRoute.withName(
                         '/') // Replace this with your root screen's route name (usually '/')
-                );
+                    );
               });
             });
           },

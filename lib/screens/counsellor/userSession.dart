@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:counselling_cell_application/screens/counsellor/addSessionWithUser.dart';
+import 'package:counselling_cell_application/theme/palette.dart';
 import 'package:flutter/material.dart';
 
 class UserSession extends StatefulWidget {

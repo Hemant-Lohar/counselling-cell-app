@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:counselling_cell_application/screens/login/userModal.dart';
+import 'package:counselling_cell_application/theme/palette.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -52,6 +53,11 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        leading: const BackButton(color: Colors.black),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+      ),
       body: Consumer<UserModal>(
         builder: (context, modal, child) {
           switch (modal.activeIndex) {
@@ -88,9 +94,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
         child: ListView(
           padding: const EdgeInsets.symmetric(horizontal: 40.0),
           children: [
-            const SizedBox(
-              height: 40,
-            ),
+           
             Image.asset('assets/register.png', height: 250, width: 250),
             Center(
               child: DotStepper(
@@ -101,9 +105,12 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                 spacing: 10,
                 tappingEnabled: false,
                 indicator: Indicator.worm,
+                fixedDotDecoration: const FixedDotDecoration(color: Palette.tileback),
+                indicatorDecoration: const IndicatorDecoration(color: Palette.secondary),
               ),
             ),
             TextFormField(
+              style: const TextStyle(fontSize:14),
               controller: _Usernamecontroller,
               decoration: const InputDecoration(
                 labelText: "Name",
@@ -111,6 +118,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
               validator: RequiredValidator(errorText: "Required"),
             ),
             TextFormField(
+              style: const TextStyle(fontSize:14),
               controller: _Useragecontroller,
               keyboardType: TextInputType.number,
               decoration: const InputDecoration(
@@ -119,6 +127,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
               validator: RequiredValidator(errorText: "Required"),
             ),
             TextFormField(
+              style: const TextStyle(fontSize:14),
               controller: _Usergendercontroller,
               decoration: const InputDecoration(
                 labelText: "Gender",
@@ -126,6 +135,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
               validator: RequiredValidator(errorText: "Required"),
             ),
             TextFormField(
+              style: const TextStyle(fontSize:14),
               controller: _Usermobilecontroller,
               keyboardType: TextInputType.number,
               decoration: const InputDecoration(
@@ -193,6 +203,7 @@ class _EducationDetailsState extends State<EducationDetails> {
               ),
             ),
             TextFormField(
+              style: const TextStyle(fontSize:14),
               controller: _Userclasscontroller,
               decoration: const InputDecoration(
                 labelText: "Class",
@@ -200,6 +211,7 @@ class _EducationDetailsState extends State<EducationDetails> {
               validator: RequiredValidator(errorText: "Required"),
             ),
             TextFormField(
+              style: const TextStyle(fontSize:14),
               controller: _Userdepartmentcontroller,
               decoration: const InputDecoration(
                 labelText: "Department",
@@ -207,6 +219,7 @@ class _EducationDetailsState extends State<EducationDetails> {
               validator: RequiredValidator(errorText: "Required"),
             ),
             TextFormField(
+              style: const TextStyle(fontSize:14),
               controller: _Userdivisioncontroller,
               decoration: const InputDecoration(
                 labelText: "Division",
@@ -222,7 +235,7 @@ class _EducationDetailsState extends State<EducationDetails> {
                 modal.changeIndex(modal.activeIndex - 1);
               },
               style: ElevatedButton.styleFrom(
-                primary: Colors.black,
+                backgroundColor: Colors.black,
                 padding:
                     const EdgeInsets.symmetric(horizontal: 40, vertical: 16),
                 shape: const StadiumBorder(),
@@ -243,7 +256,7 @@ class _EducationDetailsState extends State<EducationDetails> {
                 }
               },
               style: ElevatedButton.styleFrom(
-                primary: Colors.black,
+                backgroundColor: Colors.black,
                 padding:
                     const EdgeInsets.symmetric(horizontal: 40, vertical: 16),
                 shape: const StadiumBorder(),
@@ -288,6 +301,7 @@ class _UserDetailsState extends State<UserDetails> {
               ),
             ),
             TextFormField(
+              style: const TextStyle(fontSize:14),
               controller: _useremailController,
               decoration: const InputDecoration(
                 labelText: "Email",
@@ -295,6 +309,7 @@ class _UserDetailsState extends State<UserDetails> {
               validator: RequiredValidator(errorText: "Required"),
             ),
             TextFormField(
+              style: const TextStyle(fontSize:14),
               controller: _passwordController,
               obscureText: true,
               decoration: const InputDecoration(
@@ -303,6 +318,7 @@ class _UserDetailsState extends State<UserDetails> {
               validator: RequiredValidator(errorText: "Required"),
             ),
             TextFormField(
+              style: const TextStyle(fontSize:14),
               controller: _confirmPasswordController,
               obscureText: true,
               decoration: const InputDecoration(
@@ -469,6 +485,7 @@ Future createUser(MyUser user) async {
 //                 const SizedBox(height: 20),
 //                 Center(
 //                   child: TextFormField(
+  // style: TextStyle(fontSize:14),
 //                     controller: _useremailController,
 //                     decoration: const InputDecoration(
 //                         hintText: 'Enter Email Address',
@@ -480,6 +497,7 @@ Future createUser(MyUser user) async {
 //                 ),
 //                 const SizedBox(height: 20),
 //                 TextFormField(
+  // style: TextStyle(fontSize:14),
 //                   obscureText: true,
 //                   controller: _passwordController,
 //                   decoration: const InputDecoration(
@@ -491,6 +509,7 @@ Future createUser(MyUser user) async {
 //                 ),
 //                 const SizedBox(height: 20),
 //                 TextFormField(
+  // style: TextStyle(fontSize:14),
 //                   obscureText: true,
 //                   controller: _confirmPasswordController,
 //                   decoration: const InputDecoration(

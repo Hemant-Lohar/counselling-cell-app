@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../theme/Palette.dart';
 import 'counsellorHomePage.dart';
 import 'counsellorProfilePage.dart';
 class CounsellorPage extends StatefulWidget {
@@ -53,7 +54,7 @@ class _CounsellorPageState extends State<CounsellorPage> {
           showUnselectedLabels: false,
           currentIndex: currentIndex,
           onTap: (index) => setState(() => currentIndex = index),
-          items:  [
+          items:  const [
             BottomNavigationBarItem(
               icon: Icon(Icons.home),
               label: 'Home',
