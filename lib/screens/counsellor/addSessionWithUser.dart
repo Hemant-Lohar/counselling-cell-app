@@ -116,34 +116,34 @@ class _AddSessionWithUserState extends State<AddSessionWithUser> {
                         },
                       ),
                     ),
-                  ]),
-                const SizedBox(
-                    height: 30,
-                  ),
-                SizedBox(
-                    width: 150,
-                    child: TextField(
-                      controller: _timeEnd,
-                      decoration: const InputDecoration(
-                        icon: Icon(Icons.access_time_filled_sharp),
-                        labelText: "End Time",
+                    SizedBox(
+                      width: 150,
+                      child: TextField(
+                        controller: _timeEnd,
+                        decoration: const InputDecoration(
+                          icon: Icon(Icons.access_time_filled_sharp),
+                          labelText: "End Time",
+                        ),
+                        onTap: () async {
+                          await showTimePicker(
+                            context: context,
+                            initialTime: TimeOfDay.fromDateTime(
+                                dateTime.add(const Duration(minutes: 30))),
+                          ).then((pickedTime) {
+                            if (pickedTime != null) {
+                              setState(() {
+                                _timeEnd.text =
+                                "${pickedTime.hour.toString().padLeft(2, "0")}:${pickedTime.minute.toString().padLeft(2, "0")}";
+                              });
+                            }
+                          });
+                        },
                       ),
-                      onTap: () async {
-                        await showTimePicker(
-                          context: context,
-                          initialTime: TimeOfDay.fromDateTime(
-                              dateTime.add(const Duration(minutes: 30))),
-                        ).then((pickedTime) {
-                          if (pickedTime != null) {
-                            setState(() {
-                              _timeEnd.text =
-                                  "${pickedTime.hour.toString().padLeft(2, "0")}:${pickedTime.minute.toString().padLeft(2, "0")}";
-                            });
-                          }
-                        });
-                      },
                     ),
-                  ),
+                  ]),
+                const SizedBox(height: 20,),
+
+
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [

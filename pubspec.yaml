@@ -52,7 +52,7 @@ dependencies:
   universal_html:
   get:
   tflite_flutter: ^0.9.0
-  hexcolor: ^3.0.1
+  hexcolor:
 dev_dependencies:
   flutter_test:
     sdk: flutter

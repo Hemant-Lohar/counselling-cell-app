@@ -1,10 +1,10 @@
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:counselling_cell_application/screens/counsellor/addSessionWithUser.dart';
-import 'package:counselling_cell_application/theme/palette.dart';
 import 'package:flutter/material.dart';
 
+import '../../theme/Palette.dart';
+import 'addSessionWithUser.dart';
 class UserSession extends StatefulWidget {
   const UserSession({Key? key, required this.id}) : super(key: key);
   final String id;
@@ -15,7 +15,8 @@ class UserSession extends StatefulWidget {
 
 class _UserSessionState extends State<UserSession> {
   late final String id;
-
+  String initial="";
+  String name="";
   // String username="";
   final String dateTime =
       "${DateTime.now().day.toString().padLeft(2, "0")}/${DateTime.now().month.toString().padLeft(2, "0")}/${DateTime.now().year}";
@@ -23,6 +24,17 @@ class _UserSessionState extends State<UserSession> {
   void initState() {
     super.initState();
     id = widget.id;
+    FirebaseFirestore.instance
+        .collection("users")
+        .doc(id)
+        .get()
+        .then((DocumentSnapshot doc) {
+      final data = doc.data() as Map<String, dynamic>;
+      setState(() {
+        name=data["name"];
+        initial = data["name"][0].toString().toUpperCase();
+      });
+    });
   }
   @override
   Widget build(BuildContext context) {
@@ -80,15 +92,32 @@ class _UserSessionState extends State<UserSession> {
                 stream: FirebaseFirestore.instance
                     .collection('users')
                     .doc(id)
-                    .collection("session")
-                    .where("date", isLessThan: dateTime)
+                    .collection("completedSession")
                     .snapshots(),
                 builder: (context, snapshots) {
-                  return (snapshots.connectionState == ConnectionState.waiting)
-                      ? const Center(
-                          child: CircularProgressIndicator(),
-                        )
-                      : ListView.builder(
+                  if(snapshots.connectionState == ConnectionState.waiting){
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  else if(snapshots.data!.size==0){
+                    return Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: const [
+                          Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Text(
+                              "No previous sessions for this user !",
+                              style: TextStyle(
+                                fontSize: 20,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 30),
+                        ]);
+                  }
+                  return ListView.builder(
                           physics: const NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
                           itemCount: snapshots.data!.docs.length,
@@ -101,9 +130,9 @@ class _UserSessionState extends State<UserSession> {
                                 tileColor: Palette.tileback,
                                 leading: CircleAvatar(
                                   backgroundColor: Palette.primary,
-                                  child: const Text(
-                                    "H",
-                                    style: TextStyle(color: Colors.white),
+                                  child: Text(
+                                   initial,
+                                    style: const TextStyle(color: Colors.white),
                                   ),
                                 ),
                                 title: Text(
@@ -147,62 +176,83 @@ class _UserSessionState extends State<UserSession> {
                     .where("date", isGreaterThanOrEqualTo: dateTime)
                     .snapshots(),
                 builder: (context, snapshots) {
-                  return (snapshots.connectionState == ConnectionState.waiting)
-                      ? const Center(
-                          child: CircularProgressIndicator(),
-                        )
-                      : ListView.builder(
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: snapshots.data!.docs.length,
-                          shrinkWrap: true,
-                          itemBuilder: (context, index) {
-                            var data = snapshots.data!.docs[index].data()
-                                as Map<String, dynamic>;
-                            return Column(
-                              children: [
-                                const SizedBox(
-                                  height: 10,
+                  if(snapshots.connectionState == ConnectionState.waiting){
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  else if(snapshots.data!.size==0){
+                    return Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: const [
+                          Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Text(
+                              "No upcoming sessions for this user !",
+                              style: TextStyle(
+                                fontSize: 20,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 30),
+                        ]);
+                  }
+                  else{
+                    return  ListView.builder(
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: snapshots.data!.docs.length,
+                        shrinkWrap: true,
+                        itemBuilder: (context, index) {
+                          var data = snapshots.data!.docs[index].data()
+                          as Map<String, dynamic>;
+                          return Column(
+                            children: [
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              ListTile(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10)),
+                                tileColor: Palette.tileback,
+                                leading: CircleAvatar(
+                                  backgroundColor: Palette.primary,
+                                  child: Text(
+                                    initial,
+                                    style:
+                                    const TextStyle(color: Colors.white),
+                                  ),
                                 ),
-                                ListTile(
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10)),
-                                  tileColor: Palette.tileback,
-                                  leading: CircleAvatar(
-                                    backgroundColor: Palette.primary,
-                                    child: Text(
-                                      id[0].toUpperCase(),
-                                      style:
-                                          const TextStyle(color: Colors.white),
-                                    ),
+                                title: Text(
+                                  "Date - ${data['date']}",
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(
+                                      color: Colors.black87,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                subtitle: Text(
+                                  "Time - ${data["timeStart"]}-${data["timeEnd"]}",
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 14,
+                                    // fontWeight: FontWeight.bold
                                   ),
-                                  title: Text(
-                                    "Date - ${data['date']}",
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: const TextStyle(
-                                        color: Colors.black87,
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  subtitle: Text(
-                                    "Time - ${data["timeStart"]}-${data["timeEnd"]}",
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: const TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 14,
-                                      // fontWeight: FontWeight.bold
-                                    ),
-                                  ),
+                                ),
 
-                                  onTap: () {},
-                                  // leading: CircleAvatar(
-                                  //   backgroundImage: NetworkImage(data['image']),
-                                  // ),
-                                ),
-                              ],
-                            );
-                          });
+                                onTap: () {},
+                                // leading: CircleAvatar(
+                                //   backgroundImage: NetworkImage(data['image']),
+                                // ),
+                              ),
+                            ],
+                          );
+                        });
+                  }
+
                 },
               ),
             ]),
