@@ -235,7 +235,8 @@ class _EducationDetailsState extends State<EducationDetails> {
                 modal.changeIndex(modal.activeIndex - 1);
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.black,
+                //backgroundColor: Colors.black,
+
                 padding:
                     const EdgeInsets.symmetric(horizontal: 40, vertical: 16),
                 shape: const StadiumBorder(),
@@ -256,7 +257,7 @@ class _EducationDetailsState extends State<EducationDetails> {
                 }
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.black,
+                //backgroundColor: Colors.black,
                 padding:
                     const EdgeInsets.symmetric(horizontal: 40, vertical: 16),
                 shape: const StadiumBorder(),

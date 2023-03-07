@@ -134,7 +134,7 @@ class _UserListState extends State<UserList> {
                       } else if (data['name']
                           .toString()
                           .toLowerCase()
-                          .startsWith(name.toLowerCase())) {
+                          .contains(name.toLowerCase())) {
                         return Container(
                           margin: const EdgeInsets.all(10),
                           padding: const EdgeInsets.only(left: 10),

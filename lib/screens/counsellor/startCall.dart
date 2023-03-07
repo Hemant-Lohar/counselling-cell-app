@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:counselling_cell_application/screens/counsellor/counsellorHomePage.dart';
 import 'package:counselling_cell_application/screens/counsellor/session.dart';
+import 'package:counselling_cell_application/theme/palette.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -25,11 +26,14 @@ class Call extends StatefulWidget {
 class _CallState extends State<Call> {
   String id = "";
   String user = "";
+  String name = "";
+  int num = 0;
   bool isAudioMuted = true;
   bool isAudioOnly = false;
   bool isVideoMuted = true;
   final _observationController = TextEditingController();
-  final _reccomendationController = TextEditingController();
+  final _newIssuesController = TextEditingController();
+  final _detailsController = TextEditingController();
   final _timeEndController = TextEditingController();
   @override
   void initState() {
@@ -46,11 +50,22 @@ class _CallState extends State<Call> {
       final data = doc.data() as Map<String, dynamic>;
       setState(() {
         user = data["user"];
+        name = data["username"];
         log(user.toString());
+        FirebaseFirestore.instance
+            .collection("users")
+            .doc(user)
+            .get()
+            .then((DocumentSnapshot doc) {
+          final data = doc.data() as Map<String, dynamic>;
+          setState(() {
+            num = data["sessionCount"];
+            log(num.toString());
+          });
+        });
       });
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -131,8 +146,8 @@ class _CallState extends State<Call> {
                 }
               },
               style: ButtonStyle(
-                backgroundColor:
-                    MaterialStateColor.resolveWith((states) => Colors.blue),
+                backgroundColor: MaterialStateColor.resolveWith(
+                    (states) => Palette.secondary),
               ),
               child: const Text(
                 "Join Meeting",
@@ -141,6 +156,12 @@ class _CallState extends State<Call> {
             ),
           ),
           const SizedBox(height: 48.0),
+          Center(
+            child: Text(
+              "User: $name",
+              style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+            ),
+          ),
           SizedBox(
             width: double.maxFinite,
             child: TextField(
@@ -157,10 +178,22 @@ class _CallState extends State<Call> {
             width: double.maxFinite,
             child: TextField(
               keyboardType: TextInputType.text,
-              controller: _reccomendationController,
+              controller: _newIssuesController,
               decoration: const InputDecoration(
                 icon: Icon(Icons.medical_services),
-                labelText: "Recommendations",
+                labelText: "New Issues",
+              ),
+            ),
+          ),
+          const SizedBox(height: 60.0),
+          SizedBox(
+            width: double.maxFinite,
+            child: TextField(
+              keyboardType: TextInputType.text,
+              controller: _detailsController,
+              decoration: const InputDecoration(
+                icon: Icon(Icons.medical_services),
+                labelText: "Session details",
               ),
             ),
           ),
@@ -203,44 +236,64 @@ class _CallState extends State<Call> {
                   var data = doc.data() as Map<String, dynamic>;
                   data.addAll({
                     "observation": _observationController.text,
-                    "recommendation": _reccomendationController.text,
-                    "timeEnd": _timeEndController.text
+                    "new_issues": _newIssuesController.text,
+                    "details": _detailsController.text,
+                    "timeEnd": _timeEndController.text,
+                    "sessionNumber": num++
                   });
                   FirebaseFirestore.instance
                       .collection("counsellor")
                       .doc("counsellor@gmail.com")
-                      .collection("completed")
+                      .collection("completedSession")
                       .doc(id)
-                      .set(data);
+                      .set(data)
+                      .onError((error, stackTrace) {
+                    Fluttertoast.showToast(msg: "An error has occurred");
+                  });
                   FirebaseFirestore.instance
                       .collection("users")
                       .doc(user)
-                      .collection("completed")
+                      .collection("completedSession")
                       .doc(id)
-                      .set(data);
+                      .set(data)
+                      .onError((error, stackTrace) {
+                    Fluttertoast.showToast(msg: "An error has occurred");
+                  });
+                });
+                FirebaseFirestore.instance.collection("users").doc(user).update(
+                    {"sessionCount": num++}).onError((error, stackTrace) {
+                  Fluttertoast.showToast(msg: "An error has occurred");
                 });
                 FirebaseFirestore.instance
                     .collection("counsellor")
                     .doc("counsellor@gmail.com")
                     .collection("session")
-                    .doc(id).delete();
+                    .doc(id)
+                    .delete()
+                    .onError((error, stackTrace) {
+                  Fluttertoast.showToast(msg: "An error has occurred");
+                });
                 FirebaseFirestore.instance
                     .collection("users")
                     .doc(user)
                     .collection("session")
                     .doc(id)
-                    .delete();
+                    .delete()
+                    .onError((error, stackTrace) {
+                  Fluttertoast.showToast(msg: "An error has occurred");
+                });
 
                 Fluttertoast.showToast(msg: "Session data is saved");
                 _observationController.text = "";
-                _reccomendationController.text = "";
+                _newIssuesController.text = "";
+                _detailsController.text = "";
                 _timeEndController.text = "";
-                if(!mounted)return;
+                if (!mounted) return;
                 Navigator.pop(context);
               },
               style: ButtonStyle(
-                backgroundColor:
-                    MaterialStateColor.resolveWith((states) => Colors.blue),
+                backgroundColor: MaterialStateColor.resolveWith(
+                    (states) => Palette.secondary),
               ),
               child: const Text(
                 "Conclude Session",
@@ -272,7 +325,6 @@ class _CallState extends State<Call> {
   }
 
   _joinMeeting() async {
-
     Map<FeatureFlag, Object> featureFlags = {
       FeatureFlag.isConferenceTimerEnabled: false,
       FeatureFlag.isCalendarEnabled: false,
@@ -284,18 +336,18 @@ class _CallState extends State<Call> {
     };
     // Define meetings options here
     var options = JitsiMeetingOptions(
-      roomNameOrUrl:"CounsellingCell",
+      roomNameOrUrl: "CounsellingCell",
       subject: "Agenda",
       isAudioMuted: isAudioMuted,
       isAudioOnly: isAudioOnly,
       isVideoMuted: isVideoMuted,
-      userDisplayName:"counsellor",
+      userDisplayName: "counsellor",
       userEmail: "counsellor@gmail.com",
       featureFlags: featureFlags,
     );
 
     log("JitsiMeetingOptions: $options");
-    try{
+    try {
       await JitsiMeetWrapper.joinMeeting(
         options: options,
         listener: JitsiMeetingListener(
@@ -365,6 +417,4 @@ class _CallState extends State<Call> {
           hintText: hintText),
     );
   }
-
-
 }

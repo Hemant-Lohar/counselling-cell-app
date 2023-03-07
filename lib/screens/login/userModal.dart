@@ -12,6 +12,7 @@ class UserModal extends ChangeNotifier {
   String usergender ="";
   bool assessment=true;
   bool firstTime = true;
+  int sessionCount=0;
   int activeIndex = 0;
   int totalIndex = 3;
 

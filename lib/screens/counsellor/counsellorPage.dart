@@ -1,14 +1,12 @@
 import 'package:counselling_cell_application/screens/counsellor/session.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:counselling_cell_application/screens/counsellor/userList.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import '../../theme/Palette.dart';
 import 'counsellorHomePage.dart';
-import 'counsellorProfilePage.dart';
+import 'userList.dart';
 class CounsellorPage extends StatefulWidget {
   const CounsellorPage({Key? key}) : super(key: key);
 
