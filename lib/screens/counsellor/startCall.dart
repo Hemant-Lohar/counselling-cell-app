@@ -42,7 +42,7 @@ class _CallState extends State<Call> {
     log(id);
     FirebaseFirestore.instance
         .collection("counsellor")
-        .doc("counsellor@gmail.com")
+        .doc("counsellor@adcet.in")
         .collection("session")
         .doc(id)
         .get()
@@ -228,7 +228,7 @@ class _CallState extends State<Call> {
               onPressed: () async {
                 await FirebaseFirestore.instance
                     .collection("counsellor")
-                    .doc("counsellor@gmail.com")
+                    .doc("counsellor@adcet.in")
                     .collection("session")
                     .doc(id)
                     .get()
@@ -243,7 +243,7 @@ class _CallState extends State<Call> {
                   });
                   FirebaseFirestore.instance
                       .collection("counsellor")
-                      .doc("counsellor@gmail.com")
+                      .doc("counsellor@adcet.in")
                       .collection("completedSession")
                       .doc(id)
                       .set(data)
@@ -266,7 +266,7 @@ class _CallState extends State<Call> {
                 });
                 FirebaseFirestore.instance
                     .collection("counsellor")
-                    .doc("counsellor@gmail.com")
+                    .doc("counsellor@adcet.in")
                     .collection("session")
                     .doc(id)
                     .delete()
@@ -342,7 +342,7 @@ class _CallState extends State<Call> {
       isAudioOnly: isAudioOnly,
       isVideoMuted: isVideoMuted,
       userDisplayName: "counsellor",
-      userEmail: "counsellor@gmail.com",
+      userEmail: "counsellor@adcet.in",
       featureFlags: featureFlags,
     );
 

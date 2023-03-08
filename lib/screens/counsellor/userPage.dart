@@ -12,25 +12,26 @@ import 'counsellorProfilePage.dart';
 import 'viewUser.dart';
 
 class UserPage extends StatefulWidget {
-  const UserPage({Key? key, required this.id});
+  const UserPage({Key? key, required this.id}):super(key: key);
   final String id;
 
   @override
-  State<UserPage> createState() => _UserPageState(this.id);
+  State<UserPage> createState() => _UserPageState();
 }
 
 class _UserPageState extends State<UserPage> {
-  final String id;
-
-  _UserPageState(this.id);
+  String id="";
 
   int currentIndex = 0;
-
+  @override
+  void initState(){
+    super.initState();
+    id=widget.id;
+  }
   @override
   Widget build(BuildContext context) {
     final screens = [
       ViewUser(id: id),
-      AddUser(id: id),
       UserSession(id: id),
     ];
     return Scaffold(
@@ -53,11 +54,6 @@ class _UserPageState extends State<UserPage> {
             BottomNavigationBarItem(
               icon: Icon(Icons.account_circle_sharp),
               label: 'Basic Info',
-              backgroundColor: Palette.primary,
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.edit),
-              label: 'Add Info',
               backgroundColor: Palette.primary,
             ),
             BottomNavigationBarItem(

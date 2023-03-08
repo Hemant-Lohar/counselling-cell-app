@@ -91,7 +91,7 @@ class _SessionState extends State<Session> {
             StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance
                   .collection('counsellor')
-                  .doc("counsellor@gmail.com")
+                  .doc("counsellor@adcet.in")
                   .collection("session")
                   .where("date", isEqualTo: dateTime)
                   .orderBy("timeStart")
@@ -341,7 +341,7 @@ class _SessionState extends State<Session> {
                                                             .collection(
                                                                 'counsellor')
                                                             .doc(
-                                                                'counsellor@gmail.com')
+                                                                'counsellor@adcet.in')
                                                             .collection(
                                                                 'session')
                                                             .doc(snapshots.data!
@@ -402,7 +402,7 @@ class _SessionState extends State<Session> {
                                     onTap: () async {
                                       await FirebaseFirestore.instance
                                           .collection('counsellor')
-                                          .doc('counsellor@gmail.com')
+                                          .doc('counsellor@adcet.in')
                                           .collection('session')
                                           .doc(snapshots.data!.docs[index].id
                                               .toString())
@@ -445,7 +445,7 @@ class _SessionState extends State<Session> {
             StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance
                   .collection('counsellor')
-                  .doc("counsellor@gmail.com")
+                  .doc("counsellor@adcet.in")
                   .collection("session")
                   .where("date", isGreaterThan: dateTime)
                   .orderBy("date")
@@ -688,7 +688,7 @@ class _SessionState extends State<Session> {
                                                             .collection(
                                                                 'counsellor')
                                                             .doc(
-                                                                'counsellor@gmail.com')
+                                                                'counsellor@adcet.in')
                                                             .collection(
                                                                 'session')
                                                             .doc(snapshots.data!
@@ -747,7 +747,7 @@ class _SessionState extends State<Session> {
                                     onTap: () async {
                                       await FirebaseFirestore.instance
                                           .collection('counsellor')
-                                          .doc('counsellor@gmail.com')
+                                          .doc('counsellor@adcet.in')
                                           .collection('session')
                                           .doc(snapshots.data!.docs[index].id
                                               .toString())
@@ -815,7 +815,7 @@ class _SessionState extends State<Session> {
     int timeEnd = int.parse(_timeEnd.text.replaceAll(":", ""));
     final snapShot = await FirebaseFirestore.instance
         .collection('counsellor')
-        .doc("counsellor@gmail.com")
+        .doc("counsellor@adcet.in")
         .collection("session")
         .where("date", isEqualTo: _date.text)
         .where('__name__', isNotEqualTo: id)

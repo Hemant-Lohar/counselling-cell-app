@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:counselling_cell_application/screens/counsellor/addUser.dart';
 import 'package:counselling_cell_application/theme/palette.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class ViewUser extends StatefulWidget {
   const ViewUser({super.key, required this.id});
@@ -11,7 +13,7 @@ class ViewUser extends StatefulWidget {
 }
 
 class _ViewUserState extends State<ViewUser> {
-  String id = "";
+  late String id ;
   @override
   void initState() {
     super.initState();
@@ -239,7 +241,11 @@ class _ViewUserState extends State<ViewUser> {
                     );
                   } else {
                     return ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        if(id.isNotEmpty) {
+                          Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context)=>AddUser(id:id)));
+                        }
+                      },
                       style: ButtonStyle(
                         backgroundColor:
                             MaterialStateProperty.all<Color>(Palette.secondary),

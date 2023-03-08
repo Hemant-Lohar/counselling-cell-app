@@ -23,6 +23,7 @@ class CounsellorHomePage extends StatefulWidget {
 class _CounsellorHomePageState extends State<CounsellorHomePage> {
   final username = FirebaseAuth.instance.currentUser!.email!;
   String name = "";
+  String initial="";
   @override
   void initState() {
     super.initState();
@@ -34,13 +35,13 @@ class _CounsellorHomePageState extends State<CounsellorHomePage> {
       final data = doc.data() as Map<String, dynamic>;
       setState(() {
         name = data["name"];
+        initial = name[0].toString().toUpperCase();
       });
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    String initial = username[0].toUpperCase();
     return Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,
@@ -360,7 +361,7 @@ class _CounsellorHomePageState extends State<CounsellorHomePage> {
               });
               await FirebaseFirestore.instance
                   .collection('counsellor')
-                  .doc('counsellor@gmail.com')
+                  .doc('counsellor@adcet.in')
                   .collection("Requests")
                   .doc(requestid)
                   .delete()

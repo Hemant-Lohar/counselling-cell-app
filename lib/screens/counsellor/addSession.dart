@@ -293,7 +293,7 @@ class _AddSessionState extends State<AddSession> {
                                 .set(session);
                             await FirebaseFirestore.instance
                                 .collection("counsellor")
-                                .doc("counsellor@gmail.com")
+                                .doc("counsellor@adcet.in")
                                 .collection("session")
                                 .doc(docId)
                                 .set(session);
@@ -324,7 +324,7 @@ class _AddSessionState extends State<AddSession> {
     // log(docId);
     final snapShot = await FirebaseFirestore.instance
         .collection('counsellor')
-        .doc("counsellor@gmail.com")
+        .doc("counsellor@adcet.in")
         .collection("session")
         .where("date", isEqualTo: session["date"])
         .get();
