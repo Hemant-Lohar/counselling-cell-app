@@ -57,7 +57,7 @@ class MainPage extends StatelessWidget {
           stream: FirebaseAuth.instance.authStateChanges(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              return snapshot.data!.email.toString() == "counsellor@gmail.com"
+              return snapshot.data!.email.toString() == "counsellor@adcet.in"
                   ? const CounsellorPage()
                   : const UserPage();
             } else {

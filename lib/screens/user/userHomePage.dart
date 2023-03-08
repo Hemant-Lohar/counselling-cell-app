@@ -255,7 +255,7 @@ class _UserHomePageState extends State<UserHomePage> {
             final docId = DateTime.now().toString();
             await FirebaseFirestore.instance
                 .collection("counsellor")
-                .doc("counsellor@gmail.com")
+                .doc("counsellor@adcet.in")
                 .collection("Requests")
                 .doc(docId)
                 .set(request)

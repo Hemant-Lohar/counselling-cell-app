@@ -148,11 +148,11 @@ class _LoginPageState extends State<LoginPage> {
                                 password: _passwordController.text,
                                 context: context);
                             log(user.toString());
-                            if (user != null && user.email=="counsellor@gmail.com" && _selectedRole[0]) {
+                            if (user != null && user.email=="counsellor@adcet.in" && _selectedRole[0]) {
                               if(!mounted)return;
                               Navigator.popUntil(context, ModalRoute.withName('/'));
                               Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => const CounsellorPage()));
-                            }  else if (user != null  && _emailController.text!="counsellor@gmail.com" && _selectedRole[1] ) {
+                            }  else if (user != null  && _emailController.text!="counsellor@adcet.in" && _selectedRole[1] ) {
                               if(!mounted)return;
                               Navigator.popUntil(context, ModalRoute.withName('/'));
                               Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => const UserPage()));

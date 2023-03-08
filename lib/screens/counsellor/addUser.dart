@@ -5,11 +5,11 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 
 class AddUser extends StatefulWidget {
-  AddUser({Key? key, required this.id});
+  const AddUser({Key? key, required this.id}):super(key: key);
   final String id;
 
   @override
-  State<AddUser> createState() => _AddUserState(this.id);
+  State<AddUser> createState() => _AddUserState();
 }
 
 TextEditingController _referralController = TextEditingController();
@@ -22,11 +22,15 @@ TextEditingController _observationController = TextEditingController();
 TextEditingController _reccomendationController = TextEditingController();
 
 class _AddUserState extends State<AddUser> {
-  String id;
+  String id="";
 
-  _AddUserState(this.id);
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
+  @override
+  void initState() {
+    super.initState();
+    id=widget.id;
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -81,7 +85,7 @@ class _AddUserState extends State<AddUser> {
               TextFormField(
                   controller: _historyController,
                   decoration: const InputDecoration(
-                      hintText: "History for Metal or physical illness", hintStyle: TextStyle(fontSize: 14)),
+                      hintText: "History for Mental or physical illness", hintStyle: TextStyle(fontSize: 14)),
                   maxLines: null,
                   validator: RequiredValidator(errorText: "Required")),
               const SizedBox(
