@@ -723,6 +723,7 @@ class _SessionState extends State<Session> {
                                                         _date.text = _timeStart
                                                                 .text =
                                                             _timeEnd.text = "";
+                                                        if(!mounted)return;
                                                         Navigator.pop(
                                                             context, 'OK');
                                                       } else {

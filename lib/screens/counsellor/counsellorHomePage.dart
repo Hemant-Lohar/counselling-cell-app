@@ -289,7 +289,7 @@ class _CounsellorHomePageState extends State<CounsellorHomePage> {
                           ],
                         ),
                         subtitle: Text(
-                          "Problem:${data["problem"]}\nPreferred mode:${data['mode']}",
+                          "Problem:${data["problem"]}\nPreferred mode:${data['mode']}\nDominant Emotion:${data['emotion']}",
                           maxLines: 3,
                           overflow: TextOverflow.ellipsis,
                           style: const TextStyle(
