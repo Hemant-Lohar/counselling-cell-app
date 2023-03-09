@@ -1,11 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:counselling_cell_application/screens/user/assesment/quiz_screen.dart';
+import 'package:counselling_cell_application/theme/palette.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:camera/camera.dart';
+import '../counsellor/startCall.dart';
 import '../counsellor/userPage.dart';
 
 class UserHomePage extends StatefulWidget {
@@ -26,8 +28,9 @@ class _UserHomePageState extends State<UserHomePage> {
   String mode = "Online";
   bool firstSession = false;
   String first = "No";
+  String emotion="";
   final TextEditingController _problemController = TextEditingController();
-
+  String? selectedAction;
   @override
   void initState() {
     super.initState();
@@ -42,6 +45,7 @@ class _UserHomePageState extends State<UserHomePage> {
         showRequestButton = !data["requested"];
         firstSession = data["firstTime"];
         name = data["name"];
+        emotion=data["emotion"];
         initial = username[0].toUpperCase();
       });
     });
@@ -138,14 +142,25 @@ class _UserHomePageState extends State<UserHomePage> {
                             // fontWeight: FontWeight.bold
                           ),
                         ),
-                        trailing: Text(
-                          "${data["timeStart"]}-${data["timeEnd"]}",
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
-                            color: Colors.black,
-                            fontSize: 20,
-                          ),
+                        trailing: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              "${data["timeStart"]}-${data["timeEnd"]}",
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontSize: 20,
+                              ),
+                            ),
+                            const SizedBox(width: 20,),
+                            IconButton(onPressed: ()async{
+                              await Future.delayed(Duration.zero);
+                              if (!mounted) return;
+                              Fluttertoast.showToast(msg: "Calling..");
+                            }, icon: const Icon(Icons.call),color: Palette.secondary,)
+                          ],
                         ),
                         subtitle: Text(
                           data['mode'],
@@ -229,9 +244,6 @@ class _UserHomePageState extends State<UserHomePage> {
                     });
                   }),
             ]),
-            Container(
-                padding: const EdgeInsets.all(3.0),
-                child: const Text("Is this your first interaction:")),
           ],
         );
       }),
@@ -250,7 +262,8 @@ class _UserHomePageState extends State<UserHomePage> {
               "name": name,
               "problem": _problemController.text,
               "mode": mode,
-              "firstTime": firstSession ? "true" : "false"
+              "firstTime": firstSession ? "true" : "false",
+              "emotion": emotion
             };
             final docId = DateTime.now().toString();
             await FirebaseFirestore.instance
