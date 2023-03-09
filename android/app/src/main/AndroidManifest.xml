@@ -5,7 +5,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
    <application
        tools:replace="android:label"
-        android:label="counselling_cell_application"
+        android:label="Counselling cell Application"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

@@ -89,85 +89,92 @@ class _PersonalDetailsState extends State<PersonalDetails> {
   @override
   Widget build(BuildContext context) {
     return Consumer<UserModal>(builder: (context, modal, child) {
-      return Form(
-        key: formKey,
-        child: ListView(
-          padding: const EdgeInsets.symmetric(horizontal: 40.0),
-          children: [
-           
-            Image.asset('assets/register.png', height: 250, width: 250),
-            Center(
-              child: DotStepper(
-                activeStep: modal.activeIndex,
-                dotCount: modal.totalIndex,
-                shape: Shape.pipe,
-                dotRadius: 20,
-                spacing: 10,
-                tappingEnabled: false,
-                indicator: Indicator.worm,
-                fixedDotDecoration: const FixedDotDecoration(color: Palette.tileback),
-                indicatorDecoration: const IndicatorDecoration(color: Palette.secondary),
+      return 
+         Form(
+          key: formKey,
+          child: ListView(
+            padding: const EdgeInsets.symmetric(horizontal: 40.0),
+            children: [
+              Image.asset('assets/registertion.jpg', height: 250, width: 250),
+              Center(
+                child: DotStepper(
+                  activeStep: modal.activeIndex,
+                  dotCount: modal.totalIndex,
+                  shape: Shape.pipe,
+                  dotRadius: 20,
+                  spacing: 10,
+                  tappingEnabled: false,
+                  indicator: Indicator.worm,
+                  fixedDotDecoration:
+                      const FixedDotDecoration(color: Palette.tileback),
+                  indicatorDecoration:
+                      const IndicatorDecoration(color: Palette.primary),
+                ),
               ),
-            ),
-            TextFormField(
-              style: const TextStyle(fontSize:14),
-              controller: _Usernamecontroller,
-              decoration: const InputDecoration(
-                labelText: "Name",
+              TextFormField(
+                style: const TextStyle(fontSize: 14),
+                controller: _Usernamecontroller,
+                decoration: const InputDecoration(
+                  labelText: "Name",
+                ),
+                validator: RequiredValidator(errorText: "Required"),
               ),
-              validator: RequiredValidator(errorText: "Required"),
-            ),
-            TextFormField(
-              style: const TextStyle(fontSize:14),
-              controller: _Useragecontroller,
-              keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
-                labelText: "Age",
+              TextFormField(
+                style: const TextStyle(fontSize: 14),
+                controller: _Useragecontroller,
+                keyboardType: TextInputType.number,
+                decoration: const InputDecoration(
+                  labelText: "Age",
+                ),
+                validator: RequiredValidator(errorText: "Required"),
               ),
-              validator: RequiredValidator(errorText: "Required"),
-            ),
-            TextFormField(
-              style: const TextStyle(fontSize:14),
-              controller: _Usergendercontroller,
-              decoration: const InputDecoration(
-                labelText: "Gender",
+              // DropdownButton(items: const [
+              //   DropdownMenuItem(value: "Male", child: Text("Male")),
+              //   DropdownMenuItem(value: "Female", child: Text("Female"))
+              // ], onChanged: (){}),
+              TextFormField(
+                style: const TextStyle(fontSize: 14),
+                controller: _Usergendercontroller,
+                decoration: const InputDecoration(
+                  labelText: "Gender",
+                ),
+                validator: RequiredValidator(errorText: "Required"),
               ),
-              validator: RequiredValidator(errorText: "Required"),
-            ),
-            TextFormField(
-              style: const TextStyle(fontSize:14),
-              controller: _Usermobilecontroller,
-              keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
-                labelText: "Mobile",
+              TextFormField(
+                style: const TextStyle(fontSize: 14),
+                controller: _Usermobilecontroller,
+                keyboardType: TextInputType.number,
+                decoration: const InputDecoration(
+                  labelText: "Mobile",
+                ),
+                validator: RequiredValidator(errorText: "Required"),
               ),
-              validator: RequiredValidator(errorText: "Required"),
-            ),
-            const SizedBox(
-              height: 30,
-            ),
-            ElevatedButton(
-              onPressed: () {
-                if (formKey.currentState?.validate() ?? false) {
-                  //next
-                  modal.changeIndex(modal.activeIndex = 1);
-                  modal.username = _Usernamecontroller.text;
-                  modal.userage = _Useragecontroller.text;
-                  modal.usergender = _Usergendercontroller.text;
-                  modal.usermobile = _Usermobilecontroller.text;
-                }
-              },
-              style: ElevatedButton.styleFrom(
-                // backgroundColor: Colors.black,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 40, vertical: 16),
-                shape: const StadiumBorder(),
+              const SizedBox(
+                height: 30,
               ),
-              child: const Text('Next'),
-            ),
-          ],
-        ),
-      );
+              ElevatedButton(
+                onPressed: () {
+                  if (formKey.currentState?.validate() ?? false) {
+                    //next
+                    modal.changeIndex(modal.activeIndex = 1);
+                    modal.username = _Usernamecontroller.text;
+                    modal.userage = _Useragecontroller.text;
+                    modal.usergender = _Usergendercontroller.text;
+                    modal.usermobile = _Usermobilecontroller.text;
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                  // backgroundColor: Colors.black,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 40, vertical: 16),
+                  shape: const StadiumBorder(),
+                ),
+                child: const Text('Next'),
+              ),
+            ],
+          ),
+        );
+      
     });
   }
 }
@@ -185,87 +192,96 @@ class _EducationDetailsState extends State<EducationDetails> {
   Widget build(BuildContext context) {
     return Consumer<UserModal>(builder: (context, modal, child) {
       return Form(
-        key: formKey,
-        child: ListView(
-          padding: const EdgeInsets.symmetric(horizontal: 40.0),
-          children: [
-            const SizedBox(
-              height: 40,
-            ),
-            Image.asset('assets/register.png', height: 250, width: 250),
-            Center(
-              child: DotStepper(
-                activeStep: modal.activeIndex,
-                dotCount: modal.totalIndex,
-                shape: Shape.pipe,
-                dotRadius: 20,
-                spacing: 10,
+          key: formKey,
+          child: ListView(
+            padding: const EdgeInsets.symmetric(horizontal: 40.0),
+            children: [
+              Image.asset('assets/registertion.jpg', height: 250, width: 250),
+              Center(
+                child: DotStepper(
+                  activeStep: modal.activeIndex,
+                  dotCount: modal.totalIndex,
+                  shape: Shape.pipe,
+                  dotRadius: 20,
+                  spacing: 10,
+                  fixedDotDecoration:
+                      const FixedDotDecoration(color: Palette.tileback),
+                  indicatorDecoration:
+                      const IndicatorDecoration(color: Palette.primary),
+                ),
               ),
-            ),
-            TextFormField(
-              style: const TextStyle(fontSize:14),
-              controller: _Userclasscontroller,
-              decoration: const InputDecoration(
-                labelText: "Class",
+              TextFormField(
+                style: const TextStyle(fontSize: 14),
+                controller: _Userclasscontroller,
+                decoration: const InputDecoration(
+                  labelText: "Class",
+                ),
+                validator: RequiredValidator(errorText: "Required"),
               ),
-              validator: RequiredValidator(errorText: "Required"),
-            ),
-            TextFormField(
-              style: const TextStyle(fontSize:14),
-              controller: _Userdepartmentcontroller,
-              decoration: const InputDecoration(
-                labelText: "Department",
+              TextFormField(
+                style: const TextStyle(fontSize: 14),
+                controller: _Userdepartmentcontroller,
+                decoration: const InputDecoration(
+                  labelText: "Department",
+                ),
+                validator: RequiredValidator(errorText: "Required"),
               ),
-              validator: RequiredValidator(errorText: "Required"),
-            ),
-            TextFormField(
-              style: const TextStyle(fontSize:14),
-              controller: _Userdivisioncontroller,
-              decoration: const InputDecoration(
-                labelText: "Division",
+              TextFormField(
+                style: const TextStyle(fontSize: 14),
+                controller: _Userdivisioncontroller,
+                decoration: const InputDecoration(
+                  labelText: "Division",
+                ),
+                validator: RequiredValidator(errorText: "Required"),
               ),
-              validator: RequiredValidator(errorText: "Required"),
-            ),
-            const SizedBox(
-              height: 40,
-            ),
-            ElevatedButton(
-              onPressed: () {
-                //next
-                modal.changeIndex(modal.activeIndex - 1);
-              },
-              style: ElevatedButton.styleFrom(
-                //backgroundColor: Colors.black,
-
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 40, vertical: 16),
-                shape: const StadiumBorder(),
+              const SizedBox(
+                height: 40,
               ),
-              child: const Text('Back'),
-            ),
-            const SizedBox(
-              height: 30,
-            ),
-            ElevatedButton(
-              onPressed: () {
-                if (formKey.currentState?.validate() ?? false) {
-                  //next
-                  modal.changeIndex(modal.activeIndex + 1);
-                  modal.userclass = _Userclasscontroller.text;
-                  modal.userdivision = _Userdivisioncontroller.text;
-                  modal.userdepartment = _Userdepartmentcontroller.text;
-                }
-              },
-              style: ElevatedButton.styleFrom(
-                //backgroundColor: Colors.black,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 40, vertical: 16),
-                shape: const StadiumBorder(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      //next
+                      modal.changeIndex(modal.activeIndex - 1);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Palette.secondary,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 30, vertical: 12),
+                      shape: const StadiumBorder(),
+                    ),
+                    child: const Text(
+                      'Back',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 30,
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      if (formKey.currentState?.validate() ?? false) {
+                        //next
+                        modal.changeIndex(modal.activeIndex + 1);
+                        modal.userclass = _Userclasscontroller.text;
+                        modal.userdivision = _Userdivisioncontroller.text;
+                        modal.userdepartment = _Userdepartmentcontroller.text;
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      //backgroundColor: Colors.black,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 30, vertical: 12),
+                      shape: const StadiumBorder(),
+                    ),
+                    child: const Text('Next'),
+                  ),
+                ],
               ),
-              child: const Text('Next'),
-            ),
-          ],
-        ),
+            ],
+          ),
+        
       );
     });
   }
@@ -283,118 +299,127 @@ class _UserDetailsState extends State<UserDetails> {
   @override
   Widget build(BuildContext context) {
     return Consumer<UserModal>(builder: (context, modal, child) {
-      return Form(
-        key: formKey,
-        child: ListView(
-          padding: const EdgeInsets.symmetric(horizontal: 40.0),
-          children: [
-            const SizedBox(
-              height: 40,
-            ),
-            Image.asset('assets/register.png', height: 250, width: 250),
-            Center(
-              child: DotStepper(
-                activeStep: modal.activeIndex,
-                dotCount: modal.totalIndex,
-                shape: Shape.pipe,
-                dotRadius: 16,
-                spacing: 10,
+      return  Form(
+          key: formKey,
+          child: ListView(
+            padding: const EdgeInsets.symmetric(horizontal: 40.0),
+            children: [
+              Image.asset('assets/registertion.jpg', height: 250, width: 250),
+              Center(
+                child: DotStepper(
+                  activeStep: modal.activeIndex,
+                  dotCount: modal.totalIndex,
+                  shape: Shape.pipe,
+                  dotRadius: 20,
+                  spacing: 10,
+                  fixedDotDecoration:
+                      const FixedDotDecoration(color: Palette.tileback),
+                  indicatorDecoration:
+                      const IndicatorDecoration(color: Palette.primary),
+                ),
               ),
-            ),
-            TextFormField(
-              style: const TextStyle(fontSize:14),
-              controller: _useremailController,
-              decoration: const InputDecoration(
-                labelText: "Email",
+              TextFormField(
+                style: const TextStyle(fontSize: 14),
+                controller: _useremailController,
+                decoration: const InputDecoration(
+                  labelText: "Email",
+                ),
+                validator: RequiredValidator(errorText: "Required"),
               ),
-              validator: RequiredValidator(errorText: "Required"),
-            ),
-            TextFormField(
-              style: const TextStyle(fontSize:14),
-              controller: _passwordController,
-              obscureText: true,
-              decoration: const InputDecoration(
-                labelText: "Password",
+              TextFormField(
+                style: const TextStyle(fontSize: 14),
+                controller: _passwordController,
+                obscureText: true,
+                decoration: const InputDecoration(
+                  labelText: "Password",
+                ),
+                validator: RequiredValidator(errorText: "Required"),
               ),
-              validator: RequiredValidator(errorText: "Required"),
-            ),
-            TextFormField(
-              style: const TextStyle(fontSize:14),
-              controller: _confirmPasswordController,
-              obscureText: true,
-              decoration: const InputDecoration(
-                labelText: "Confirm Password",
+              TextFormField(
+                style: const TextStyle(fontSize: 14),
+                controller: _confirmPasswordController,
+                obscureText: true,
+                decoration: const InputDecoration(
+                  labelText: "Confirm Password",
+                ),
+                validator: RequiredValidator(errorText: "Required"),
               ),
-              validator: RequiredValidator(errorText: "Required"),
-            ),
-            const SizedBox(
-              height: 40,
-            ),
-            ElevatedButton(
-              onPressed: () {
-                //next
-                modal.changeIndex(modal.activeIndex - 1);
-              },
-              style: ElevatedButton.styleFrom(
-                // backgroundColor: Colors.black,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 40, vertical: 16),
-                shape: const StadiumBorder(),
+              const SizedBox(
+                height: 40,
               ),
-              child: const Text('Back'),
-            ),
-            const SizedBox(
-              height: 40,
-            ),
-            ElevatedButton(
-              onPressed: () async {
-                if (formKey.currentState?.validate() ?? false) {
-                  //next
-                  // modal.changeIndex(modal.activeIndex + 1);
-                  modal.useremail = _useremailController.text;
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      //next
+                      modal.changeIndex(modal.activeIndex - 1);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Palette.secondary,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 30, vertical: 12),
+                      shape: const StadiumBorder(),
+                    ),
+                    child: const Text(
+                      'Back',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 40,
+                  ),
+                  ElevatedButton(
+                    onPressed: () async {
+                      if (formKey.currentState?.validate() ?? false) {
+                        //next
+                        // modal.changeIndex(modal.activeIndex + 1);
+                        modal.useremail = _useremailController.text;
 
-                  Firebase.initializeApp(
-                      options: DefaultFirebaseOptions.currentPlatform);
+                        Firebase.initializeApp(
+                            options: DefaultFirebaseOptions.currentPlatform);
 
-                  final user = MyUser(
-                      id: modal.useremail,
-                      name: modal.username,
-                      age: int.parse(modal.userage),
-                      gender: modal.usergender,
-                      mobile: int.parse(modal.usermobile),
-                      uclass: modal.userclass,
-                      department: modal.userdepartment,
-                      division: modal.userdivision,
-                      assessment: true
-                  );
+                        final user = MyUser(
+                            id: modal.useremail,
+                            name: modal.username,
+                            age: int.parse(modal.userage),
+                            gender: modal.usergender,
+                            mobile: int.parse(modal.usermobile),
+                            uclass: modal.userclass,
+                            department: modal.userdepartment,
+                            division: modal.userdivision,
+                            assessment: true);
 
-                  await signUp(
-                          _useremailController.text, _passwordController.text)
-                      .then((value) => {createUser(user)})
-                      .then((value) => {
-                            Navigator.popUntil(
-                              context,
-                              ModalRoute.withName('/'),
-                            ),
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const LoginPage()),
-                            )
-                          })
-                      .then((value) => Navigator.pop(context, UserModal));
-                }
-              },
-              style: ElevatedButton.styleFrom(
-                shadowColor: Colors.black,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 40, vertical: 16),
-                shape: const StadiumBorder(),
+                        await signUp(_useremailController.text,
+                                _passwordController.text)
+                            .then((value) => {createUser(user)})
+                            .then((value) => {
+                                  Navigator.popUntil(
+                                    context,
+                                    ModalRoute.withName('/'),
+                                  ),
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const LoginPage()),
+                                  )
+                                })
+                            .then((value) => Navigator.pop(context, UserModal));
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 30, vertical: 12),
+                      shape: const StadiumBorder(),
+                    ),
+                    child: const Text('Register'),
+                  ),
+                ],
               ),
-              child: const Text('Register'),
-            ),
-          ],
-        ),
+            ],
+          ),
+        
       );
     });
   }
@@ -411,17 +436,16 @@ class MyUser {
   final String department;
   final bool assessment;
 
-  MyUser({
-    this.id = '',
-    required this.name,
-    required this.age,
-    required this.gender,
-    required this.mobile,
-    required this.uclass,
-    required this.department,
-    required this.division,
-    required this.assessment
-  });
+  MyUser(
+      {this.id = '',
+      required this.name,
+      required this.age,
+      required this.gender,
+      required this.mobile,
+      required this.uclass,
+      required this.department,
+      required this.division,
+      required this.assessment});
 
   Map<String, dynamic> toJson() => {
         'id': id,
@@ -482,7 +506,7 @@ Future createUser(MyUser user) async {
 //               mainAxisAlignment: MainAxisAlignment.start,
 //               children: [
 //                 const SizedBox(height: 10),
-//                 Image.asset('assets/register.png'),
+//                 Image.asset('assets/registertion.jpg'),
 //                 const SizedBox(height: 20),
 //                 Center(
 //                   child: TextFormField(

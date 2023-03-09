@@ -59,7 +59,7 @@ class MainPage extends StatelessWidget {
             if (snapshot.hasData) {
               return snapshot.data!.email.toString() == "counsellor@adcet.in"
                   ? const CounsellorPage()
-                  : const UserPage();
+                  : const LoginPage();
             } else {
               return const LoginPage();
             }

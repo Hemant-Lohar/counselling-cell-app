@@ -138,9 +138,20 @@ class _UserListState extends State<UserList> {
                         return Container(
                           margin: const EdgeInsets.all(10),
                           padding: const EdgeInsets.only(left: 10),
-                          height: 50,
-                          child: ElevatedButton(
-                            onPressed: () {
+                          // height: 50,
+
+                          // onPressed: () {
+                          //   Navigator.push(
+                          //     context,
+                          //     MaterialPageRoute(
+                          //         builder: (context) => UserPage(
+                          //               id: data['id'].toString(),
+                          //             )),
+                          //   );
+                          // },
+
+                          child: ListTile(
+                            onTap: () {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -149,21 +160,35 @@ class _UserListState extends State<UserList> {
                                         )),
                               );
                             },
-                            style: ElevatedButton.styleFrom(
-                              // backgroundColor: Colors.black,
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 0, vertical: 8),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10.0)),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12)),
+                            tileColor: Palette.tileback,
+                            leading: CircleAvatar(
+                              backgroundColor: Palette.primary,
+                              child: Text(
+                                data['name'][0],
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                ),
+                              ),
                             ),
-                            child: Text(
+                            title: Text(
                               data['name'],
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: const TextStyle(
-                                color: Colors.white,
-                                backgroundColor: Colors.blue,
-                                fontSize: 14,
+                                  color: Colors.black87,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            subtitle: const Text(
+                              "Class - B.Tech",
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 12,
+
+                                // fontWeight: FontWeight.bold
                               ),
                             ),
                           ),

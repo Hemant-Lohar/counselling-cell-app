@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 
+import 'package:counselling_cell_application/theme/palette.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -61,6 +62,8 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+          resizeToAvoidBottomInset: true,
+
       backgroundColor: Colors.white,
       body: FutureBuilder(
           future: Firebase.initializeApp(
@@ -68,26 +71,30 @@ class _LoginPageState extends State<LoginPage> {
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
               var children2 = [
-                Container(
-                  height: 280,
-                  width: double.infinity,
-                  padding: const EdgeInsets.only(top: 80),
-                  decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(30.0),
-                          bottomRight: Radius.circular(30.0)),
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [
-                          Color.fromARGB(255, 185, 218, 243),
-                          Color.fromARGB(255, 221, 240, 255)
-                        ],
-                      ),
-                      image: DecorationImage(
-                          image: AssetImage('assets/logo.png'),
-                          fit: BoxFit.fitWidth,
-                          alignment: Alignment.bottomLeft)),
+                SingleChildScrollView(
+                  child: Container(
+                    height: 400,
+                    width: double.infinity,
+                    padding: const EdgeInsets.only(top: 400),
+                    decoration: const BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(30.0),
+                            bottomRight: Radius.circular(30.0)),
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [
+                            Color.fromARGB(255, 185, 218, 243),
+                            Color.fromARGB(255, 221, 240, 255)
+                          ],
+                        ),
+                        image: DecorationImage(
+                          
+                          scale: 0.4,
+                            image: AssetImage('assets/login.jpg'),
+                            fit: BoxFit.cover,
+                            alignment: Alignment.bottomCenter)),
+                  ),
                 ),
                 const SizedBox(height: 50),
                 Padding(
@@ -108,9 +115,9 @@ class _LoginPageState extends State<LoginPage> {
                           borderRadius:
                               const BorderRadius.all(Radius.circular(22)),
                           borderColor: Colors.black,
-                          selectedBorderColor: Colors.black,
+                          selectedBorderColor: Colors.black87,
                           selectedColor: Colors.white,
-                          fillColor: Colors.black,
+                          fillColor: Colors.black87,
                           color: Colors.black,
                           constraints: const BoxConstraints(
                             minHeight: 40.0,
@@ -177,7 +184,7 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                         const SizedBox(
-                          height: 30,
+                          height: 20,
                         ),
                         // const Text('Not Registered? Register here',
                         // style: TextStyle(color: Colors.black),)
