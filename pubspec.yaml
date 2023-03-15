@@ -40,6 +40,8 @@ dependencies:
   firebase_ml_model_downloader:
   firebase_auth: ^4.2.1
   permission_handler:
+  printing:
+  open_file:
   provider: ^6.0.5
   path_provider:
   path:
@@ -53,6 +55,7 @@ dependencies:
   get:
   tflite_flutter: ^0.9.0
   hexcolor:
+  pdf: ^3.8.4
 dev_dependencies:
   flutter_launcher_icons:
   flutter_native_splash:
