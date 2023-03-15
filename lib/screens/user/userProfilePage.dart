@@ -51,7 +51,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                       ),
                       ElevatedButton(
                         onPressed: () {
-                          Logout().then((value) => {
+                          logout().then((value) => {
 
                           Navigator.pushAndRemoveUntil(
                           context,
@@ -66,7 +66,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                               horizontal: 40, vertical: 16),
                           shape: const StadiumBorder(),
                         ),
-                        child: const Text('Logout'),
+                        child: const Text('logout'),
                       ),
                     ],
                   ),

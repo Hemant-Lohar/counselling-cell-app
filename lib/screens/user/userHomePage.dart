@@ -1,14 +1,19 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:counselling_cell_application/screens/user/assesment/quiz_screen.dart';
 import 'package:counselling_cell_application/theme/palette.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:camera/camera.dart';
+import 'package:jitsi_meet_wrapper/jitsi_meet_wrapper.dart';
 import '../counsellor/startCall.dart';
 import '../counsellor/userPage.dart';
+import 'package:universal_html/html.dart' as html;
 
 class UserHomePage extends StatefulWidget {
   const UserHomePage({super.key});
@@ -18,19 +23,23 @@ class UserHomePage extends StatefulWidget {
 }
 
 class _UserHomePageState extends State<UserHomePage> {
+  bool isAudioMuted = true;
+  bool isAudioOnly = false;
+  bool isVideoMuted = true;
   final String username = FirebaseAuth.instance.currentUser!.email!;
   String initial = "";
   String name = "";
   late final String dateTime;
-  bool showAssessment = false;
-  bool showRequestButton = true;
+  bool showAssessment = true;
+  bool showRequestButton = false;
   bool selectedMode = true;
   String mode = "Online";
   bool firstSession = false;
   String first = "No";
-  String emotion="";
+  String emotion = "";
   final TextEditingController _problemController = TextEditingController();
   String? selectedAction;
+
   @override
   void initState() {
     super.initState();
@@ -45,7 +54,7 @@ class _UserHomePageState extends State<UserHomePage> {
         showRequestButton = !data["requested"];
         firstSession = data["firstTime"];
         name = data["name"];
-        emotion=data["emotion"];
+        emotion = data["emotion"];
         initial = username[0].toUpperCase();
       });
     });
@@ -65,6 +74,7 @@ class _UserHomePageState extends State<UserHomePage> {
               height: 50,
             ),
             showAssessment ? getAssessmentButton() : getSessions(),
+            
           ],
         ),
       ),
@@ -118,8 +128,8 @@ class _UserHomePageState extends State<UserHomePage> {
                   "Your upcoming session",
                   style: TextStyle(
                     color: Colors.black,
-                    fontSize: 30,
-                    // fontWeight: FontWeight.bold
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold
                   ),
                 ),
                 ListView.builder(
@@ -154,12 +164,25 @@ class _UserHomePageState extends State<UserHomePage> {
                                 fontSize: 20,
                               ),
                             ),
-                            const SizedBox(width: 20,),
-                            IconButton(onPressed: ()async{
-                              await Future.delayed(Duration.zero);
-                              if (!mounted) return;
-                              Fluttertoast.showToast(msg: "Calling..");
-                            }, icon: const Icon(Icons.call),color: Palette.secondary,)
+                            const SizedBox(
+                              width: 20,
+                            ),
+                            IconButton(
+                              onPressed: () async {
+                                await Future.delayed(Duration.zero);
+                                if (!mounted) return;
+                                Fluttertoast.showToast(msg: "Calling..");
+                                if (kIsWeb) {
+                                  html.window.open(
+                                      "https://meet.jit.si/CounsellingCell",
+                                      "Ongoing Session");
+                                } else {
+                                  _joinMeeting();
+                                }
+                              },
+                              icon: const Icon(Icons.call),
+                              color: Palette.primary,
+                            )
                           ],
                         ),
                         subtitle: Text(
@@ -185,9 +208,10 @@ class _UserHomePageState extends State<UserHomePage> {
         });
   }
 
-    Widget getAssessmentButton() {
+  Widget getAssessmentButton() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         const Text(
           "Welcome User, Take a short assessment to improve your experience",
@@ -216,24 +240,28 @@ class _UserHomePageState extends State<UserHomePage> {
 
   Widget getAlertDialog() {
     return AlertDialog(
-      title: const Text('Mention your problems in short'),
+      title: const Text('Mention your problems in short',
+          style: TextStyle(fontSize: 18)),
       content: StatefulBuilder(
           builder: (BuildContext context, StateSetter setState) {
         return Column(
           mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             TextField(
+              style: const TextStyle(fontSize: 14),
               keyboardType: TextInputType.text,
               controller: _problemController,
               decoration: const InputDecoration(
-                icon: Icon(Icons.warning),
+                icon: Icon(Icons.question_answer),
                 labelText: "Problem",
               ),
             ),
-            Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-              Container(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Text("Preferred mode:    $mode")),
+            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              Text(
+                "Preferred mode:    $mode",
+                style: const TextStyle(fontSize: 14),
+              ),
               Switch(
                   value: selectedMode,
                   onChanged: (bool value) {
@@ -282,7 +310,9 @@ class _UserHomePageState extends State<UserHomePage> {
                 Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(
-                        builder: (BuildContext context) =>   UserPage(id: username,)),
+                        builder: (BuildContext context) => UserPage(
+                              id: username,
+                            )),
                     ModalRoute.withName(
                         '/') // Replace this with your root screen's route name (usually '/')
                     );
@@ -300,7 +330,87 @@ class _UserHomePageState extends State<UserHomePage> {
   }
 }
 
+_joinMeeting() async {
+  Map<FeatureFlag, Object> featureFlags = {
+    FeatureFlag.isConferenceTimerEnabled: false,
+    FeatureFlag.isCalendarEnabled: false,
+    FeatureFlag.isAddPeopleEnabled: false,
+    FeatureFlag.isCloseCaptionsEnabled: false,
+    FeatureFlag.areSecurityOptionsEnabled: false,
+    FeatureFlag.isNotificationsEnabled: false,
+    FeatureFlag.isRaiseHandEnabled: false
+  };
+  // Define meetings options here
 
+  String name = FirebaseAuth.instance.currentUser!.email!;
+  var options = JitsiMeetingOptions(
+    roomNameOrUrl: "CounsellingCell",
+    subject: "Agenda",
+    isAudioMuted: true,
+    isAudioOnly: false,
+    isVideoMuted: true,
+    userDisplayName: "User",
+    userEmail: "user@gmail.com",
+    featureFlags: featureFlags,
+  );
+
+  log("JitsiMeetingOptions: $options");
+  try {
+    await JitsiMeetWrapper.joinMeeting(
+      options: options,
+      listener: JitsiMeetingListener(
+        onOpened: () => log("onOpened"),
+        onConferenceWillJoin: (url) {
+          log("onConferenceWillJoin: url: $url");
+        },
+        onConferenceJoined: (url) {
+          log("onConferenceJoined: url: $url");
+        },
+        onConferenceTerminated: (url, error) {
+          log("onConferenceTerminated: url: $url, error: $error");
+          JitsiMeetWrapper.hangUp();
+        },
+        onAudioMutedChanged: (isMuted) {
+          log("onAudioMutedChanged: isMuted: $isMuted");
+        },
+        onVideoMutedChanged: (isMuted) {
+          log("onVideoMutedChanged: isMuted: $isMuted");
+        },
+        onScreenShareToggled: (participantId, isSharing) {
+          log(
+            "onScreenShareToggled: participantId: $participantId, "
+            "isSharing: $isSharing",
+          );
+        },
+        onParticipantJoined: (email, name, role, participantId) {
+          log(
+            "onParticipantJoined: email: $email, name: $name, role: $role, "
+            "participantId: $participantId",
+          );
+        },
+        onParticipantLeft: (participantId) {
+          log("onParticipantLeft: participantId: $participantId");
+        },
+        onParticipantsInfoRetrieved: (participantsInfo, requestId) {
+          log(
+            "onParticipantsInfoRetrieved: participantsInfo: $participantsInfo, "
+            "requestId: $requestId",
+          );
+        },
+        onChatMessageReceived: (senderId, message, isPrivate) {
+          log(
+            "onChatMessageReceived: senderId: $senderId, message: $message, "
+            "isPrivate: $isPrivate",
+          );
+        },
+        onChatToggled: (isOpen) => log("onChatToggled: isOpen: $isOpen"),
+        onClosed: () => log("onClosed"),
+      ),
+    );
+  } catch (error) {
+    log(error.toString());
+  }
+}
 
 
 

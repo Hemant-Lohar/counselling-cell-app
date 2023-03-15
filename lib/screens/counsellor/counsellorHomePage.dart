@@ -23,7 +23,7 @@ class CounsellorHomePage extends StatefulWidget {
 class _CounsellorHomePageState extends State<CounsellorHomePage> {
   final username = FirebaseAuth.instance.currentUser!.email!;
   String name = "";
-  String initial="";
+  String initial = "";
   @override
   void initState() {
     super.initState();
@@ -75,13 +75,14 @@ class _CounsellorHomePageState extends State<CounsellorHomePage> {
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: SingleChildScrollView(
               child: Column(children: [
-                Text("Welcome $name !\nThis is Your Homepage.",
-                    style: const TextStyle(color: Colors.black, fontSize: 16)),
-                const SizedBox(
-                  height: 30,
-                ),
+                // Text("Welcome $name !\nThis is Your Homepage.",
+                //     style: const TextStyle(color: Colors.black, fontSize: 16)),
+                // const SizedBox(
+                //   height: 30,
+                // ),
                 getNewRequests(),
                 getRequests()
+
                 // ElevatedButton(onPressed: () async{
                 //
                 // }, child: const Text("Send"))
@@ -106,9 +107,9 @@ class _CounsellorHomePageState extends State<CounsellorHomePage> {
                 children: const [
                   Center(
                     child: Text(
-                      "You have no requests from existing users!!",
+                      "You have no requests from existing users!",
                       style: TextStyle(
-                        fontSize: 20,
+                        fontSize: 14,
                         color: Colors.black,
                       ),
                     ),
@@ -122,7 +123,7 @@ class _CounsellorHomePageState extends State<CounsellorHomePage> {
                 const Text(
                   "Requests from existing users",
                   style: TextStyle(
-                    fontSize: 20,
+                    fontSize: 16,
                     color: Colors.black,
                   ),
                 ),
@@ -217,9 +218,9 @@ class _CounsellorHomePageState extends State<CounsellorHomePage> {
                   Padding(
                     padding: EdgeInsets.all(8.0),
                     child: Text(
-                      "You have no new requests!!",
+                      "You have no new requests!",
                       style: TextStyle(
-                        fontSize: 20,
+                        fontSize: 16,
                         color: Colors.black,
                       ),
                     ),

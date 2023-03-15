@@ -13,7 +13,7 @@ class ViewUser extends StatefulWidget {
 }
 
 class _ViewUserState extends State<ViewUser> {
-  late String id ;
+  late String id;
   @override
   void initState() {
     super.initState();
@@ -67,7 +67,7 @@ class _ViewUserState extends State<ViewUser> {
                           children: [
                         const SizedBox(height: 30),
                         CircleAvatar(
-                          backgroundColor: Palette.secondary,
+                          backgroundColor: Palette.primary,
                           radius: 50,
                           child: Text(
                             initial,
@@ -213,7 +213,7 @@ class _ViewUserState extends State<ViewUser> {
 
                   if (output.containsKey('referral')) {
                     return Padding(
-                      padding: EdgeInsets.all(5.0),
+                      padding: const EdgeInsets.all(40.0),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -221,7 +221,7 @@ class _ViewUserState extends State<ViewUser> {
                           const SizedBox(height: 30),
                           Column(
                             mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const Divider(
@@ -231,34 +231,96 @@ class _ViewUserState extends State<ViewUser> {
                               const SizedBox(
                                 height: 10,
                               ),
-                              Text("Referred by: $referral",style: const TextStyle(color: Colors.black, fontSize: 14)),
-                              Text("Reason for Referral: $reasonReferral",style: const TextStyle(color: Colors.black, fontSize: 14)),
-                              Text("Parents Mobile Number:$parentMobile",style: const TextStyle(color: Colors.black, fontSize: 14)),
-                              Text("Informant: $informant",style: const TextStyle(color: Colors.black, fontSize: 14)),
-                              Text("Information given by Parents / teacher: $info",style: const TextStyle(color: Colors.black, fontSize: 14)),
-                              Text("Chief Complaints and History: $complaint",style: const TextStyle(color: Colors.black, fontSize: 14)),
-                              Text("Family History: $familyHistory",style: const TextStyle(color: Colors.black, fontSize: 14)),
-                              Text("Parents information: $parentDetails",style: const TextStyle(color: Colors.black, fontSize: 14)),
-                              Text("Siblings: $siblings",style: const TextStyle(color: Colors.black, fontSize: 14)),
-                              Text("Birth Order: $birthOrder",style: const TextStyle(color: Colors.black, fontSize: 14)),
-                              Text("Past medical/ psychiatric history: $pastmedicalHistory",style: const TextStyle(color: Colors.black, fontSize: 14)),
-                              Text("Medical and Psychiatric History: $medicalHistory",style: const TextStyle(color: Colors.black, fontSize: 14)),
-                              Text("(Birth and Early Development: $birthEarlyDevelopment",style: const TextStyle(color: Colors.black, fontSize: 14)),
-                              Text("Behaviour during Childhood: $childBehaviour",style: const TextStyle(color: Colors.black, fontSize: 14)),
-                              Text(" Physical Illness during Childhood: $childIllness",style: const TextStyle(color: Colors.black, fontSize: 14)),
-                              Text(" Menstrual History: $menstrual",style: const TextStyle(color: Colors.black, fontSize: 14)),
-                              Text("Sexual History: $sexual",style: const TextStyle(color: Colors.black, fontSize: 14)),
-                              Text(" Marital History : $marital",style: const TextStyle(color: Colors.black, fontSize: 14)),
-                              Text("Use and abuse of alcohol : $alcohol",style: const TextStyle(color: Colors.black, fontSize: 14)),
-                              Text("tobacco and drug abuse: $substance",style: const TextStyle(color: Colors.black, fontSize: 14)),
-                              Text("10th marks: $ssc",style: const TextStyle(color: Colors.black, fontSize: 14)),
-                              Text("12th/Diploma marks: $hscDiploma",style: const TextStyle(color: Colors.black, fontSize: 14)),
-                              Text("JEE/CET marks: $entranceExam",style: const TextStyle(color: Colors.black, fontSize: 14)),
-                              Text("Current academic performance: $cgpa",style: const TextStyle(color: Colors.black, fontSize: 14)),
-                              Text("Extra Info(if any): $extraInfo",style: const TextStyle(color: Colors.black, fontSize: 14)),
-                              Text("Assessment (if any): $assessment",style: const TextStyle(color: Colors.black, fontSize: 14)),
-                              Text("Observation: $observation",style: const TextStyle(color: Colors.black, fontSize: 14)),
-                              Text("Reccomendation: $reccomendation",style: const TextStyle(color: Colors.black, fontSize: 14)),
+                              Text("Referred by: $referral",
+                                  style: const TextStyle(
+                                      color: Colors.black, fontSize: 14)),
+                              Text("Reason for Referral: $reasonReferral",
+                                  style: const TextStyle(
+                                      color: Colors.black, fontSize: 14)),
+                              Text("Parents Mobile Number:$parentMobile",
+                                  style: const TextStyle(
+                                      color: Colors.black, fontSize: 14)),
+                              Text("Informant: $informant",
+                                  style: const TextStyle(
+                                      color: Colors.black, fontSize: 14)),
+                              Text(
+                                  "Information given by Parents / teacher: $info",
+                                  style: const TextStyle(
+                                      color: Colors.black, fontSize: 14)),
+                              Text("Chief Complaints and History: $complaint",
+                                  style: const TextStyle(
+                                      color: Colors.black, fontSize: 14)),
+                              Text("Family History: $familyHistory",
+                                  style: const TextStyle(
+                                      color: Colors.black, fontSize: 14)),
+                              Text("Parents information: $parentDetails",
+                                  style: const TextStyle(
+                                      color: Colors.black, fontSize: 14)),
+                              Text("Siblings: $siblings",
+                                  style: const TextStyle(
+                                      color: Colors.black, fontSize: 14)),
+                              Text("Birth Order: $birthOrder",
+                                  style: const TextStyle(
+                                      color: Colors.black, fontSize: 14)),
+                              Text(
+                                  "Past medical/ psychiatric history: $pastmedicalHistory",
+                                  style: const TextStyle(
+                                      color: Colors.black, fontSize: 14)),
+                              Text(
+                                  "Medical and Psychiatric History: $medicalHistory",
+                                  style: const TextStyle(
+                                      color: Colors.black, fontSize: 14)),
+                              Text(
+                                  "(Birth and Early Development: $birthEarlyDevelopment",
+                                  style: const TextStyle(
+                                      color: Colors.black, fontSize: 14)),
+                              Text(
+                                  "Behaviour during Childhood: $childBehaviour",
+                                  style: const TextStyle(
+                                      color: Colors.black, fontSize: 14)),
+                              Text(
+                                  " Physical Illness during Childhood: $childIllness",
+                                  style: const TextStyle(
+                                      color: Colors.black, fontSize: 14)),
+                              Text(" Menstrual History: $menstrual",
+                                  style: const TextStyle(
+                                      color: Colors.black, fontSize: 14)),
+                              Text("Sexual History: $sexual",
+                                  style: const TextStyle(
+                                      color: Colors.black, fontSize: 14)),
+                              Text(" Marital History : $marital",
+                                  style: const TextStyle(
+                                      color: Colors.black, fontSize: 14)),
+                              Text("Use and abuse of alcohol : $alcohol",
+                                  style: const TextStyle(
+                                      color: Colors.black, fontSize: 14)),
+                              Text("tobacco and drug abuse: $substance",
+                                  style: const TextStyle(
+                                      color: Colors.black, fontSize: 14)),
+                              Text("10th marks: $ssc",
+                                  style: const TextStyle(
+                                      color: Colors.black, fontSize: 14)),
+                              Text("12th/Diploma marks: $hscDiploma",
+                                  style: const TextStyle(
+                                      color: Colors.black, fontSize: 14)),
+                              Text("JEE/CET marks: $entranceExam",
+                                  style: const TextStyle(
+                                      color: Colors.black, fontSize: 14)),
+                              Text("Current academic performance: $cgpa",
+                                  style: const TextStyle(
+                                      color: Colors.black, fontSize: 14)),
+                              Text("Extra Info(if any): $extraInfo",
+                                  style: const TextStyle(
+                                      color: Colors.black, fontSize: 14)),
+                              Text("Assessment (if any): $assessment",
+                                  style: const TextStyle(
+                                      color: Colors.black, fontSize: 14)),
+                              Text("Observation: $observation",
+                                  style: const TextStyle(
+                                      color: Colors.black, fontSize: 14)),
+                              Text("Reccomendation: $reccomendation",
+                                  style: const TextStyle(
+                                      color: Colors.black, fontSize: 14)),
                             ],
                           ),
                         ],
@@ -267,8 +329,10 @@ class _ViewUserState extends State<ViewUser> {
                   } else {
                     return ElevatedButton(
                       onPressed: () {
-                        if(id.isNotEmpty) {
-                          Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context)=>AddUser(id:id)));
+                        if (id.isNotEmpty) {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                                  AddUser(id: id)));
                         }
                       },
                       style: ButtonStyle(
@@ -278,7 +342,6 @@ class _ViewUserState extends State<ViewUser> {
                       child: const Text("Enter Details"),
                     );
                   } // <-- Your value
-
                 } else {
                   return const Center(child: CircularProgressIndicator());
                 }

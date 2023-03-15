@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:counselling_cell_application/theme/palette.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:io';
 import 'dart:async';
@@ -11,6 +12,7 @@ import 'package:image/image.dart' as img;
 import 'package:tflite_flutter/tflite_flutter.dart';
 // import 'package:tflite_flutter/tflite_flutter.dart';
 import 'package:firebase_ml_model_downloader/firebase_ml_model_downloader.dart';
+
 List<String> labels = [
   "Angry",
   "Disgust",
@@ -21,7 +23,6 @@ List<String> labels = [
   "Neutral"
 ];
 
-
 class QuizScreen extends StatefulWidget {
   const QuizScreen({
     super.key,
@@ -29,7 +30,6 @@ class QuizScreen extends StatefulWidget {
   });
 
   final CameraDescription camera;
-
 
   @override
   State<QuizScreen> createState() => _QuizScreenState();
@@ -43,10 +43,10 @@ class _QuizScreenState extends State<QuizScreen> {
   List<Question> questionList = getQuestions();
   int _currentQuestionIndex = 0;
   int _score = 0;
-  late final List<int> _emotions=List<int>.filled(7,0);
+  late final List<int> _emotions = List<int>.filled(7, 0);
   Answer? _selectedAnswer;
   @override
-  void initState(){
+  void initState() {
     super.initState();
     // To display the current output from the Camera,
     // create a CameraController.
@@ -80,12 +80,10 @@ class _QuizScreenState extends State<QuizScreen> {
       log(interpreter.getInputTensors().toString());
       log(interpreter.getOutputTensors().toString());
       setState(() {
-        _customModel=customModel.file;
+        _customModel = customModel.file;
       });
     });
   }
-
-
 
   @override
   void dispose() {
@@ -97,31 +95,47 @@ class _QuizScreenState extends State<QuizScreen> {
 
   //define the data
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: BackButton(onPressed: (){
-          Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(builder: (BuildContext context) => const UserPage()),
-              ModalRoute.withName('/') // Replace this with your root screen's route name (usually '/')
-          );
-        }),
-      ),
-      backgroundColor: const Color.fromARGB(255, 11, 140, 238),
-      body: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 32),
-        child:
-        Column(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-          const Text(
-            "Mental Health Assessment",
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 24,
-            ),
+        title: const Text(
+          "Mental Health Assessment",
+          style: TextStyle(
+            color: Colors.black87,
+            fontSize: 16,
+            // fontWeight: FontWeight.bold,
           ),
+        ),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: BackButton(
+            color: Colors.black87,
+            onPressed: () {
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                      builder: (BuildContext context) => const UserPage()),
+                  ModalRoute.withName(
+                      '/') // Replace this with your root screen's route name (usually '/')
+                  );
+            }),
+      ),
+      // backgroundColor: Palette.whi,
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal:30.0),
+        child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+          Image.asset('assets/assessment.png', height: 200, width: 200),
+          const SizedBox(height: 20),
+      
+          // const Text(
+          //   "Mental Health Assessment",
+          //   style: TextStyle(
+          //     color: Colors.black87,
+          //     fontSize: 18,
+          //     fontWeight: FontWeight.bold,
+          //   ),
+          // ),
           _questionWidget(),
           _answerList(),
           _nextButton(),
@@ -136,27 +150,27 @@ class _QuizScreenState extends State<QuizScreen> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          "Question ${_currentQuestionIndex + 1}/${questionList.length.toString()}",
+          "Question: ${_currentQuestionIndex + 1}/${questionList.length.toString()}",
           style: const TextStyle(
-            color: Colors.white,
-            fontSize: 20,
-            fontWeight: FontWeight.w600,
+            color: Colors.black87,
+            fontSize: 14,
+            // fontWeight: FontWeight.w600,
           ),
         ),
         const SizedBox(height: 20),
         Container(
           alignment: Alignment.center,
           width: double.infinity,
-          padding: const EdgeInsets.all(32),
+          padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
-            color: Colors.indigo,
-            borderRadius: BorderRadius.circular(16),
+            color: Palette.secondary,
+            borderRadius: BorderRadius.circular(12),
           ),
           child: Text(
             questionList[_currentQuestionIndex].questionText,
             style: const TextStyle(
               color: Colors.white,
-              fontSize: 18,
+              fontSize: 16,
               fontWeight: FontWeight.w600,
             ),
           ),
@@ -171,7 +185,7 @@ class _QuizScreenState extends State<QuizScreen> {
           .answersList
           .map(
             (e) => _answerButton(e),
-      )
+          )
           .toList(),
     );
   }
@@ -185,17 +199,15 @@ class _QuizScreenState extends State<QuizScreen> {
       height: 48,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
+          foregroundColor: isSelected ? Colors.white : Colors.black,
+          backgroundColor: isSelected ? Colors.orangeAccent : Palette.tileback,
+          elevation: 0,
           shape: const StadiumBorder(),
-          primary: isSelected ? Colors.orangeAccent : Colors.white,
-          onPrimary: isSelected ? Colors.white : Colors.black,
         ),
-        onPressed: ()async{
-
-
-            setState(() {
-              _selectedAnswer = answer;
-            });
-
+        onPressed: () async {
+          setState(() {
+            _selectedAnswer = answer;
+          });
         },
         child: Text(answer.answerText),
       ),
@@ -213,13 +225,13 @@ class _QuizScreenState extends State<QuizScreen> {
       height: 48,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
+          foregroundColor: Colors.white,
+          backgroundColor: Palette.primary,
           shape: const StadiumBorder(),
-          primary: Colors.blueAccent,
-          onPrimary: Colors.white,
         ),
         onPressed: () {
           captureImage();
-          _score+=_selectedAnswer!.score;
+          _score += _selectedAnswer!.score;
           if (isLastQuestion) {
             //display score
             log(_emotions.toString());
@@ -228,11 +240,10 @@ class _QuizScreenState extends State<QuizScreen> {
           } else {
             //next question
 
-              setState(() {
-                _selectedAnswer = null;
-                _currentQuestionIndex++;
-              });
-
+            setState(() {
+              _selectedAnswer = null;
+              _currentQuestionIndex++;
+            });
           }
         },
         child: Text(isLastQuestion ? "Submit" : "Next"),
@@ -241,40 +252,48 @@ class _QuizScreenState extends State<QuizScreen> {
   }
 
   _showScoreDialog() {
-
-
     return AlertDialog(
       title: Text(
         _score.toString(),
-        style: const TextStyle(color:  Colors.green, fontWeight: FontWeight.bold),
+        style:
+            const TextStyle(color: Colors.green, fontWeight: FontWeight.bold),
       ),
       actions: <Widget>[
         TextButton(
-          onPressed: (){
-            int maxx=0;
-            for(int i=0;i<7;i++){
-              if(_emotions[i]>_emotions[maxx]) maxx=i;
+          onPressed: () {
+            int maxx = 0;
+            for (int i = 0; i < 7; i++) {
+              if (_emotions[i] > _emotions[maxx]) maxx = i;
             }
             log(labels[maxx]);
             FirebaseFirestore.instance
                 .collection("users")
                 .doc(_username)
-                .update({"assessment": false,"score":_score,"emotion":labels[maxx]});
+                .update({
+              "assessment": false,
+              "score": _score,
+              "emotion": labels[maxx]
+            });
             Navigator.pushAndRemoveUntil(
                 context,
-                MaterialPageRoute(builder: (BuildContext context) => const UserPage()),
-                ModalRoute.withName('/') // Replace this with your root screen's route name (usually '/')
-            );
+                MaterialPageRoute(
+                    builder: (BuildContext context) => const UserPage()),
+                ModalRoute.withName(
+                    '/') // Replace this with your root screen's route name (usually '/')
+                );
           },
           child: const Text('Home'),
         ),
         TextButton(
-          onPressed: (){
+          onPressed: () {
             Navigator.pushAndRemoveUntil(
                 context,
-                MaterialPageRoute(builder: (BuildContext context) => QuizScreen(camera: widget.camera)),
-                ModalRoute.withName('/') // Replace this with your root screen's route name (usually '/')
-            );
+                MaterialPageRoute(
+                    builder: (BuildContext context) =>
+                        QuizScreen(camera: widget.camera)),
+                ModalRoute.withName(
+                    '/') // Replace this with your root screen's route name (usually '/')
+                );
           },
           child: const Text('Restart'),
         ),
@@ -282,14 +301,14 @@ class _QuizScreenState extends State<QuizScreen> {
     );
   }
 
-  void captureImage()async{
+  void captureImage() async {
     try {
       // Ensure that the camera is initialized.
       _initializeControllerFuture;
       // Attempt to take a picture and get the file `image` where it was saved.
       var image = _controller.takePicture();
       final arr = await readImage(await image);
-      final prediction=predict(arr);
+      final prediction = predict(arr);
       _emotions[prediction]++;
       log(labels[prediction]);
       //final arr = await readImage(await image);
@@ -299,21 +318,20 @@ class _QuizScreenState extends State<QuizScreen> {
       // If the picture was taken, display it on a new screen.
 
       if (!mounted) return;
-
-
     } catch (e) {
       // If an error occurs, log the error to the console.
       log(e.toString());
-
     }
   }
+
   Future<List<List<double>>> readImage(XFile image) async {
     List<List<double>> imgArray = [];
     final bytes = await image.readAsBytes();
     final decoder = img.JpegDecoder();
     final decodedImgOriginal = decoder.decode(bytes);
     final decodedBytes = decodedImgOriginal!.getBytes();
-    final img.Image decodedImg = img.copyResize(decodedImgOriginal, width: 48, height: 48);
+    final img.Image decodedImg =
+        img.copyResize(decodedImgOriginal, width: 48, height: 48);
     int height = decodedImg.height;
     int width = decodedImg.width;
     //log("$height $width");

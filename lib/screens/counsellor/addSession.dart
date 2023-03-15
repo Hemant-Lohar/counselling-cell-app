@@ -92,8 +92,10 @@ class _AddSessionState extends State<AddSession> {
                             initialTime: TimeOfDay.fromDateTime(dateTime),
                           ).then((pickedTime) {
                             if (pickedTime != null) {
+                              int hr = pickedTime.hour-12;
                               setState(() {
                                 _timeStart.text =
+                                    // "${hr.toString()}:${pickedTime.minute.toString().padLeft(2, "0")}";
                                     "${pickedTime.hour.toString().padLeft(2, "0")}:${pickedTime.minute.toString().padLeft(2, "0")}";
                                 dateTime = DateTime(
                                     dateTime.year,
@@ -126,8 +128,10 @@ class _AddSessionState extends State<AddSession> {
                                 dateTime.add(const Duration(minutes: 30))),
                           ).then((pickedTime) {
                             if (pickedTime != null) {
+                              // int hr = pickedTime.hour-12; 
                               setState(() {
                                 _timeEnd.text =
+                                    // "${hr.toString()}:${pickedTime.minute.toString().padLeft(2, "0")}";
                                     "${pickedTime.hour.toString().padLeft(2, "0")}:${pickedTime.minute.toString().padLeft(2, "0")}";
                               });
                             }

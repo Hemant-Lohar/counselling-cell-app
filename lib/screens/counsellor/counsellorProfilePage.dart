@@ -16,7 +16,7 @@ class CounsellorProfile extends StatefulWidget {
 class _CounsellorProfileState extends State<CounsellorProfile> {
   final username = FirebaseAuth.instance.currentUser!.email!;
   String name = "";
-  String initial="";
+  String initial = "";
   @override
   void initState() {
     super.initState();
@@ -32,36 +32,108 @@ class _CounsellorProfileState extends State<CounsellorProfile> {
       });
     });
   }
+
   @override
   Widget build(BuildContext context) {
+    // return Consumer<DataClass>(builder: (context, modal, child) {
+    //   String username = modal.username;
+    //   return Scaffold(
+    //     appBar: AppBar(
+    //       leading: const BackButton(color: Colors.black),
+    //       backgroundColor: Colors.transparent,
+    //       elevation: 0,
+    //     ),
+    //     body: Padding(
+    //         padding: const EdgeInsets.symmetric(horizontal: 40),
+    //         child: Center(
+    //           child: Column(
+    //             mainAxisAlignment: MainAxisAlignment.start,
+    //             crossAxisAlignment: CrossAxisAlignment.center,
+    //             children: [
+    //               CircleAvatar(
+    //                 backgroundColor: Colors.black45,
+    //                 radius: 60,
+    //                 child: Text(
+    //                   initial,
+    //                   style: const TextStyle(color: Colors.white, fontSize: 56),
+    //                 ),
+    //               ),
+    //               const SizedBox(
+    //                 height: 40,
+    //               ),
+    // Row(
+    //   mainAxisAlignment: MainAxisAlignment.start,
+    //   children: [
+    //     Text('Name: $name',
+    //         textAlign: TextAlign.left,
+    //         style: const TextStyle(
+    //             fontWeight: FontWeight.bold,
+    //             color: Colors.black,
+    //             fontSize: 16)),
+    //   ],
+    // ),
+    //               Row(
+    //                 mainAxisAlignment: MainAxisAlignment.start,
+    //                 children: [
+    //                   Text('Email: $username',
+    //                       style: const TextStyle(
+    //                           fontWeight: FontWeight.bold,
+    //                           color: Colors.black,
+    //                           fontSize: 16)),
+    //                 ],
+    //               ),
+    //               const SizedBox(
+    //                 height: 40,
+    //               ),
+    //               ElevatedButton(
+    //                 onPressed: () {
+    //                   logout().then((value) => {
+    //                         Navigator.popUntil(
+    //                           context,
+    //                           ModalRoute.withName('/'),
+    //                         ),
+    //                         Navigator.push(
+    //                           context,
+    //                           MaterialPageRoute(
+    //                               builder: (context) => const LoginPage()),
+    //                         )
+    //                       });
+    //                 },
+    //                 style: ElevatedButton.styleFrom(
+    //                   // backgroundColor: Colors.black,
+    //                   padding: const EdgeInsets.symmetric(
+    //                       horizontal: 40, vertical: 16),
+    //                   shape: const StadiumBorder(),
+    //                 ),
+    //                 child: const Text('logout'),
+    //               ),
+    //             ],
+    //           ),
+    //         )),
+    //   );
+    // });
     return Consumer<DataClass>(builder: (context, modal, child) {
-      String username = modal.username;
       return Scaffold(
-        appBar: AppBar(
-          leading: const BackButton(color: Colors.black),
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-        ),
-        body: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 40),
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  CircleAvatar(
-                    backgroundColor: Colors.black45,
+          appBar: AppBar(
+            leading: const BackButton(color: Colors.black),
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+          ),
+          body: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 40.0),
+            child: ListView(
+              children: [
+                const Center(
+                  child: CircleAvatar(
+                    backgroundColor: Colors.black26,
                     radius: 60,
-                    child: Text(
-                      initial,
-                      style: const TextStyle(color: Colors.white, fontSize: 56),
-                    ),
                   ),
-                  const SizedBox(
-                    height: 40,
-                  ),
-                  Row(
+                ),
+                const SizedBox(height: 40),
+                Center(
+                  child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text('Name: $name',
                           textAlign: TextAlign.left,
@@ -69,47 +141,41 @@ class _CounsellorProfileState extends State<CounsellorProfile> {
                               fontWeight: FontWeight.bold,
                               color: Colors.black,
                               fontSize: 16)),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
                       Text('Email: $username',
                           style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               color: Colors.black,
                               fontSize: 16)),
+                      const SizedBox(
+                        height: 40,
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          logout().then((value) => {
+                                Navigator.pushAndRemoveUntil(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (BuildContext context) =>
+                                            const LoginPage()),
+                                    ModalRoute.withName(
+                                        '/') // Replace this with your root screen's route name (usually '/')
+                                    ),
+                              });
+                        },
+                        style: ElevatedButton.styleFrom(
+                          // backgroundColor: Colors.black,
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 40, vertical: 16),
+                          shape: const StadiumBorder(),
+                        ),
+                        child: const Text('logout'),
+                      ),
                     ],
                   ),
-                  const SizedBox(
-                    height: 40,
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      Logout().then((value) => {
-                            Navigator.popUntil(
-                              context,
-                              ModalRoute.withName('/'),
-                            ),
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const LoginPage()),
-                            )
-                          });
-                    },
-                    style: ElevatedButton.styleFrom(
-                      // backgroundColor: Colors.black,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 40, vertical: 16),
-                      shape: const StadiumBorder(),
-                    ),
-                    child: const Text('Logout'),
-                  ),
-                ],
-              ),
-            )),
-      );
+                ),
+              ],
+            ),
+          ));
     });
   }
 }

@@ -83,9 +83,9 @@ class _UserListState extends State<UserList> {
                                   fontSize: 14,
                                   fontWeight: FontWeight.bold),
                             ),
-                            subtitle: const Text(
-                              "Class - B.Tech",
-                              style: TextStyle(
+                            subtitle:  Text(
+                              data['class'],
+                              style: const TextStyle(
                                 color: Colors.black,
                                 fontSize: 12,
 
@@ -182,9 +182,9 @@ class _UserListState extends State<UserList> {
                                   fontSize: 14,
                                   fontWeight: FontWeight.bold),
                             ),
-                            subtitle: const Text(
-                              "Class - B.Tech",
-                              style: TextStyle(
+                            subtitle:  Text(
+                              data['class'],
+                              style: const TextStyle(
                                 color: Colors.black,
                                 fontSize: 12,
 

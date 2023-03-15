@@ -76,9 +76,7 @@ class _UserSessionState extends State<UserSession> {
           iconSize: 40,
           alignment: Alignment.bottomCenter,
           icon: const Icon(Icons.download),
-          onPressed: (){},
-
-
+          onPressed: () {},
         ),
         //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
         //   children: [
@@ -102,6 +100,7 @@ class _UserSessionState extends State<UserSession> {
                 height: 10,
               ),
               const Text("Previous Sessions"),
+              const SizedBox(height: 10),
               StreamBuilder<QuerySnapshot>(
                 stream: FirebaseFirestore.instance
                     .collection('users')
@@ -116,12 +115,13 @@ class _UserSessionState extends State<UserSession> {
                     return Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: const [
+                          SizedBox(height: 20),
                           Center(
                             child: Text(
                               "No previous sessions",
                               style: TextStyle(
-                                fontSize: 20,
-                                color: Colors.black,
+                                fontSize: 14,
+                                color: Colors.grey,
                               ),
                             ),
                           ),
@@ -135,43 +135,49 @@ class _UserSessionState extends State<UserSession> {
                         itemBuilder: (context, index) {
                           var data = snapshots.data!.docs[index].data()
                               as Map<String, dynamic>;
-                          return ListTile(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10)),
-                              tileColor: Palette.tileback,
-                              leading: CircleAvatar(
-                                backgroundColor: Palette.primary,
-                                child: Text(
-                                  initial,
-                                  style: const TextStyle(color: Colors.white),
-                                ),
-                              ),
-                              title: Text(
-                                "Date - ${data['date']}",
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
-                                    color: Colors.black54,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              subtitle: Text(
-                                "Time - ${data["timeStart"]}-${data["timeEnd"]}",
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 14,
+                          return Column(
+                            children: [
+                              ListTile(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10)),
+                                  tileColor: Palette.tileback,
+                                  leading: CircleAvatar(
+                                    backgroundColor: Palette.primary,
+                                    child: Text(
+                                      initial,
+                                      style:
+                                          const TextStyle(color: Colors.white),
+                                    ),
+                                  ),
+                                  title: Text(
+                                    "Date - ${data['date']}",
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(
+                                        color: Colors.black54,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  subtitle: Text(
+                                    "Time - ${data["timeStart"]}-${data["timeEnd"]}",
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 14,
 
-                                  // fontWeight: FontWeight.bold
-                                ),
-                              ),
-                              onTap: () {}
+                                      // fontWeight: FontWeight.bold
+                                    ),
+                                  ),
+                                  onTap: () {}
 
-                              // leading: CircleAvatar(
-                              //   backgroundImage: NetworkImage(data['image']),
-                              // ),
-                              );
+                                  // leading: CircleAvatar(
+                                  //   backgroundImage: NetworkImage(data['image']),
+                                  // ),
+                                  ),
+                              const SizedBox(height: 10),
+                            ],
+                          );
                         });
                   }
                 },
@@ -194,12 +200,13 @@ class _UserSessionState extends State<UserSession> {
                     return Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: const [
+                          SizedBox(height: 20),
                           Center(
                             child: Text(
                               "No upcoming sessions",
                               style: TextStyle(
-                                fontSize: 20,
-                                color: Colors.black,
+                                fontSize: 14,
+                                color: Colors.grey,
                               ),
                             ),
                           ),
@@ -263,7 +270,6 @@ class _UserSessionState extends State<UserSession> {
               const SizedBox(
                 height: 10,
               ),
-
             ]),
           ),
         ));

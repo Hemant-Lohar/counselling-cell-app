@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-
 import 'package:counselling_cell_application/theme/palette.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -62,8 +61,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-          resizeToAvoidBottomInset: true,
-
+      resizeToAvoidBottomInset: true,
       backgroundColor: Colors.white,
       body: FutureBuilder(
           future: Firebase.initializeApp(
@@ -89,8 +87,7 @@ class _LoginPageState extends State<LoginPage> {
                           ],
                         ),
                         image: DecorationImage(
-                          
-                          scale: 0.4,
+                            scale: 0.4,
                             image: AssetImage('assets/login.jpg'),
                             fit: BoxFit.cover,
                             alignment: Alignment.bottomCenter)),
@@ -110,7 +107,8 @@ class _LoginPageState extends State<LoginPage> {
                                 _selectedRole[i] = i == index;
                               }
                             });
-                            _emailController.text=_passwordController.text="";
+                            _emailController.text =
+                                _passwordController.text = "";
                           },
                           borderRadius:
                               const BorderRadius.all(Radius.circular(22)),
@@ -133,7 +131,8 @@ class _LoginPageState extends State<LoginPage> {
                               hintStyle: TextStyle(color: Colors.grey),
                               enabledBorder: UnderlineInputBorder(
                                   borderSide: BorderSide(color: Colors.grey))),
-                          style: const TextStyle(color: Colors.black, fontSize: 14),
+                          style: const TextStyle(
+                              color: Colors.black, fontSize: 14),
                         ),
                         const SizedBox(height: 20),
                         TextFormField(
@@ -144,7 +143,8 @@ class _LoginPageState extends State<LoginPage> {
                               hintStyle: TextStyle(color: Colors.grey),
                               enabledBorder: UnderlineInputBorder(
                                   borderSide: BorderSide(color: Colors.grey))),
-                          style: const TextStyle(color: Colors.black, fontSize: 14),
+                          style: const TextStyle(
+                              color: Colors.black, fontSize: 14),
                         ),
 
                         const SizedBox(height: 40),
@@ -155,15 +155,34 @@ class _LoginPageState extends State<LoginPage> {
                                 password: _passwordController.text,
                                 context: context);
                             log(user.toString());
-                            if (user != null && user.email=="counsellor@adcet.in" && _selectedRole[0]) {
-                              if(!mounted)return;
-                              Navigator.popUntil(context, ModalRoute.withName('/'));
-                              Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => const CounsellorPage()));
-                            }  else if (user != null  && _emailController.text!="counsellor@adcet.in" && _selectedRole[1] ) {
-                              if(!mounted)return;
-                              Navigator.popUntil(context, ModalRoute.withName('/'));
-                              Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => const UserPage()));
-                            }else {
+                            if (user != null &&
+                                user.email == "counsellor@adcet.in" &&
+                                _selectedRole[0]) {
+                              if (!mounted) return;
+                              Navigator.popUntil(
+                                  context, ModalRoute.withName('/'));
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (BuildContext context) =>
+                                          const CounsellorPage()));
+                            } else if (user != null &&
+                                _emailController.text !=
+                                    "counsellor@adcet.in" &&
+                                _selectedRole[1]) {
+                              if (!mounted) return;
+                              const Center(
+                                child: CircularProgressIndicator(),
+                              );
+                              Navigator.popUntil(
+                                  context, ModalRoute.withName('/'));
+                              Navigator.of(context).pop();
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (BuildContext context) =>
+                                          const UserPage()));
+                            } else {
                               Fluttertoast.showToast(
                                 msg: "Invalid email or password", // message
                                 toastLength: Toast.LENGTH_SHORT, // length
@@ -173,7 +192,7 @@ class _LoginPageState extends State<LoginPage> {
                             }
                           },
                           style: ElevatedButton.styleFrom(
-                          //  backgroundColor: Colors.black,
+                            //  backgroundColor: Colors.black,
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 32, vertical: 10),
                             shape: const StadiumBorder(),
@@ -200,7 +219,8 @@ class _LoginPageState extends State<LoginPage> {
                             padding: EdgeInsets.all(10.0),
                             child: Text(
                               "Don't have an account? Register here",
-                              style: TextStyle(color: Colors.black,fontSize: 12),
+                              style:
+                                  TextStyle(color: Colors.black, fontSize: 12),
                               textAlign: TextAlign.center,
                             ),
                           ),
@@ -227,8 +247,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 }
 
-
-Future Logout() async {
+Future logout() async {
   // showDialog(context: context, barrierDismissible: false,
   // builder: (context) => const Center(child: CircularProgressIndicator()));
 

@@ -71,7 +71,7 @@ class _CallState extends State<Call> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Session in Progress"),
+        title: const Text("Session"),
         leading: const BackButton(color: Colors.white),
       ),
       body: Container(
@@ -159,7 +159,7 @@ class _CallState extends State<Call> {
           Center(
             child: Text(
               "User: $name",
-              style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
           ),
           SizedBox(
