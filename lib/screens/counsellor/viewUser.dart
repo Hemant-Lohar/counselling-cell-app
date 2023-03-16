@@ -21,6 +21,11 @@ class _ViewUserState extends State<ViewUser> {
   }
 
   @override
+  void dispose() {
+
+    super.dispose();
+  }
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -48,14 +53,14 @@ class _ViewUserState extends State<ViewUser> {
                 } else if (snapshot.hasData) {
                   var output = snapshot.data!.data();
 
-                  var name = output!['name']; // <-- Your value
-                  var age = output['age']; // <-- Your value
-                  var gender = output['gender']; // <-- Your value
-                  var mobile = output['mobile']; // <-- Your value
-                  var dept = output['department']; // <-- Your value
-                  var clas = output['class']; // <-- Your value
-                  var division = output['division'];
-                  var urn = output["urn"];
+                  var name =      output!['name']; // <-- Your value
+                  var age =       output['age']; // <-- Your value
+                  var gender =    output['gender']; // <-- Your value
+                  var mobile =    output['mobile']; // <-- Your value
+                  var dept =      output['department']; // <-- Your value
+                  var clas =      output['class']; // <-- Your value
+                  var division =  output['division'];
+                  var urn =       output["urn"];
 
                   var initial = name[0].toUpperCase();
                   // print(output.containsValue('referral'));

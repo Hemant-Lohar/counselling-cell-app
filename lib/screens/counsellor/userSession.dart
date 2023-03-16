@@ -1,8 +1,12 @@
 import 'dart:developer';
-
+// import 'dart:io';
+import 'pdfUserHistory.dart';
+import 'pdfAPI.dart';
+import 'package:printing/printing.dart';
+import 'package:pdf/widgets.dart' as pw;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-
+import 'package:path_provider/path_provider.dart';
 import '../../theme/Palette.dart';
 import 'addSessionWithUser.dart';
 
@@ -21,6 +25,7 @@ class _UserSessionState extends State<UserSession> {
   // String username="";
   final String dateTime =
       "${DateTime.now().day.toString().padLeft(2, "0")}/${DateTime.now().month.toString().padLeft(2, "0")}/${DateTime.now().year}";
+  PrintingInfo? printingInfo;
   @override
   void initState() {
     super.initState();
@@ -29,11 +34,13 @@ class _UserSessionState extends State<UserSession> {
         .collection("users")
         .doc(id)
         .get()
-        .then((DocumentSnapshot doc) {
+        .then((DocumentSnapshot doc)async{
+      final info = await Printing.info();
       final data = doc.data() as Map<String, dynamic>;
       setState(() {
         name = data["name"];
         initial = data["name"][0].toString().toUpperCase();
+        printingInfo=info;
       });
     });
   }
@@ -49,7 +56,7 @@ class _UserSessionState extends State<UserSession> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  id,
+                  name,
                   style: const TextStyle(color: Colors.white, fontSize: 16),
                 ),
                 CircleAvatar(
@@ -76,7 +83,11 @@ class _UserSessionState extends State<UserSession> {
           iconSize: 40,
           alignment: Alignment.bottomCenter,
           icon: const Icon(Icons.download),
-          onPressed: () {},
+          onPressed: () async {
+            final pdfFile = await PdfUserHistory.generate(id,name);
+            PdfAPI.openFile(pdfFile);
+
+          },
         ),
         //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
         //   children: [
@@ -105,8 +116,7 @@ class _UserSessionState extends State<UserSession> {
                 stream: FirebaseFirestore.instance
                     .collection('users')
                     .doc(id)
-                    .collection("session")
-                    .where("date", isLessThan: dateTime)
+                    .collection("completedSession")
                     .snapshots(),
                 builder: (context, snapshots) {
                   if (snapshots.connectionState == ConnectionState.waiting) {
@@ -270,6 +280,7 @@ class _UserSessionState extends State<UserSession> {
               const SizedBox(
                 height: 10,
               ),
+
             ]),
           ),
         ));

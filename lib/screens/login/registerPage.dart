@@ -1,5 +1,5 @@
 import 'dart:developer';
-
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:counselling_cell_application/screens/login/userModal.dart';
 import 'package:counselling_cell_application/theme/palette.dart';
@@ -14,17 +14,15 @@ import '../../firebase_options.dart';
 import 'loginPage.dart';
 
 var gender = "Male";
+var Class = "F.Y.B.Tech.";
+var Division = "A";
+var Dept = "Mechanical Engineering";
 var _useremailController = TextEditingController();
 var _passwordController = TextEditingController();
 var _confirmPasswordController = TextEditingController();
 var _Usernamecontroller = TextEditingController();
 var _Useragecontroller = TextEditingController();
-var _Usergendercontroller = TextEditingController();
-var _Usercontroller = TextEditingController();
 var _Usermobilecontroller = TextEditingController();
-var _Userdepartmentcontroller = TextEditingController();
-var _Userclasscontroller = TextEditingController();
-var _Userdivisioncontroller = TextEditingController();
 
 class Register extends StatefulWidget {
   const Register({super.key});
@@ -117,8 +115,9 @@ class _PersonalDetailsState extends State<PersonalDetails> {
               controller: _Usernamecontroller,
               decoration: const InputDecoration(
                 labelText: "Name",
+                hintText: "Enter your full name"
               ),
-              validator: RequiredValidator(errorText: "Required"),
+              validator: RequiredValidator(errorText: "Required",),
             ),
             TextFormField(
               style: const TextStyle(fontSize: 14),
@@ -127,7 +126,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
               decoration: const InputDecoration(
                 labelText: "Age",
               ),
-              validator: RequiredValidator(errorText: "Required"),
+              validator:MultiValidator([RequiredValidator(errorText: "Required"),RangeValidator(min: 16, max: 90, errorText: "Invalid Age!")]),
             ),
             DropdownButtonFormField(
               decoration: const InputDecoration(label: Text("Select Gender")),
@@ -146,7 +145,13 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                     child: Text(
                       "Female",
                       style: TextStyle(fontSize: 14),
-                    ))
+                    )),
+                DropdownMenuItem(
+                    value: "LGBTQ+",
+                    child: Text(
+                      "LGBTQ+",
+                      style: TextStyle(fontSize: 14),
+                    )),
               ],
               onChanged: (String? value) {
                 setState(() {
@@ -170,7 +175,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
               decoration: const InputDecoration(
                 labelText: "Mobile",
               ),
-              validator: RequiredValidator(errorText: "Required"),
+              validator: MultiValidator([RequiredValidator(errorText: "Required"),LengthRangeValidator(min: 10, max: 10, errorText: "Mobile number must be 10 digits")])
             ),
             const SizedBox(
               height: 30,
@@ -181,8 +186,8 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                   //next
                   modal.changeIndex(modal.activeIndex = 1);
                   modal.username = _Usernamecontroller.text;
-                  modal.userage = gender;
-                  modal.usergender = _Usergendercontroller.text;
+                  modal.userage = _Useragecontroller.text;
+                  modal.usergender = gender;
                   modal.usermobile = _Usermobilecontroller.text;
                 }
               },
@@ -210,6 +215,10 @@ class EducationDetails extends StatefulWidget {
 
 class _EducationDetailsState extends State<EducationDetails> {
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  String dropdownValueClass = Class;
+  String dropdownValueDivision = Division;
+  String dropdownValueDept = Dept;
+
   @override
   Widget build(BuildContext context) {
     return Consumer<UserModal>(builder: (context, modal, child) {
@@ -232,29 +241,144 @@ class _EducationDetailsState extends State<EducationDetails> {
                     const IndicatorDecoration(color: Palette.primary),
               ),
             ),
-            TextFormField(
-              style: const TextStyle(fontSize: 14),
-              controller: _Userclasscontroller,
-              decoration: const InputDecoration(
-                labelText: "Class",
-              ),
-              validator: RequiredValidator(errorText: "Required"),
+            DropdownButtonFormField(
+              decoration: const InputDecoration(label: Text("Select Year")),
+              value: Class,
+              hint: const Text("Select Year"),
+              icon: const Icon(Icons.arrow_downward),
+              items: const [
+                DropdownMenuItem(
+                    value: "F.Y.B.Tech.",
+                    child: Text(
+                      "F.Y.B.Tech.",
+                      style: TextStyle(fontSize: 14),
+                    )),
+                DropdownMenuItem(
+                    value: "S.Y.B.Tech.",
+                    child: Text(
+                      "S.Y.B.Tech.",
+                      style: TextStyle(fontSize: 14),
+                    )),
+                DropdownMenuItem(
+                    value: "T.Y.B.Tech.",
+                    child: Text(
+                      "T.Y.B.Tech.",
+                      style: TextStyle(fontSize: 14),
+                    )),
+                DropdownMenuItem(
+                    value: "B.Tech.",
+                    child: Text(
+                      "B.Tech.",
+                      style: TextStyle(fontSize: 14),
+                    )),
+              ],
+              onChanged: (String? value) {
+                setState(() {
+                  dropdownValueClass = value!;
+                });
+                Class = dropdownValueClass;
+              },
             ),
-            TextFormField(
-              style: const TextStyle(fontSize: 14),
-              controller: _Userdepartmentcontroller,
-              decoration: const InputDecoration(
-                labelText: "Department",
-              ),
-              validator: RequiredValidator(errorText: "Required"),
+            DropdownButtonFormField(
+              decoration:
+                  const InputDecoration(label: Text("Select Department")),
+              value: Dept,
+              hint: const Text("Select Department"),
+              icon: const Icon(Icons.arrow_downward),
+              items: const [
+                DropdownMenuItem(
+                    value: "Computer Science & Engineering",
+                    child: Text(
+                      "Computer Science & Engineering",
+                      style: TextStyle(fontSize: 14),
+                    )),
+                DropdownMenuItem(
+                    value: "Mechanical Engineering",
+                    child: Text(
+                      "Mechanical Engineering",
+                      style: TextStyle(fontSize: 14),
+                    )),
+                DropdownMenuItem(
+                    value: "Civil Engineering",
+                    child: Text(
+                      "Civil Engineering",
+                      style: TextStyle(fontSize: 14),
+                    )),
+                DropdownMenuItem(
+                    value: "Electrical Engineering",
+                    child: Text(
+                      "Electrical Engineering",
+                      style: TextStyle(fontSize: 14),
+                    )),
+                DropdownMenuItem(
+                    value: "Aeronautical Engineering",
+                    child: Text(
+                      "Aeronautical Engineering",
+                      style: TextStyle(fontSize: 14),
+                    )),
+                DropdownMenuItem(
+                    value: "Food Technology",
+                    child: Text(
+                      "Food Technology",
+                      style: TextStyle(fontSize: 14),
+                    )),
+                DropdownMenuItem(
+                    value: "AI & DS",
+                    child: Text(
+                      "AI & DS",
+                      style: TextStyle(fontSize: 14),
+                    )),
+                DropdownMenuItem(
+                    value: "IoT & Cyber Security",
+                    child: Text(
+                      "IoT & Cyber Security",
+                      style: TextStyle(fontSize: 14),
+                    )),
+                DropdownMenuItem(
+                    value: "Agriculture Engineering",
+                    child: Text(
+                      "Agriculture Engineering",
+                      style: TextStyle(fontSize: 14),
+                    )),
+              ],
+              onChanged: (String? value) {
+                setState(() {
+                  dropdownValueDept = value!;
+                });
+                Dept = dropdownValueDept;
+              },
             ),
-            TextFormField(
-              style: const TextStyle(fontSize: 14),
-              controller: _Userdivisioncontroller,
-              decoration: const InputDecoration(
-                labelText: "Division",
-              ),
-              validator: RequiredValidator(errorText: "Required"),
+            DropdownButtonFormField(
+              decoration: const InputDecoration(label: Text("Select Division")),
+              value: Division,
+              hint: const Text("Select Division"),
+              icon: const Icon(Icons.arrow_downward),
+              items: const [
+                DropdownMenuItem(
+                    value: "A",
+                    child: Text(
+                      "A",
+                      style: TextStyle(fontSize: 14),
+                    )),
+                DropdownMenuItem(
+                    value: "B",
+                    child: Text(
+                      "B",
+                      style: TextStyle(fontSize: 14),
+                    )),
+                DropdownMenuItem(
+                    value: "C",
+                    child: Text(
+                      "C",
+                      style: TextStyle(fontSize: 14),
+                    )),
+              ],
+              onChanged: (String? value) {
+                setState(() {
+                  dropdownValueDivision = value!;
+                });
+                Division = dropdownValueDivision;
+              },
             ),
             const SizedBox(
               height: 40,
@@ -268,7 +392,7 @@ class _EducationDetailsState extends State<EducationDetails> {
                     modal.changeIndex(modal.activeIndex - 1);
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Palette.secondary,
+                    // backgroundColor: Palette.secondary,
                     padding: const EdgeInsets.symmetric(
                         horizontal: 30, vertical: 12),
                     shape: const StadiumBorder(),
@@ -286,9 +410,9 @@ class _EducationDetailsState extends State<EducationDetails> {
                     if (formKey.currentState?.validate() ?? false) {
                       //next
                       modal.changeIndex(modal.activeIndex + 1);
-                      modal.userclass = _Userclasscontroller.text;
-                      modal.userdivision = _Userdivisioncontroller.text;
-                      modal.userdepartment = _Userdepartmentcontroller.text;
+                      modal.userclass = Class;
+                      modal.userdivision = Division;
+                      modal.userdepartment = Dept;
                     }
                   },
                   style: ElevatedButton.styleFrom(
@@ -317,6 +441,21 @@ class UserDetails extends StatefulWidget {
 
 class _UserDetailsState extends State<UserDetails> {
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  @override
+  void dispose() {
+    _useremailController.text="";
+    _passwordController.text="";
+    _confirmPasswordController.text="";
+    _Usernamecontroller.text="";
+    _Useragecontroller.text="";
+    _Usermobilecontroller.text="";
+    gender = "Male";
+    Class = "F.Y.B.Tech.";
+    Division = "A";
+    Dept = "Mechanical Engineering";
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<UserModal>(builder: (context, modal, child) {
@@ -377,7 +516,7 @@ class _UserDetailsState extends State<UserDetails> {
                     modal.changeIndex(modal.activeIndex - 1);
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Palette.secondary,
+                    // backgroundColor: Palette.secondary,
                     padding: const EdgeInsets.symmetric(
                         horizontal: 30, vertical: 12),
                     shape: const StadiumBorder(),
@@ -498,6 +637,7 @@ Future signUp(String email, String password) async {
     );
   } on FirebaseAuthException catch (e) {
     log(e.toString());
+    Fluttertoast.showToast(msg: "This email is already in use");
   }
 }
 
@@ -512,7 +652,6 @@ Future createUser(MyUser user) async {
 // Future createUser(User user) async {
 //   final docUser = FirebaseFirestore.instance.collection('Users').doc()
 // }
-
 
 // class UserDetails extends StatefulWidget {
 //   const UserDetails({Key? key}) : super(key: key);
@@ -537,7 +676,7 @@ Future createUser(MyUser user) async {
 //                 const SizedBox(height: 20),
 //                 Center(
 //                   child: TextFormField(
-  // style: TextStyle(fontSize:14),
+// style: TextStyle(fontSize:14),
 //                     controller: _useremailController,
 //                     decoration: const InputDecoration(
 //                         hintText: 'Enter Email Address',
@@ -549,7 +688,7 @@ Future createUser(MyUser user) async {
 //                 ),
 //                 const SizedBox(height: 20),
 //                 TextFormField(
-  // style: TextStyle(fontSize:14),
+// style: TextStyle(fontSize:14),
 //                   obscureText: true,
 //                   controller: _passwordController,
 //                   decoration: const InputDecoration(
@@ -561,7 +700,7 @@ Future createUser(MyUser user) async {
 //                 ),
 //                 const SizedBox(height: 20),
 //                 TextFormField(
-  // style: TextStyle(fontSize:14),
+// style: TextStyle(fontSize:14),
 //                   obscureText: true,
 //                   controller: _confirmPasswordController,
 //                   decoration: const InputDecoration(
@@ -630,12 +769,12 @@ Future createUser(MyUser user) async {
 //                 const SizedBox(height: 30),
 //                 InkWell(
 //                   onTap: () {
-                  //   Navigator.push(
-                  //     context,
-                  //     MaterialPageRoute(
-                  //         builder: (context) => const LoginPage()),
-                  //   );
-                  // },
+//   Navigator.push(
+//     context,
+//     MaterialPageRoute(
+//         builder: (context) => const LoginPage()),
+//   );
+// },
 //                   child: const Padding(
 //                     padding: EdgeInsets.all(10.0),
 //                     child: Text(

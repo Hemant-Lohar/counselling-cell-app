@@ -28,6 +28,12 @@ class _UserPageState extends State<UserPage> {
     super.initState();
     id=widget.id;
   }
+
+  @override
+  void dispose() {
+
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     final screens = [

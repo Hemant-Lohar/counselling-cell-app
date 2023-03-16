@@ -10,7 +10,6 @@ import '../userPage.dart';
 import 'package:camera/camera.dart';
 import 'package:image/image.dart' as img;
 import 'package:tflite_flutter/tflite_flutter.dart';
-// import 'package:tflite_flutter/tflite_flutter.dart';
 import 'package:firebase_ml_model_downloader/firebase_ml_model_downloader.dart';
 
 List<String> labels = [
@@ -199,8 +198,8 @@ class _QuizScreenState extends State<QuizScreen> {
       height: 48,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          foregroundColor: isSelected ? Colors.white : Colors.black,
-          backgroundColor: isSelected ? Colors.orangeAccent : Palette.tileback,
+          // foregroundColor: isSelected ? Colors.white : Colors.black,
+          // backgroundColor: isSelected ? Colors.orangeAccent : Palette.tileback,
           elevation: 0,
           shape: const StadiumBorder(),
         ),
@@ -225,8 +224,8 @@ class _QuizScreenState extends State<QuizScreen> {
       height: 48,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          foregroundColor: Colors.white,
-          backgroundColor: Palette.primary,
+          // foregroundColor: Colors.white,
+          // backgroundColor: Palette.primary,
           shape: const StadiumBorder(),
         ),
         onPressed: () {
@@ -328,7 +327,7 @@ class _QuizScreenState extends State<QuizScreen> {
     List<List<double>> imgArray = [];
     final bytes = await image.readAsBytes();
     final decoder = img.JpegDecoder();
-    final decodedImgOriginal = decoder.decode(bytes);
+    final decodedImgOriginal = decoder.decodeImage(bytes);
     final decodedBytes = decodedImgOriginal!.getBytes();
     final img.Image decodedImg =
         img.copyResize(decodedImgOriginal, width: 48, height: 48);
