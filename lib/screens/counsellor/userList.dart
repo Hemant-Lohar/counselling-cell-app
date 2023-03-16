@@ -69,7 +69,7 @@ class _UserListState extends State<UserList> {
                             leading: CircleAvatar(
                               backgroundColor: Palette.primary,
                               child: Text(
-                                data['name'][0],
+                                data['name'][0].toString().toUpperCase(),
                                 style: const TextStyle(
                                     color: Colors.white, fontSize: 20),
                               ),

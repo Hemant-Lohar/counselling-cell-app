@@ -225,10 +225,6 @@ class _AddSessionWithUserState extends State<AddSessionWithUser> {
                                   .doc(request)
                                   .delete()
                                   .then((value) async {
-                                await FirebaseFirestore.instance
-                                    .collection("users")
-                                    .doc(user)
-                                    .update({"requested": false});
                                 if (!mounted) return;
                                 Navigator.pushAndRemoveUntil(
                                     context,

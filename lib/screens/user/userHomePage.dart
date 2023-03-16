@@ -11,7 +11,6 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:camera/camera.dart';
 import 'package:jitsi_meet_wrapper/jitsi_meet_wrapper.dart';
-import '../counsellor/startCall.dart';
 import '../counsellor/userPage.dart';
 import 'package:universal_html/html.dart' as html;
 
@@ -51,7 +50,7 @@ class _UserHomePageState extends State<UserHomePage> {
       final data = doc.data() as Map<String, dynamic>;
       setState(() {
         showAssessment = data["assessment"];
-        showRequestButton = !data["requested"];
+
         firstSession = data["firstTime"];
         name = data["name"];
         emotion = data["emotion"];
@@ -106,8 +105,7 @@ class _UserHomePageState extends State<UserHomePage> {
                     ),
                   ),
                   const SizedBox(height: 30),
-                  showRequestButton
-                      ? ElevatedButton(
+                  ElevatedButton(
                           onPressed: () {
                             Future.delayed(
                                 const Duration(seconds: 0),
@@ -117,8 +115,7 @@ class _UserHomePageState extends State<UserHomePage> {
                                       return getAlertDialog();
                                     }));
                           },
-                          child: const Text("Request an appointment"))
-                      : Container(),
+                          child: const Text("Request an appointment")),
                 ]);
           } else {
             return Column(
@@ -305,7 +302,7 @@ class _UserHomePageState extends State<UserHomePage> {
               await FirebaseFirestore.instance
                   .collection("users")
                   .doc(username)
-                  .update({"requested": true, "firstTime": false}).then(
+                  .update({"firstTime": false}).then(
                       (value) {
                 Navigator.pushAndRemoveUntil(
                     context,
@@ -328,89 +325,90 @@ class _UserHomePageState extends State<UserHomePage> {
       ],
     );
   }
-}
+  _joinMeeting() async {
+    Map<FeatureFlag, Object> featureFlags = {
+      FeatureFlag.isConferenceTimerEnabled: false,
+      FeatureFlag.isCalendarEnabled: false,
+      FeatureFlag.isAddPeopleEnabled: false,
+      FeatureFlag.isCloseCaptionsEnabled: false,
+      FeatureFlag.areSecurityOptionsEnabled: false,
+      FeatureFlag.isNotificationsEnabled: false,
+      FeatureFlag.isRaiseHandEnabled: false
+    };
+    // Define meetings options here
 
-_joinMeeting() async {
-  Map<FeatureFlag, Object> featureFlags = {
-    FeatureFlag.isConferenceTimerEnabled: false,
-    FeatureFlag.isCalendarEnabled: false,
-    FeatureFlag.isAddPeopleEnabled: false,
-    FeatureFlag.isCloseCaptionsEnabled: false,
-    FeatureFlag.areSecurityOptionsEnabled: false,
-    FeatureFlag.isNotificationsEnabled: false,
-    FeatureFlag.isRaiseHandEnabled: false
-  };
-  // Define meetings options here
-
-  String name = FirebaseAuth.instance.currentUser!.email!;
-  var options = JitsiMeetingOptions(
-    roomNameOrUrl: "CounsellingCell",
-    subject: "Agenda",
-    isAudioMuted: true,
-    isAudioOnly: false,
-    isVideoMuted: true,
-    userDisplayName: "User",
-    userEmail: "user@gmail.com",
-    featureFlags: featureFlags,
-  );
-
-  log("JitsiMeetingOptions: $options");
-  try {
-    await JitsiMeetWrapper.joinMeeting(
-      options: options,
-      listener: JitsiMeetingListener(
-        onOpened: () => log("onOpened"),
-        onConferenceWillJoin: (url) {
-          log("onConferenceWillJoin: url: $url");
-        },
-        onConferenceJoined: (url) {
-          log("onConferenceJoined: url: $url");
-        },
-        onConferenceTerminated: (url, error) {
-          log("onConferenceTerminated: url: $url, error: $error");
-          JitsiMeetWrapper.hangUp();
-        },
-        onAudioMutedChanged: (isMuted) {
-          log("onAudioMutedChanged: isMuted: $isMuted");
-        },
-        onVideoMutedChanged: (isMuted) {
-          log("onVideoMutedChanged: isMuted: $isMuted");
-        },
-        onScreenShareToggled: (participantId, isSharing) {
-          log(
-            "onScreenShareToggled: participantId: $participantId, "
-            "isSharing: $isSharing",
-          );
-        },
-        onParticipantJoined: (email, name, role, participantId) {
-          log(
-            "onParticipantJoined: email: $email, name: $name, role: $role, "
-            "participantId: $participantId",
-          );
-        },
-        onParticipantLeft: (participantId) {
-          log("onParticipantLeft: participantId: $participantId");
-        },
-        onParticipantsInfoRetrieved: (participantsInfo, requestId) {
-          log(
-            "onParticipantsInfoRetrieved: participantsInfo: $participantsInfo, "
-            "requestId: $requestId",
-          );
-        },
-        onChatMessageReceived: (senderId, message, isPrivate) {
-          log(
-            "onChatMessageReceived: senderId: $senderId, message: $message, "
-            "isPrivate: $isPrivate",
-          );
-        },
-        onChatToggled: (isOpen) => log("onChatToggled: isOpen: $isOpen"),
-        onClosed: () => log("onClosed"),
-      ),
+    String name = FirebaseAuth.instance.currentUser!.email!;
+    var options = JitsiMeetingOptions(
+      roomNameOrUrl: "CounsellingCell",
+      //subject: ,
+      isAudioMuted: true,
+      isAudioOnly: false,
+      isVideoMuted: true,
+      userEmail: name,
+      userDisplayName: username,
+      featureFlags: featureFlags,
     );
-  } catch (error) {
-    log(error.toString());
+
+    log("JitsiMeetingOptions: $options");
+    try {
+      await JitsiMeetWrapper.joinMeeting(
+        options: options,
+        listener: JitsiMeetingListener(
+          onOpened: () => log("onOpened"),
+          onConferenceWillJoin: (url) {
+            log("onConferenceWillJoin: url: $url");
+          },
+          onConferenceJoined: (url) {
+            log("onConferenceJoined: url: $url");
+          },
+          onConferenceTerminated: (url, error) {
+            log("onConferenceTerminated: url: $url, error: $error");
+            JitsiMeetWrapper.hangUp();
+          },
+          onAudioMutedChanged: (isMuted) {
+            log("onAudioMutedChanged: isMuted: $isMuted");
+          },
+          onVideoMutedChanged: (isMuted) {
+            log("onVideoMutedChanged: isMuted: $isMuted");
+          },
+          onScreenShareToggled: (participantId, isSharing) {
+            log(
+              "onScreenShareToggled: participantId: $participantId, "
+                  "isSharing: $isSharing",
+            );
+          },
+          onParticipantJoined: (email, name, role, participantId) {
+            log(
+              "onParticipantJoined: email: $email, name: $name, role: $role, "
+                  "participantId: $participantId",
+            );
+          },
+          onParticipantLeft: (participantId) {
+            log("onParticipantLeft: participantId: $participantId");
+          },
+          onParticipantsInfoRetrieved: (participantsInfo, requestId) {
+            log(
+              "onParticipantsInfoRetrieved: participantsInfo: $participantsInfo, "
+                  "requestId: $requestId",
+            );
+          },
+          onChatMessageReceived: (senderId, message, isPrivate) {
+            log(
+              "onChatMessageReceived: senderId: $senderId, message: $message, "
+                  "isPrivate: $isPrivate",
+            );
+          },
+          onChatToggled: (isOpen) => log("onChatToggled: isOpen: $isOpen"),
+          onClosed: () => log("onClosed"),
+        ),
+      );
+    } catch (error) {
+      log(error.toString());
+    }
   }
 }
+
+
 
 
 

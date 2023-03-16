@@ -20,9 +20,10 @@ var Dept = "Mechanical Engineering";
 var _useremailController = TextEditingController();
 var _passwordController = TextEditingController();
 var _confirmPasswordController = TextEditingController();
-var _Usernamecontroller = TextEditingController();
-var _Useragecontroller = TextEditingController();
-var _Usermobilecontroller = TextEditingController();
+var _usernamecontroller = TextEditingController();
+var _useragecontroller = TextEditingController();
+var _usermobilecontroller = TextEditingController();
+var _userUrnController = TextEditingController();
 
 class Register extends StatefulWidget {
   const Register({super.key});
@@ -112,21 +113,24 @@ class _PersonalDetailsState extends State<PersonalDetails> {
             ),
             TextFormField(
               style: const TextStyle(fontSize: 14),
-              controller: _Usernamecontroller,
+              controller: _usernamecontroller,
               decoration: const InputDecoration(
-                labelText: "Name",
-                hintText: "Enter your full name"
+                  labelText: "Name", hintText: "Enter your full name"),
+              validator: RequiredValidator(
+                errorText: "Required",
               ),
-              validator: RequiredValidator(errorText: "Required",),
             ),
             TextFormField(
               style: const TextStyle(fontSize: 14),
-              controller: _Useragecontroller,
+              controller: _useragecontroller,
               keyboardType: TextInputType.number,
               decoration: const InputDecoration(
                 labelText: "Age",
               ),
-              validator:MultiValidator([RequiredValidator(errorText: "Required"),RangeValidator(min: 16, max: 90, errorText: "Invalid Age!")]),
+              validator: MultiValidator([
+                RequiredValidator(errorText: "Required"),
+                RangeValidator(min: 16, max: 90, errorText: "Invalid Age!")
+              ]),
             ),
             DropdownButtonFormField(
               decoration: const InputDecoration(label: Text("Select Gender")),
@@ -169,14 +173,19 @@ class _PersonalDetailsState extends State<PersonalDetails> {
             //   validator: RequiredValidator(errorText: "Required"),
             // ),
             TextFormField(
-              style: const TextStyle(fontSize: 14),
-              controller: _Usermobilecontroller,
-              keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
-                labelText: "Mobile",
-              ),
-              validator: MultiValidator([RequiredValidator(errorText: "Required"),LengthRangeValidator(min: 10, max: 10, errorText: "Mobile number must be 10 digits")])
-            ),
+                style: const TextStyle(fontSize: 14),
+                controller: _usermobilecontroller,
+                keyboardType: TextInputType.number,
+                decoration: const InputDecoration(
+                  labelText: "Mobile",
+                ),
+                validator: MultiValidator([
+                  RequiredValidator(errorText: "Required"),
+                  LengthRangeValidator(
+                      min: 10,
+                      max: 10,
+                      errorText: "Mobile number must be 10 digits")
+                ])),
             const SizedBox(
               height: 30,
             ),
@@ -185,10 +194,10 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                 if (formKey.currentState?.validate() ?? false) {
                   //next
                   modal.changeIndex(modal.activeIndex = 1);
-                  modal.username = _Usernamecontroller.text;
-                  modal.userage = _Useragecontroller.text;
+                  modal.username = _usernamecontroller.text;
+                  modal.userage = _useragecontroller.text;
                   modal.usergender = gender;
-                  modal.usermobile = _Usermobilecontroller.text;
+                  modal.usermobile = _usermobilecontroller.text;
                 }
               },
               style: ElevatedButton.styleFrom(
@@ -240,44 +249,6 @@ class _EducationDetailsState extends State<EducationDetails> {
                 indicatorDecoration:
                     const IndicatorDecoration(color: Palette.primary),
               ),
-            ),
-            DropdownButtonFormField(
-              decoration: const InputDecoration(label: Text("Select Year")),
-              value: Class,
-              hint: const Text("Select Year"),
-              icon: const Icon(Icons.arrow_downward),
-              items: const [
-                DropdownMenuItem(
-                    value: "F.Y.B.Tech.",
-                    child: Text(
-                      "F.Y.B.Tech.",
-                      style: TextStyle(fontSize: 14),
-                    )),
-                DropdownMenuItem(
-                    value: "S.Y.B.Tech.",
-                    child: Text(
-                      "S.Y.B.Tech.",
-                      style: TextStyle(fontSize: 14),
-                    )),
-                DropdownMenuItem(
-                    value: "T.Y.B.Tech.",
-                    child: Text(
-                      "T.Y.B.Tech.",
-                      style: TextStyle(fontSize: 14),
-                    )),
-                DropdownMenuItem(
-                    value: "B.Tech.",
-                    child: Text(
-                      "B.Tech.",
-                      style: TextStyle(fontSize: 14),
-                    )),
-              ],
-              onChanged: (String? value) {
-                setState(() {
-                  dropdownValueClass = value!;
-                });
-                Class = dropdownValueClass;
-              },
             ),
             DropdownButtonFormField(
               decoration:
@@ -349,6 +320,44 @@ class _EducationDetailsState extends State<EducationDetails> {
               },
             ),
             DropdownButtonFormField(
+              decoration: const InputDecoration(label: Text("Select Year")),
+              value: Class,
+              hint: const Text("Select Year"),
+              icon: const Icon(Icons.arrow_downward),
+              items: const [
+                DropdownMenuItem(
+                    value: "F.Y.B.Tech.",
+                    child: Text(
+                      "F.Y.B.Tech.",
+                      style: TextStyle(fontSize: 14),
+                    )),
+                DropdownMenuItem(
+                    value: "S.Y.B.Tech.",
+                    child: Text(
+                      "S.Y.B.Tech.",
+                      style: TextStyle(fontSize: 14),
+                    )),
+                DropdownMenuItem(
+                    value: "T.Y.B.Tech.",
+                    child: Text(
+                      "T.Y.B.Tech.",
+                      style: TextStyle(fontSize: 14),
+                    )),
+                DropdownMenuItem(
+                    value: "B.Tech.",
+                    child: Text(
+                      "B.Tech.",
+                      style: TextStyle(fontSize: 14),
+                    )),
+              ],
+              onChanged: (String? value) {
+                setState(() {
+                  dropdownValueClass = value!;
+                });
+                Class = dropdownValueClass;
+              },
+            ),
+            DropdownButtonFormField(
               decoration: const InputDecoration(label: Text("Select Division")),
               value: Division,
               hint: const Text("Select Division"),
@@ -380,6 +389,18 @@ class _EducationDetailsState extends State<EducationDetails> {
                 Division = dropdownValueDivision;
               },
             ),
+            TextFormField(
+                style: const TextStyle(fontSize: 14),
+                controller: _userUrnController,
+                keyboardType: TextInputType.number,
+                decoration: const InputDecoration(
+                  labelText: "URN",
+                ),
+                validator: MultiValidator([
+                  RequiredValidator(errorText: "Required"),
+                  LengthRangeValidator(
+                      min: 8, max: 8, errorText: "URN must be 8 digits")
+                ])),
             const SizedBox(
               height: 40,
             ),
@@ -413,6 +434,7 @@ class _EducationDetailsState extends State<EducationDetails> {
                       modal.userclass = Class;
                       modal.userdivision = Division;
                       modal.userdepartment = Dept;
+                      modal.urn = _userUrnController.text;
                     }
                   },
                   style: ElevatedButton.styleFrom(
@@ -443,12 +465,13 @@ class _UserDetailsState extends State<UserDetails> {
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   @override
   void dispose() {
-    _useremailController.text="";
-    _passwordController.text="";
-    _confirmPasswordController.text="";
-    _Usernamecontroller.text="";
-    _Useragecontroller.text="";
-    _Usermobilecontroller.text="";
+    _useremailController.text = "";
+    _passwordController.text = "";
+    _confirmPasswordController.text = "";
+    _usernamecontroller.text = "";
+    _useragecontroller.text = "";
+    _usermobilecontroller.text = "";
+    _userUrnController.text = "";
     gender = "Male";
     Class = "F.Y.B.Tech.";
     Division = "A";
@@ -548,6 +571,7 @@ class _UserDetailsState extends State<UserDetails> {
                           uclass: modal.userclass,
                           department: modal.userdepartment,
                           division: modal.userdivision,
+                          urn: modal.urn,
                           assessment: modal.assessment,
                           firstTime: modal.firstTime,
                           sessionCount: modal.sessionCount);
@@ -594,6 +618,7 @@ class MyUser {
   final String uclass;
   final String division;
   final String department;
+  final String urn;
   final bool assessment;
   final bool firstTime;
   final int sessionCount;
@@ -607,6 +632,7 @@ class MyUser {
       required this.uclass,
       required this.department,
       required this.division,
+      required this.urn,
       required this.assessment,
       required this.firstTime,
       required this.sessionCount});
@@ -620,6 +646,7 @@ class MyUser {
         'class': uclass,
         'department': department,
         'division': division,
+        'urn': urn,
         'assessment': assessment,
         'firstTime': firstTime,
         'sessionCount': sessionCount

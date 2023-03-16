@@ -27,6 +27,7 @@ class _CallState extends State<Call> {
   String id = "";
   String user = "";
   String name = "";
+  String agenda="";
   int num = 0;
   bool isAudioMuted = true;
   bool isAudioOnly = false;
@@ -51,6 +52,7 @@ class _CallState extends State<Call> {
       setState(() {
         user = data["user"];
         name = data["username"];
+        agenda = data["agenda"];
         log(user.toString());
         FirebaseFirestore.instance
             .collection("users")
@@ -337,7 +339,7 @@ class _CallState extends State<Call> {
     // Define meetings options here
     var options = JitsiMeetingOptions(
       roomNameOrUrl: "CounsellingCell",
-      subject: "Agenda",
+      subject: agenda,
       isAudioMuted: isAudioMuted,
       isAudioOnly: isAudioOnly,
       isVideoMuted: isVideoMuted,

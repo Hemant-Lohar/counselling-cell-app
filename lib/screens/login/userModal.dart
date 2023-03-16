@@ -7,7 +7,7 @@ class UserModal extends ChangeNotifier {
   String userdepartment ="";
   String userclass = "";
   String userdivision = "";
-  // String urn = "";
+  String urn = "";
   String userage = "";
   String usermobile = "";
   String usergender ="";

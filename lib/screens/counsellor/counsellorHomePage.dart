@@ -355,12 +355,6 @@ class _CounsellorHomePageState extends State<CounsellorHomePage> {
                 .set(notification)
                 .then((value) async {
               await FirebaseFirestore.instance
-                  .collection("users")
-                  .doc(username)
-                  .update({
-                "requested": false,
-              });
-              await FirebaseFirestore.instance
                   .collection('counsellor')
                   .doc('counsellor@adcet.in')
                   .collection("Requests")
