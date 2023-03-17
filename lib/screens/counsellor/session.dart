@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:counselling_cell_application/theme/Palette.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -78,149 +79,132 @@ class _SessionState extends State<Session> {
               ),
             actions: [
               IconButton(onPressed: ()async{
-                QuerySnapshot snapshot = await FirebaseFirestore.instance
-                    .collection("counsellor")
-                    .doc("counsellor@adcet.in")
-                    .collection("session")
-                .orderBy("date")
-                    .get();
-                List<QueryDocumentSnapshot> documents = snapshot.docs;
 
-                documents.sort((a, b) {
-                  DateFormat format = DateFormat("dd/MM/yyyy");
-                  DateTime aDate = format.parse(a.get("date"));
-                  DateTime bDate = format.parse(b.get("date"));
-                  return aDate.compareTo(bDate);
-                });
+                Future.delayed(
+                  const Duration(seconds: 0),
+                      () => showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: const Text(
+                            "Select Time Frame"),
+                        content: Column(
+                          mainAxisSize:
+                          MainAxisSize.min,
+                          crossAxisAlignment:
+                          CrossAxisAlignment
+                              .start,
+                          mainAxisAlignment:
+                          MainAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              width: 200,
+                              child: TextField(
+                                controller: _timeStart,
+                                decoration:
+                                const InputDecoration(
+                                  icon: Icon(Icons
+                                      .calendar_month),
+                                  labelText:
+                                  "Select start date",
+                                ),
+                                onTap: () async {
+                                  await showDatePicker(
+                                      context:
+                                      context,
+                                      initialDate:
+                                      DateTime
+                                          .now(),
+                                      firstDate:
+                                      DateTime(2022),
+                                      lastDate:
+                                      DateTime(
+                                          2100))
+                                      .then(
+                                          (pickedDate) {
+                                        if (pickedDate !=
+                                            null) {
+                                          setState(() {
+                                            _timeStart.text =
+                                            "${pickedDate.day.toString().padLeft(2, "0")}/${pickedDate.month.toString().padLeft(2, "0")}/${pickedDate.year}";
+                                          });
+                                        }
+                                      });
+                                },
+                              ),
+                            ),
 
-                documents.forEach((doc) {
-                  print(doc.data());
-                });
-                // Future.delayed(
-                //   const Duration(seconds: 0),
-                //       () => showDialog(
-                //     context: context,
-                //     builder: (BuildContext context) {
-                //       return AlertDialog(
-                //         title: const Text(
-                //             "Select Time Frame"),
-                //         content: Column(
-                //           mainAxisSize:
-                //           MainAxisSize.min,
-                //           crossAxisAlignment:
-                //           CrossAxisAlignment
-                //               .start,
-                //           mainAxisAlignment:
-                //           MainAxisAlignment.start,
-                //           children: [
-                //             SizedBox(
-                //               width: 200,
-                //               child: TextField(
-                //                 controller: _timeStart,
-                //                 decoration:
-                //                 const InputDecoration(
-                //                   icon: Icon(Icons
-                //                       .calendar_month),
-                //                   labelText:
-                //                   "Select start date",
-                //                 ),
-                //                 onTap: () async {
-                //                   await showDatePicker(
-                //                       context:
-                //                       context,
-                //                       initialDate:
-                //                       DateTime
-                //                           .now(),
-                //                       firstDate:
-                //                       DateTime(2022),
-                //                       lastDate:
-                //                       DateTime(
-                //                           2100))
-                //                       .then(
-                //                           (pickedDate) {
-                //                         if (pickedDate !=
-                //                             null) {
-                //                           setState(() {
-                //                             _timeStart.text =
-                //                             "${pickedDate.day.toString().padLeft(2, "0")}/${pickedDate.month.toString().padLeft(2, "0")}/${pickedDate.year}";
-                //                           });
-                //                         }
-                //                       });
-                //                 },
-                //               ),
-                //             ),
-                //
-                //             SizedBox(
-                //               width: 200,
-                //               child: TextField(
-                //                 controller: _timeEnd,
-                //                 decoration:
-                //                 const InputDecoration(
-                //                   icon: Icon(Icons
-                //                       .calendar_month),
-                //                   labelText:
-                //                   "Select end date",
-                //                 ),
-                //                 onTap: () async {
-                //                   await showDatePicker(
-                //                       context:
-                //                       context,
-                //                       initialDate:
-                //                       DateTime
-                //                           .now(),
-                //                       firstDate:
-                //                       DateTime(2022),
-                //                       lastDate:
-                //                       DateTime(
-                //                           2100))
-                //                       .then(
-                //                           (pickedDate) {
-                //                         if (pickedDate !=
-                //                             null) {
-                //                           setState(() {
-                //                             _timeEnd.text =
-                //                             "${pickedDate.day.toString().padLeft(2, "0")}/${pickedDate.month.toString().padLeft(2, "0")}/${pickedDate.year}";
-                //                           });
-                //                         }
-                //                       });
-                //                 },
-                //               ),
-                //             ),
-                //           ],
-                //         ),
-                //         actions: <Widget>[
-                //           TextButton(
-                //             onPressed: () {
-                //               _timeStart
-                //                   .text =
-                //                   _timeEnd.text = "";
-                //               Navigator.pop(
-                //                   context, 'Cancel');
-                //             },
-                //             child:
-                //             const Text('Cancel'),
-                //           ),
-                //           TextButton(
-                //             onPressed: () async {
-                //
-                //               final pdfFile = await PdfAnalytics.generate(id, _timeStart.text, _timeEnd.text);
-                //               _timeStart
-                //                   .text =
-                //                   _timeEnd.text = "";
-                //               if(!mounted)return;
-                //               Navigator.pop(
-                //                   context, 'OK');
-                //               PdfAPI.openFile(pdfFile);
-                //
-                //
-                //             },
-                //             child: const Text('OK'),
-                //           ),
-                //         ],
-                //       );
-                //     },
-                //   ),
-                // );
+                            SizedBox(
+                              width: 200,
+                              child: TextField(
+                                controller: _timeEnd,
+                                decoration:
+                                const InputDecoration(
+                                  icon: Icon(Icons
+                                      .calendar_month),
+                                  labelText:
+                                  "Select end date",
+                                ),
+                                onTap: () async {
+                                  await showDatePicker(
+                                      context:
+                                      context,
+                                      initialDate:
+                                      DateTime
+                                          .now(),
+                                      firstDate:
+                                      DateTime(2022),
+                                      lastDate:
+                                      DateTime(
+                                          2100))
+                                      .then(
+                                          (pickedDate) {
+                                        if (pickedDate !=
+                                            null) {
+                                          setState(() {
+                                            _timeEnd.text =
+                                            "${pickedDate.day.toString().padLeft(2, "0")}/${pickedDate.month.toString().padLeft(2, "0")}/${pickedDate.year}";
+                                          });
+                                        }
+                                      });
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                        actions: <Widget>[
+                          TextButton(
+                            onPressed: () {
+                              _timeStart
+                                  .text =
+                                  _timeEnd.text = "";
+                              Navigator.pop(
+                                  context, 'Cancel');
+                            },
+                            child:
+                            const Text('Cancel'),
+                          ),
+                          TextButton(
+                            onPressed: () async {
+
+                              final pdfFile = await PdfAnalytics.generate(id, _timeStart.text, _timeEnd.text);
+                              _timeStart
+                                  .text =
+                                  _timeEnd.text = "";
+                              if(!mounted)return;
+                              Navigator.pop(
+                                  context, 'OK');
+                              PdfAPI.openFile(pdfFile);
+
+
+                            },
+                            child: const Text('OK'),
+                          ),
+                        ],
+                      );
+                    },
+                  ),
+                );
 
               }, icon: const Icon(Icons.download))
             ],

@@ -14,6 +14,7 @@ class ViewUser extends StatefulWidget {
 
 class _ViewUserState extends State<ViewUser> {
   late String id;
+  final dataStyle = const TextStyle(fontSize: 14, color: Colors.black);
   @override
   void initState() {
     super.initState();
@@ -61,7 +62,7 @@ class _ViewUserState extends State<ViewUser> {
                   var clas =      output['class']; // <-- Your value
                   var division =  output['division'];
                   var urn =       output["urn"];
-
+                  var emotion = output["emotion"];
                   var initial = name[0].toUpperCase();
                   // print(output.containsValue('referral'));
 
@@ -87,50 +88,48 @@ class _ViewUserState extends State<ViewUser> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text('Name: $name',
-                                style: const TextStyle(
-                                    color: Colors.black, fontSize: 14)),
+                                style: dataStyle),
                             const SizedBox(
                               height: 10,
                             ),
                             Text('Age: $age',
-                                style: const TextStyle(
-                                    color: Colors.black, fontSize: 14)),
+                                style: dataStyle),
                             const SizedBox(
                               height: 10,
                             ),
                             Text('Gender: $gender',
-                                style: const TextStyle(
-                                    color: Colors.black, fontSize: 14)),
+                                style: dataStyle),
+                            const SizedBox(
+                              height: 10,
+                            ),
+
+                            Text('Dominant emotion: $emotion',
+                                style: dataStyle),
                             const SizedBox(
                               height: 10,
                             ),
                             Text('Department: $dept',
-                                style: const TextStyle(
-                                    color: Colors.black, fontSize: 14)),
+                                style: dataStyle),
                             const SizedBox(
                               height: 10,
                             ),
                             Text('Class : $clas',
-                                style: const TextStyle(
-                                    color: Colors.black, fontSize: 14)),
+                                style: dataStyle),
                             const SizedBox(
                               height: 10,
                             ),
                             Text('Division : $division',
-                                style: const TextStyle(
-                                    color: Colors.black, fontSize: 14)),
+                                style: dataStyle),
                             const SizedBox(
                               height: 10,
                             ),
                             Text('URN : $urn',
-                                style: const TextStyle(
-                                    color: Colors.black, fontSize: 14)),
+                                style: dataStyle),
                             const SizedBox(
                               height: 10,
                             ),
                             Text('Mobile : $mobile',
-                                style: const TextStyle(
-                                    color: Colors.black, fontSize: 14)),
+                                style: dataStyle),
 
                             //
                             // Text('Reffered By : $referedby',
@@ -237,95 +236,67 @@ class _ViewUserState extends State<ViewUser> {
                                 height: 10,
                               ),
                               Text("Referred by: $referral",
-                                  style: const TextStyle(
-                                      color: Colors.black, fontSize: 14)),
+                                  style: dataStyle),
                               Text("Reason for Referral: $reasonReferral",
-                                  style: const TextStyle(
-                                      color: Colors.black, fontSize: 14)),
+                                  style: dataStyle),
                               Text("Parents Mobile Number:$parentMobile",
-                                  style: const TextStyle(
-                                      color: Colors.black, fontSize: 14)),
+                                  style: dataStyle),
                               Text("Informant: $informant",
-                                  style: const TextStyle(
-                                      color: Colors.black, fontSize: 14)),
+                                  style: dataStyle),
                               Text(
                                   "Information given by Parents / teacher: $info",
-                                  style: const TextStyle(
-                                      color: Colors.black, fontSize: 14)),
+                                  style: dataStyle),
                               Text("Chief Complaints and History: $complaint",
-                                  style: const TextStyle(
-                                      color: Colors.black, fontSize: 14)),
+                                  style: dataStyle),
                               Text("Family History: $familyHistory",
-                                  style: const TextStyle(
-                                      color: Colors.black, fontSize: 14)),
+                                  style:dataStyle),
                               Text("Parents information: $parentDetails",
-                                  style: const TextStyle(
-                                      color: Colors.black, fontSize: 14)),
+                                  style: dataStyle),
                               Text("Siblings: $siblings",
-                                  style: const TextStyle(
-                                      color: Colors.black, fontSize: 14)),
+                                  style: dataStyle),
                               Text("Birth Order: $birthOrder",
-                                  style: const TextStyle(
-                                      color: Colors.black, fontSize: 14)),
+                                  style: dataStyle),
                               Text(
                                   "Past medical/ psychiatric history: $pastmedicalHistory",
-                                  style: const TextStyle(
-                                      color: Colors.black, fontSize: 14)),
+                                  style: dataStyle),
                               Text(
                                   "Medical and Psychiatric History: $medicalHistory",
-                                  style: const TextStyle(
-                                      color: Colors.black, fontSize: 14)),
+                                  style: dataStyle),
                               Text(
                                   "(Birth and Early Development: $birthEarlyDevelopment",
-                                  style: const TextStyle(
-                                      color: Colors.black, fontSize: 14)),
+                                  style: dataStyle),
                               Text(
                                   "Behaviour during Childhood: $childBehaviour",
-                                  style: const TextStyle(
-                                      color: Colors.black, fontSize: 14)),
+                                  style: dataStyle),
                               Text(
                                   " Physical Illness during Childhood: $childIllness",
-                                  style: const TextStyle(
-                                      color: Colors.black, fontSize: 14)),
+                                  style: dataStyle),
                               Text(" Menstrual History: $menstrual",
-                                  style: const TextStyle(
-                                      color: Colors.black, fontSize: 14)),
+                                  style: dataStyle),
                               Text("Sexual History: $sexual",
-                                  style: const TextStyle(
-                                      color: Colors.black, fontSize: 14)),
+                                  style: dataStyle),
                               Text(" Marital History : $marital",
-                                  style: const TextStyle(
-                                      color: Colors.black, fontSize: 14)),
+                                  style: dataStyle),
                               Text("Use and abuse of alcohol : $alcohol",
-                                  style: const TextStyle(
-                                      color: Colors.black, fontSize: 14)),
+                                  style: dataStyle),
                               Text("tobacco and drug abuse: $substance",
-                                  style: const TextStyle(
-                                      color: Colors.black, fontSize: 14)),
+                                  style: dataStyle),
                               Text("10th marks: $ssc",
-                                  style: const TextStyle(
-                                      color: Colors.black, fontSize: 14)),
+                                  style: dataStyle),
                               Text("12th/Diploma marks: $hscDiploma",
-                                  style: const TextStyle(
-                                      color: Colors.black, fontSize: 14)),
+                                  style: dataStyle),
                               Text("JEE/CET marks: $entranceExam",
-                                  style: const TextStyle(
-                                      color: Colors.black, fontSize: 14)),
+                                  style: dataStyle),
                               Text("Current academic performance: $cgpa",
-                                  style: const TextStyle(
-                                      color: Colors.black, fontSize: 14)),
+                                  style: dataStyle),
                               Text("Extra Info(if any): $extraInfo",
-                                  style: const TextStyle(
-                                      color: Colors.black, fontSize: 14)),
+                                  style: dataStyle),
                               Text("Assessment (if any): $assessment",
-                                  style: const TextStyle(
-                                      color: Colors.black, fontSize: 14)),
+                                  style: dataStyle),
                               Text("Observation: $observation",
-                                  style: const TextStyle(
-                                      color: Colors.black, fontSize: 14)),
+                                  style: dataStyle),
                               Text("Reccomendation: $reccomendation",
-                                  style: const TextStyle(
-                                      color: Colors.black, fontSize: 14)),
+                                  style: dataStyle),
                             ],
                           ),
                         ],
