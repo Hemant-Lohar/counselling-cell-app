@@ -1,7 +1,7 @@
 import 'dart:developer';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
+import 'package:intl/intl.dart';
 import 'package:counselling_cell_application/theme/Palette.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
@@ -24,8 +24,6 @@ class Session extends StatefulWidget {
 
 class _SessionState extends State<Session> {
   final TextEditingController _date = TextEditingController();
-  final TextEditingController _dateStart = TextEditingController();
-  final TextEditingController _dateEnd = TextEditingController();
 
   final TextEditingController _timeStart = TextEditingController();
   final TextEditingController _timeEnd = TextEditingController();
@@ -80,130 +78,149 @@ class _SessionState extends State<Session> {
               ),
             actions: [
               IconButton(onPressed: ()async{
-                Future.delayed(
-                  const Duration(seconds: 0),
-                      () => showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: const Text(
-                            "Select Time Frame"),
-                        content: Column(
-                          mainAxisSize:
-                          MainAxisSize.min,
-                          crossAxisAlignment:
-                          CrossAxisAlignment
-                              .start,
-                          mainAxisAlignment:
-                          MainAxisAlignment.start,
-                          children: [
-                            SizedBox(
-                              width: 200,
-                              child: TextField(
-                                controller: _dateStart,
-                                decoration:
-                                const InputDecoration(
-                                  icon: Icon(Icons
-                                      .calendar_month),
-                                  labelText:
-                                  "Select start date",
-                                ),
-                                onTap: () async {
-                                  await showDatePicker(
-                                      context:
-                                      context,
-                                      initialDate:
-                                      DateTime
-                                          .now(),
-                                      firstDate:
-                                      DateTime(2022),
-                                      lastDate:
-                                      DateTime(
-                                          2100))
-                                      .then(
-                                          (pickedDate) {
-                                        if (pickedDate !=
-                                            null) {
-                                          setState(() {
-                                            _dateStart.text =
-                                            "${pickedDate.day.toString().padLeft(2, "0")}/${pickedDate.month.toString().padLeft(2, "0")}/${pickedDate.year}";
-                                          });
-                                        }
-                                      });
-                                },
-                              ),
-                            ),
+                QuerySnapshot snapshot = await FirebaseFirestore.instance
+                    .collection("counsellor")
+                    .doc("counsellor@adcet.in")
+                    .collection("session")
+                .orderBy("date")
+                    .get();
+                List<QueryDocumentSnapshot> documents = snapshot.docs;
 
-                            SizedBox(
-                              width: 200,
-                              child: TextField(
-                                controller: _dateEnd,
-                                decoration:
-                                const InputDecoration(
-                                  icon: Icon(Icons
-                                      .calendar_month),
-                                  labelText:
-                                  "Select end date",
-                                ),
-                                onTap: () async {
-                                  await showDatePicker(
-                                      context:
-                                      context,
-                                      initialDate:
-                                      DateTime
-                                          .now(),
-                                      firstDate:
-                                      DateTime(2022),
-                                      lastDate:
-                                      DateTime(
-                                          2100))
-                                      .then(
-                                          (pickedDate) {
-                                        if (pickedDate !=
-                                            null) {
-                                          setState(() {
-                                            _dateEnd.text =
-                                            "${pickedDate.day.toString().padLeft(2, "0")}/${pickedDate.month.toString().padLeft(2, "0")}/${pickedDate.year}";
-                                          });
-                                        }
-                                      });
-                                },
-                              ),
-                            ),
-                          ],
-                        ),
-                        actions: <Widget>[
-                          TextButton(
-                            onPressed: () {
-                              _dateStart
-                                  .text =
-                                  _dateEnd.text = "";
-                              Navigator.pop(
-                                  context, 'Cancel');
-                            },
-                            child:
-                            const Text('Cancel'),
-                          ),
-                          TextButton(
-                            onPressed: () async {
+                documents.sort((a, b) {
+                  DateFormat format = DateFormat("dd/MM/yyyy");
+                  DateTime aDate = format.parse(a.get("date"));
+                  DateTime bDate = format.parse(b.get("date"));
+                  return aDate.compareTo(bDate);
+                });
 
-                              final pdfFile = await PdfAnalytics.generate(id, _dateStart.text, _dateEnd.text);
-                              _dateStart
-                                  .text =
-                                  _dateEnd.text = "";
-                              Navigator.pop(
-                                  context, 'OK');
-                              PdfAPI.openFile(pdfFile);
-
-
-                            },
-                            child: const Text('OK'),
-                          ),
-                        ],
-                      );
-                    },
-                  ),
-                );
+                documents.forEach((doc) {
+                  print(doc.data());
+                });
+                // Future.delayed(
+                //   const Duration(seconds: 0),
+                //       () => showDialog(
+                //     context: context,
+                //     builder: (BuildContext context) {
+                //       return AlertDialog(
+                //         title: const Text(
+                //             "Select Time Frame"),
+                //         content: Column(
+                //           mainAxisSize:
+                //           MainAxisSize.min,
+                //           crossAxisAlignment:
+                //           CrossAxisAlignment
+                //               .start,
+                //           mainAxisAlignment:
+                //           MainAxisAlignment.start,
+                //           children: [
+                //             SizedBox(
+                //               width: 200,
+                //               child: TextField(
+                //                 controller: _timeStart,
+                //                 decoration:
+                //                 const InputDecoration(
+                //                   icon: Icon(Icons
+                //                       .calendar_month),
+                //                   labelText:
+                //                   "Select start date",
+                //                 ),
+                //                 onTap: () async {
+                //                   await showDatePicker(
+                //                       context:
+                //                       context,
+                //                       initialDate:
+                //                       DateTime
+                //                           .now(),
+                //                       firstDate:
+                //                       DateTime(2022),
+                //                       lastDate:
+                //                       DateTime(
+                //                           2100))
+                //                       .then(
+                //                           (pickedDate) {
+                //                         if (pickedDate !=
+                //                             null) {
+                //                           setState(() {
+                //                             _timeStart.text =
+                //                             "${pickedDate.day.toString().padLeft(2, "0")}/${pickedDate.month.toString().padLeft(2, "0")}/${pickedDate.year}";
+                //                           });
+                //                         }
+                //                       });
+                //                 },
+                //               ),
+                //             ),
+                //
+                //             SizedBox(
+                //               width: 200,
+                //               child: TextField(
+                //                 controller: _timeEnd,
+                //                 decoration:
+                //                 const InputDecoration(
+                //                   icon: Icon(Icons
+                //                       .calendar_month),
+                //                   labelText:
+                //                   "Select end date",
+                //                 ),
+                //                 onTap: () async {
+                //                   await showDatePicker(
+                //                       context:
+                //                       context,
+                //                       initialDate:
+                //                       DateTime
+                //                           .now(),
+                //                       firstDate:
+                //                       DateTime(2022),
+                //                       lastDate:
+                //                       DateTime(
+                //                           2100))
+                //                       .then(
+                //                           (pickedDate) {
+                //                         if (pickedDate !=
+                //                             null) {
+                //                           setState(() {
+                //                             _timeEnd.text =
+                //                             "${pickedDate.day.toString().padLeft(2, "0")}/${pickedDate.month.toString().padLeft(2, "0")}/${pickedDate.year}";
+                //                           });
+                //                         }
+                //                       });
+                //                 },
+                //               ),
+                //             ),
+                //           ],
+                //         ),
+                //         actions: <Widget>[
+                //           TextButton(
+                //             onPressed: () {
+                //               _timeStart
+                //                   .text =
+                //                   _timeEnd.text = "";
+                //               Navigator.pop(
+                //                   context, 'Cancel');
+                //             },
+                //             child:
+                //             const Text('Cancel'),
+                //           ),
+                //           TextButton(
+                //             onPressed: () async {
+                //
+                //               final pdfFile = await PdfAnalytics.generate(id, _timeStart.text, _timeEnd.text);
+                //               _timeStart
+                //                   .text =
+                //                   _timeEnd.text = "";
+                //               if(!mounted)return;
+                //               Navigator.pop(
+                //                   context, 'OK');
+                //               PdfAPI.openFile(pdfFile);
+                //
+                //
+                //             },
+                //             child: const Text('OK'),
+                //           ),
+                //         ],
+                //       );
+                //     },
+                //   ),
+                // );
 
               }, icon: const Icon(Icons.download))
             ],
@@ -228,7 +245,7 @@ class _SessionState extends State<Session> {
                     .collection('counsellor')
                     .doc("counsellor@adcet.in")
                     .collection("session")
-                    .where("date", isEqualTo: dateTime)
+                    .where("date", isEqualTo:DateFormat('yyyy/MM/dd').format(DateFormat('dd/MM/yyyy').parse(dateTime)),)
                     .orderBy("timeStart")
                     .snapshots(),
                 builder: (context, snapshots) {
@@ -277,7 +294,7 @@ class _SessionState extends State<Session> {
                                       fontWeight: FontWeight.bold),
                                 ),
                                 subtitle: Text(
-                                  "Start: ${data["timeStart"]} - End: ${data["timeEnd"]} ◾ Online",
+                                  "Start: ${data["timeStart"]} - End: ${data["timeEnd"]} ◾ ${data["mode"]}",
                                   // maxLines: 1,
                                   // overflow: TextOverflow.ellipsis,
                                   style: const TextStyle(
@@ -490,7 +507,7 @@ class _SessionState extends State<Session> {
                                                                   .docs[index]
                                                                   .id)
                                                               .update({
-                                                            "date": _date.text,
+                                                            "date": DateFormat('yyyy/MM/dd').format(DateFormat('dd/MM/yyyy').parse(_date.text)),
                                                             "timeStart":
                                                                 _timeStart.text,
                                                             "timeEnd":
@@ -511,7 +528,7 @@ class _SessionState extends State<Session> {
                                                                     .toString())
                                                                 .update({
                                                               "date":
-                                                                  _date.text,
+                                                              DateFormat('yyyy/MM/dd').format(DateFormat('dd/MM/yyyy').parse(_date.text)),
                                                               "timeStart":
                                                                   _timeStart
                                                                       .text,
@@ -529,6 +546,7 @@ class _SessionState extends State<Session> {
                                                                   .text =
                                                               _timeEnd.text =
                                                                   "";
+                                                          if(!mounted)return;
                                                           Navigator.pop(
                                                               context, 'OK');
                                                         } else {
@@ -597,7 +615,7 @@ class _SessionState extends State<Session> {
                     .collection('counsellor')
                     .doc("counsellor@adcet.in")
                     .collection("session")
-                    .where("date", isGreaterThan: dateTime)
+                    .where("date", isGreaterThan: DateFormat('yyyy/MM/dd').format(DateFormat('dd/MM/yyyy').parse(dateTime)))
                     .orderBy("date")
                     .orderBy("timeStart")
                     .snapshots(),
@@ -617,6 +635,7 @@ class _SessionState extends State<Session> {
                       ),
                     );
                   } else {
+
                     return ListView.builder(
                         physics: const NeverScrollableScrollPhysics(),
                         itemCount: snapshots.data!.docs.length,
@@ -632,11 +651,11 @@ class _SessionState extends State<Session> {
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(12)),
                                 tileColor: Palette.tileback,
-                                leading: const CircleAvatar(
+                                leading: CircleAvatar(
                                   backgroundColor: Palette.primary,
                                   child: Text(
-                                    "H",
-                                    style: TextStyle(
+                                    data['username']![0].toString().toUpperCase(),
+                                    style:const TextStyle(
                                         color: Colors.white, fontSize: 20),
                                   ),
                                 ),
@@ -651,7 +670,7 @@ class _SessionState extends State<Session> {
                                       fontWeight: FontWeight.bold),
                                 ),
                                 subtitle: Text(
-                                  "${data['date']}  Start - ${data["timeStart"]} - ${data["timeEnd"]} ◾ OFFLINE",
+                                  "${DateFormat('dd/MM/yyyy').format(DateFormat('yyyy/MM/dd').parse(data["date"]))}  Start - ${data["timeStart"]} - ${data["timeEnd"]} ◾ ${data["mode"]}",
                                   // maxLines: 1,
                                   // overflow: TextOverflow.ellipsis,
                                   style: const TextStyle(
@@ -854,7 +873,7 @@ class _SessionState extends State<Session> {
                                                                   .docs[index]
                                                                   .id)
                                                               .update({
-                                                            "date": _date.text,
+                                                            "date": DateFormat('yyyy/MM/dd').format(DateFormat('dd/MM/yyyy').parse(_date.text)),
                                                             "timeStart":
                                                                 _timeStart.text,
                                                             "timeEnd":
@@ -875,7 +894,7 @@ class _SessionState extends State<Session> {
                                                                     .toString())
                                                                 .update({
                                                               "date":
-                                                                  _date.text,
+                                                              DateFormat('yyyy/MM/dd').format(DateFormat('dd/MM/yyyy').parse(_date.text)),
                                                               "timeStart":
                                                                   _timeStart
                                                                       .text,

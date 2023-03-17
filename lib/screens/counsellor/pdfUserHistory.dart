@@ -64,7 +64,7 @@ class PdfUserHistory {
     final pdf = Document();
     pdf.addPage(MultiPage(build: (context) => widgetList));
 
-    return PdfAPI.saveDocument(name: '${name}_history.pdf', pdf: pdf);
+    return  PdfAPI.saveDocument(name: '${name}_history.pdf', pdf: pdf);
   }
 
   // static Widget buildHeader(String user) => Column(

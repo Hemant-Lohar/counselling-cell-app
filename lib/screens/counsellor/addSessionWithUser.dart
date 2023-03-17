@@ -2,7 +2,7 @@ import 'dart:developer';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-
+import 'package:intl/intl.dart';
 import 'counsellorPage.dart';
 
 class AddSessionWithUser extends StatefulWidget {
@@ -183,7 +183,7 @@ class _AddSessionWithUserState extends State<AddSessionWithUser> {
                     ElevatedButton(
                         onPressed: () async {
                           final session = <String, String>{
-                            "date": _date.text,
+                            "date":  DateFormat('yyyy/MM/dd').format(DateFormat('dd/MM/yyyy').parse(_date.text)),
                             "timeStart": _timeStart.text,
                             "timeEnd": _timeEnd.text,
                             "user": user,
@@ -191,13 +191,8 @@ class _AddSessionWithUserState extends State<AddSessionWithUser> {
                             "agenda": _agenda.text,
                             "mode": selectedMode ? "Online" : "Offline",
                           };
-                          final dt = DateTime(dateTime.year, dateTime.month,
-                              dateTime.day, dateTime.hour)
-                              .toString()
-                              .substring(0, 10)
-                              .replaceAll("-", "");
                           final docId =
-                              "$dt${_timeStart.text.replaceAll(":", "")}${_timeEnd.text.replaceAll(":", "")}";
+                              DateTime.now().toString();
 
                           if (await validate(docId, session)) {
                             await FirebaseFirestore.instance
@@ -257,8 +252,8 @@ class _AddSessionWithUserState extends State<AddSessionWithUser> {
   }
 
   Future<bool> validate(String docId, Map<String, String> session) async {
-    final start = int.parse(docId.substring(08, 12));
-    final end = int.parse(docId.substring(12, 16));
+    final start = int.parse(session["timeStart"]!.replaceAll(":", ""));
+    final end = int.parse(session["timeEnd"]!.replaceAll(":", ""));
     // log(docId);
     final snapShot = await FirebaseFirestore.instance
         .collection('counsellor')

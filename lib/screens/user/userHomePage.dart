@@ -1,5 +1,5 @@
 import 'dart:developer';
-
+import 'package:intl/intl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:counselling_cell_application/screens/user/assesment/quiz_screen.dart';
 import 'package:counselling_cell_application/theme/palette.dart';
@@ -140,7 +140,7 @@ class _UserHomePageState extends State<UserHomePage> {
                         contentPadding: const EdgeInsets.all(8.0),
                         horizontalTitleGap: 0.0,
                         title: Text(
-                          data['date'],
+                          DateFormat('dd/MM/yyyy').format(DateFormat('yyyy/MM/dd').parse(data["date"])),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: const TextStyle(

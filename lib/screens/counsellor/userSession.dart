@@ -1,5 +1,7 @@
 import 'dart:developer';
 // import 'dart:io';
+
+import 'package:intl/intl.dart';
 import 'pdfUserHistory.dart';
 import 'pdfAPI.dart';
 import 'package:printing/printing.dart';
@@ -83,7 +85,7 @@ class _UserSessionState extends State<UserSession> {
           iconSize: 40,
           alignment: Alignment.bottomCenter,
           icon: const Icon(Icons.download),
-          onPressed: () async {
+          onPressed: () async{
             final pdfFile = await PdfUserHistory.generate(id,name);
             PdfAPI.openFile(pdfFile);
 
@@ -160,7 +162,7 @@ class _UserSessionState extends State<UserSession> {
                                     ),
                                   ),
                                   title: Text(
-                                    "Date - ${data['date']}",
+                                    "Date - ${DateFormat('dd/MM/yyyy').format(DateFormat('yyyy/MM/dd').parse(data["date"]))}",
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                     style: const TextStyle(
@@ -201,7 +203,6 @@ class _UserSessionState extends State<UserSession> {
                     .collection('users')
                     .doc(id)
                     .collection("session")
-                    .where("date", isGreaterThanOrEqualTo: dateTime)
                     .snapshots(),
                 builder: (context, snapshots) {
                   if (snapshots.connectionState == ConnectionState.waiting) {
@@ -247,7 +248,7 @@ class _UserSessionState extends State<UserSession> {
                                   ),
                                 ),
                                 title: Text(
-                                  "Date - ${data['date']}",
+                                  "Date - ${DateFormat('dd/MM/yyyy').format(DateFormat('yyyy/MM/dd').parse(data["date"]))}",
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                   style: const TextStyle(

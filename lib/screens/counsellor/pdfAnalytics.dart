@@ -9,9 +9,11 @@ import 'pdfAPI.dart';
 class PdfAnalytics {
   static Future<File> generate(String id, String startDate, String endDate) async {
     List<Widget> widgetList = [];
-    final documentReference =
-    FirebaseFirestore.instance.collection("counsellor").doc(id);
-   widgetList.add(Text("Analytics pdf for $startDate $endDate",style: const TextStyle(fontSize: 20)));
+    final documentReference = FirebaseFirestore.instance.collection("counsellor").doc(id);
+    //log(documentReference.collection("session").count().toString());
+   widgetList.add(Text("Analytics pdf for $startDate to $endDate",style: const TextStyle(fontSize: 20)));
+
+
     // await documentReference.collection("completedSession").get().then(
     //       (querySnapshot) {
     //     if (querySnapshot.size == 0) {

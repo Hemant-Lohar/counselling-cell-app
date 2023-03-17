@@ -1,5 +1,5 @@
 import 'dart:developer';
-
+import 'package:intl/intl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -92,7 +92,7 @@ class _AddSessionState extends State<AddSession> {
                             initialTime: TimeOfDay.fromDateTime(dateTime),
                           ).then((pickedTime) {
                             if (pickedTime != null) {
-                              int hr = pickedTime.hour-12;
+
                               setState(() {
                                 _timeStart.text =
                                     // "${hr.toString()}:${pickedTime.minute.toString().padLeft(2, "0")}";
@@ -272,7 +272,7 @@ class _AddSessionState extends State<AddSession> {
                     ElevatedButton(
                         onPressed: () async {
                           final session = <String, String>{
-                            "date": _date.text,
+                            "date": DateFormat('yyyy/MM/dd').format(DateFormat('dd/MM/yyyy').parse(_date.text)),
                             "timeStart": _timeStart.text,
                             "timeEnd": _timeEnd.text,
                             "user": userid,
@@ -280,13 +280,7 @@ class _AddSessionState extends State<AddSession> {
                             "agenda": _agenda.text,
                             "mode": selectedMode ? "Online" : "Offline",
                           };
-                          final dt = DateTime(dateTime.year, dateTime.month,
-                                  dateTime.day, dateTime.hour)
-                              .toString()
-                              .substring(0, 10)
-                              .replaceAll("-", "");
-                          final docId =
-                              "$dt${_timeStart.text.replaceAll(":", "")}${_timeEnd.text.replaceAll(":", "")}";
+                          final docId =DateTime.now().toString();
 
                           if (await validate(docId, session)) {
                             await FirebaseFirestore.instance
@@ -303,7 +297,7 @@ class _AddSessionState extends State<AddSession> {
                                 .set(session);
                             Fluttertoast.showToast(
                                 msg: "Session added successfully");
-
+                            if(!mounted)return;
                             Navigator.pop(context);
                           } else {
                             Fluttertoast.showToast(
@@ -323,8 +317,8 @@ class _AddSessionState extends State<AddSession> {
   }
 
   Future<bool> validate(String docId, Map<String, String> session) async {
-    final start = int.parse(docId.substring(08, 12));
-    final end = int.parse(docId.substring(12, 16));
+    final start = int.parse(session["timeStart"]!.replaceAll(":", ""));
+    final end = int.parse(session["timeEnd"]!.replaceAll(":", ""));
     // log(docId);
     final snapShot = await FirebaseFirestore.instance
         .collection('counsellor')

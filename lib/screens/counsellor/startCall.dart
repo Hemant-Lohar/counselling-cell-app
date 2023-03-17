@@ -35,6 +35,8 @@ class _CallState extends State<Call> {
   final _observationController = TextEditingController();
   final _newIssuesController = TextEditingController();
   final _detailsController = TextEditingController();
+  final _reccController = TextEditingController();
+  String _timeEnd = "";
   final _timeEndController = TextEditingController();
   @override
   void initState() {
@@ -53,6 +55,7 @@ class _CallState extends State<Call> {
         user = data["user"];
         name = data["username"];
         agenda = data["agenda"];
+        _timeEnd=_timeEndController.text=data["timeEnd"];
         log(user.toString());
         FirebaseFirestore.instance
             .collection("users")
@@ -61,6 +64,7 @@ class _CallState extends State<Call> {
             .then((DocumentSnapshot doc) {
           final data = doc.data() as Map<String, dynamic>;
           setState(() {
+            _reccController.text=data["reccomendation"];
             num = data["sessionCount"];
             log(num.toString());
           });
@@ -199,6 +203,17 @@ class _CallState extends State<Call> {
               ),
             ),
           ),
+          SizedBox(
+            width: double.maxFinite,
+            child: TextField(
+              keyboardType: TextInputType.text,
+              controller: _reccController,
+              decoration: const InputDecoration(
+                icon: Icon(Icons.medical_services),
+                labelText: "Reccomendation",
+              ),
+            ),
+          ),
           const SizedBox(height: 60.0),
           SizedBox(
             child: TextField(
@@ -210,7 +225,7 @@ class _CallState extends State<Call> {
               onTap: () async {
                 await showTimePicker(
                   context: context,
-                  initialTime: TimeOfDay.now(),
+                  initialTime: TimeOfDay(hour: int.parse(_timeEnd.split(':')[0]), minute: int.parse(_timeEnd.split(':')[1])),
                 ).then((pickedTime) {
                   if (pickedTime != null) {
                     setState(() {
@@ -236,12 +251,13 @@ class _CallState extends State<Call> {
                     .get()
                     .then((DocumentSnapshot doc) {
                   var data = doc.data() as Map<String, dynamic>;
+                  num++;
                   data.addAll({
                     "observation": _observationController.text,
                     "new_issues": _newIssuesController.text,
                     "details": _detailsController.text,
                     "timeEnd": _timeEndController.text,
-                    "sessionNumber": num++
+                    "sessionNumber": num
                   });
                   FirebaseFirestore.instance
                       .collection("counsellor")
@@ -263,7 +279,7 @@ class _CallState extends State<Call> {
                   });
                 });
                 FirebaseFirestore.instance.collection("users").doc(user).update(
-                    {"sessionCount": num++}).onError((error, stackTrace) {
+                    {"sessionCount": num,"reccomendation": _reccController.text}).onError((error, stackTrace) {
                   Fluttertoast.showToast(msg: "An error has occurred");
                 });
                 FirebaseFirestore.instance
@@ -290,6 +306,7 @@ class _CallState extends State<Call> {
                 _newIssuesController.text = "";
                 _detailsController.text = "";
                 _timeEndController.text = "";
+                _reccController.text="";
                 if (!mounted) return;
                 Navigator.pop(context);
               },

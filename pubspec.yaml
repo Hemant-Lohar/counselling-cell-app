@@ -56,6 +56,7 @@ dependencies:
   tflite_flutter: ^0.9.0
   hexcolor:
   pdf: ^3.8.4
+  fl_chart: ^0.61.0
 dev_dependencies:
   flutter_launcher_icons:
   flutter_native_splash:
