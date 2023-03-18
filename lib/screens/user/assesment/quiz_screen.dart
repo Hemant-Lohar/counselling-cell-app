@@ -44,6 +44,9 @@ class _QuizScreenState extends State<QuizScreen> {
   int _score = 0;
   late final List<int> _emotions = List<int>.filled(7, 0);
   Answer? _selectedAnswer;
+  final String high="Your score is high ! Please seek immediate help.";
+  final String moderate = "Your score is average ! You should visit the counsellor sometime";
+  final String low = "Great ! looks like you have are in a healthy mental state. Feel free to visit the counsellor anyways !";
   @override
   void initState() {
     super.initState();
@@ -126,7 +129,7 @@ class _QuizScreenState extends State<QuizScreen> {
         child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
           Image.asset('assets/assessment.png', height: 200, width: 200),
           const SizedBox(height: 20),
-      
+
           // const Text(
           //   "Mental Health Assessment",
           //   style: TextStyle(
@@ -253,10 +256,11 @@ class _QuizScreenState extends State<QuizScreen> {
   _showScoreDialog() {
     return AlertDialog(
       title: Text(
-        _score.toString(),
+        "Your score is $_score",
         style:
             const TextStyle(color: Colors.green, fontWeight: FontWeight.bold),
       ),
+      content: _score>=24?Text(high):_score>=14?Text(moderate):Text(low),
       actions: <Widget>[
         TextButton(
           onPressed: () {
@@ -282,19 +286,6 @@ class _QuizScreenState extends State<QuizScreen> {
                 );
           },
           child: const Text('Home'),
-        ),
-        TextButton(
-          onPressed: () {
-            Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(
-                    builder: (BuildContext context) =>
-                        QuizScreen(camera: widget.camera)),
-                ModalRoute.withName(
-                    '/') // Replace this with your root screen's route name (usually '/')
-                );
-          },
-          child: const Text('Restart'),
         ),
       ],
     );
