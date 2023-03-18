@@ -9,6 +9,7 @@ import 'counsellorPage.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../theme/Palette.dart';
 import 'counsellorProfilePage.dart';
@@ -80,6 +81,7 @@ class _CounsellorHomePageState extends State<CounsellorHomePage> {
                 // const SizedBox(
                 //   height: 30,
                 // ),
+                Charts(),
                 getNewRequests(),
                 getRequests()
 
@@ -379,6 +381,32 @@ class _CounsellorHomePageState extends State<CounsellorHomePage> {
       ],
     );
   }
+
+  Widget Charts() {
+    final List<ChartData> chartData = [
+      ChartData('David', 90, Colors.black),
+      ChartData('Steve', 38, Colors.orange),
+      ChartData('Jack', 34, Colors.red),
+      ChartData('Others', 52, Colors.blue)
+    ];
+    return (SfCircularChart(series: <CircularSeries>[
+      // Render pie chart
+      PieSeries<ChartData, String>(
+        dataSource: chartData,
+        pointColorMapper: (ChartData data, _) => data.color,
+        xValueMapper: (ChartData data, _) => data.x,
+        yValueMapper: (ChartData data, _) => data.y,
+        explode: true,
+      )
+    ]));
+  }
+}
+
+class ChartData {
+  ChartData(this.x, this.y, this.color);
+  final String x;
+  final double y;
+  final Color color;
 }
 
 
