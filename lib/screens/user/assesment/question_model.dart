@@ -14,54 +14,56 @@ class Answer {
 
 List<Question> getQuestions() {
   List<Question> list = [];
+  var answer = [
+    Answer("Never", 0),
+    Answer("Rarely", 1),
+    Answer("Sometimes", 2),
+    Answer("Often", 3),
+    Answer("Always",4)
+  ];
   //ADD questions and answer here
 
   list.add(Question(
-    "Who is the owner of Flutter?",
-    [
-      Answer("Nokia", 1),
-      Answer("Samsung", 2),
-      Answer("Google", 3),
-      Answer("Apple", 4),
-    ],
+    "How often do you feel overwhelmed or stressed?",answer
   ));
 
   list.add(Question(
-    "Who owns Iphone?",
-    [
-      Answer("Apple", 1),
-      Answer("Microsoft", 2),
-      Answer("Google", 3),
-      Answer("Nokia", 4),
-    ],
+    "How often do you feel sad or depressed?",
+   answer
   ));
 
   list.add(Question(
-    "Youtube is _________  platform?",
-    [
-      Answer("Music Sharing", 1),
-      Answer("Video Sharing", 2),
-      Answer("Live Streaming", 3),
-      Answer("All of the above", 4),
-    ],
+    "How often do you feel anxious or worried?",
+   answer
   ));
   list.add(Question(
-    "Who is the CEO of Tata sons?",
-    [
-      Answer("Sir Ratan Tata", 1),
-      Answer("Gautam Adano", 2),
-      Answer("Mukesh Ambani", 3),
-      Answer("N Chandrasekaran", 4),
-    ],
+    "How often do you feel irritable or angry?",
+    answer
   ));
 
   list.add(Question(
-    "Flutter user dart as a language?",
-    [
-      Answer("True", 1),
-      Answer("False", 2),
-    ],
+    "How often do you feel lonely or isolated?",
+   answer
   ));
+
+  list.add(Question(
+    "How often do you have trouble sleeping?",
+   answer
+  ));
+  list.add(Question(
+    "How often do you feel tired or fatigued?",
+   answer
+  ));
+
+  list.add(Question(
+    "How often do you feel a lack of interest or pleasure in activities you used to enjoy?",
+   answer
+  ));
+  list.add(Question(
+    "How often do you have trouble concentrating or focusing?",
+   answer
+  ));
+
 
   return list;
 }
