@@ -8,6 +8,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 
+import 'history.dart';
 import 'notifications.dart';
 
 class UserPage extends StatefulWidget {
@@ -21,9 +22,8 @@ class _UserPageState extends State<UserPage> {
   final String username = FirebaseAuth.instance.currentUser!.email!;
   String initial = "";
   String name = "";
-
   int currentIndex = 0;
-  final screens = [const UserHomePage(), const UserProfilePage()];
+  final screens = [const UserHomePage(), const History()];
 
   @override
   void initState() {
@@ -100,8 +100,8 @@ class _UserPageState extends State<UserPage> {
               backgroundColor: Palette.primary,
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.group),
-              label: 'Profile',
+              icon: Icon(Icons.history),
+              label: 'History',
               backgroundColor: Palette.primary,
             ),
           ]),

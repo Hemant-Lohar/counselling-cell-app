@@ -1,10 +1,11 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:counselling_cell_application/screens/login/loginPage.dart';
 import 'package:counselling_cell_application/theme/palette.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import '../../DataClass.dart';
 
 class UserProfilePage extends StatefulWidget {
@@ -15,14 +16,14 @@ class UserProfilePage extends StatefulWidget {
 }
 
 class _UserProfilePageState extends State<UserProfilePage> {
-  String id = FirebaseAuth.instance.currentUser!.email!;
-  String name = "";
+  final id = FirebaseAuth.instance.currentUser!.email!;
+  String name  = "";
   String Class = "";
-  String dept = "";
-  String div = "";
-  String Urn = "";
-  String rec = "";
-
+  String dept  = "";
+  String div   = "";
+  String Urn   = "";
+  String rec   = "";
+  String initial = "";
   @override
   void initState() {
     FirebaseFirestore.instance
@@ -32,21 +33,20 @@ class _UserProfilePageState extends State<UserProfilePage> {
         .then((DocumentSnapshot doc) {
       final data = doc.data() as Map<String, dynamic>;
       setState(() {
-        name = data["name"];
-        Class = data["class"];
+        name =data["name"];
+        initial = name[0].toUpperCase();
+        Class= data["class"];
         dept = data["department"];
-        div = data["division"];
-        Urn = data["urn"];
-        rec = data["reccomendation"];
+        div  = data["division"];
+        Urn  = data["urn"];
+        // rec  = data["reccomendation"];
       });
     });
-
     super.initState();
   }
-
   @override
   Widget build(BuildContext context) {
-    return Consumer<DataClass>(builder: (context, modal, child) {
+    // return Consumer<DataClass>(builder: (context, modal, child) {
       return Scaffold(
           appBar: AppBar(
             leading: const BackButton(color: Colors.black),
@@ -61,7 +61,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                   child: CircleAvatar(
                     backgroundColor: Palette.secondary,
                     radius: 60,
-                    child: Text(name[0].toString().toUpperCase(),
+                    child: Text(initial,
                         style:
                             const TextStyle(color: Colors.white, fontSize: 40)),
                   ),
@@ -108,12 +108,14 @@ class _UserProfilePageState extends State<UserProfilePage> {
                       const SizedBox(
                         height: 10,
                       ),
-                      Text('Reccomendation: $rec',
-                          style: const TextStyle(
-                              color: Colors.black, fontSize: 14)),
-                      const SizedBox(
-                        height: 40,
-                      ),
+                      // Text('Reccomendation: $rec',
+                      //     style: const TextStyle(
+                      //         color: Colors.black, fontSize: 14)),
+                      // const SizedBox(
+                      //   height: 40,
+                      // ),
+
+
                     ],
                   ),
                 ),
@@ -141,6 +143,6 @@ class _UserProfilePageState extends State<UserProfilePage> {
               ],
             ),
           ));
-    });
+    // });
   }
 }

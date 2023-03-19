@@ -123,10 +123,11 @@ class _CounsellorProfileState extends State<CounsellorProfile> {
             padding: const EdgeInsets.symmetric(horizontal: 40.0),
             child: ListView(
               children: [
-                const Center(
+                Center(
                   child: CircleAvatar(
                     backgroundColor: Colors.black26,
                     radius: 60,
+                    child: Text(initial,style:  const TextStyle(color: Colors.white, fontSize: 40),),
                   ),
                 ),
                 const SizedBox(height: 40),
