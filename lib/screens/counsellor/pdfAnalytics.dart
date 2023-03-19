@@ -71,9 +71,119 @@ class PdfAnalytics {
     log(genderMap.toString());
     log(deptMap.toString());
     log(classMap.toString());
-    widgetList.add(Text("Analytics by gender:$genderMap"));
-    widgetList.add(Text("Analytics by Department:$deptMap"));
-    widgetList.add(Text("Analytics by Class:$classMap"));
+
+// List<Weight> weightData =
+//   genderMap.entries.map( (entry) => Weight(entry.key, entry.value)).toList();
+
+    widgetList.add(Column(children: [
+      Center(
+          child: Text("Gender", style: TextStyle(fontWeight: FontWeight.bold))),
+      Table(border: TableBorder.all(), columnWidths: {
+        0: const FixedColumnWidth(40),
+        1: const FixedColumnWidth(40)
+      }, children: <TableRow>[
+        TableRow(
+          children: <Widget>[
+            Text("Male", textAlign: TextAlign.center),
+            Text(genderMap["Male"].toString(), textAlign: TextAlign.center),
+          ],
+        ),
+        TableRow(
+          children: <Widget>[
+            Text("Female", textAlign: TextAlign.center),
+            Text(genderMap["Female"].toString(), textAlign: TextAlign.center),
+          ],
+        ),
+      ])
+    ]));
+
+    widgetList.add(Column(children: [
+      Center(
+          child: Text("Department",
+              style: TextStyle(fontWeight: FontWeight.bold))),
+      Table(border: TableBorder.all(), columnWidths: {
+        0: const FixedColumnWidth(40),
+        1: const FixedColumnWidth(40)
+      }, children: <TableRow>[
+        TableRow(
+          children: <Widget>[
+            Text("Computer Science & Engineering", textAlign: TextAlign.center),
+            Text(deptMap["Computer Science & Engineering"].toString(),
+                textAlign: TextAlign.center),
+          ],
+        ),
+        TableRow(
+          children: <Widget>[
+            Text("Mechanical Engineering", textAlign: TextAlign.center),
+            Text(deptMap["Mechanical Engineering"].toString(),
+                textAlign: TextAlign.center),
+          ],
+        ),
+        TableRow(
+          children: <Widget>[
+            Text("Civil Engineering", textAlign: TextAlign.center),
+            Text(deptMap["Civil Engineering"].toString(),
+                textAlign: TextAlign.center),
+          ],
+        ),
+        TableRow(
+          children: <Widget>[
+            Text("Electrical Engineering", textAlign: TextAlign.center),
+            Text(deptMap["Electrical Engineering"].toString(),
+                textAlign: TextAlign.center),
+          ],
+        ),
+        TableRow(
+          children: <Widget>[
+            Text("Aeronautical Engineering", textAlign: TextAlign.center),
+            Text(deptMap["Aeronautical Engineering"].toString(),
+                textAlign: TextAlign.center),
+          ],
+        ),
+        TableRow(
+          children: <Widget>[
+            Text("Food Technology", textAlign: TextAlign.center),
+            Text(deptMap["Food Technology"].toString(),
+                textAlign: TextAlign.center),
+          ],
+        ),
+      ])
+    ]));
+
+    widgetList.add(Column(children: [
+      Center(
+          child: Text("Class", style: TextStyle(fontWeight: FontWeight.bold))),
+      Table(border: TableBorder.all(), columnWidths: {
+        0: const FixedColumnWidth(40),
+        1: const FixedColumnWidth(40)
+      }, children: <TableRow>[
+        TableRow(
+          children: <Widget>[
+            Text("F.Y.B.Tech.", textAlign: TextAlign.center),
+            Text(classMap["F.Y.B.Tech."].toString(), textAlign: TextAlign.center),
+          ],
+        ),
+        TableRow(
+          children: <Widget>[
+            Text("S.Y.B.Tech.", textAlign: TextAlign.center),
+            Text(classMap["S.Y.B.Tech."].toString(), textAlign: TextAlign.center),
+          ],
+        ),
+        TableRow(
+          children: <Widget>[
+            Text("T.Y.B.Tech.", textAlign: TextAlign.center),
+            Text(classMap["T.Y.B.Tech."].toString(), textAlign: TextAlign.center),
+          ],
+        ),
+        TableRow(
+          children: <Widget>[
+            Text("B.Tech.", textAlign: TextAlign.center),
+            Text(classMap["B.Tech."].toString(), textAlign: TextAlign.center),
+          ],
+        ),
+        
+      ])
+    ]));
 
     final pdf = Document();
     pdf.addPage(MultiPage(build: (context) => widgetList));
@@ -81,3 +191,10 @@ class PdfAnalytics {
     return PdfAPI.saveDocument(name: 'Analytics.pdf', pdf: pdf);
   }
 }
+
+// class Weight {
+//   final double male;
+//   final double female;
+
+//   Weight(this.male, this.female);
+// }

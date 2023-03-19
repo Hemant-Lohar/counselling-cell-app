@@ -81,15 +81,20 @@ class _UserSessionState extends State<UserSession> {
                 ),
               ],
             ))),
-        floatingActionButton: IconButton(
-          iconSize: 40,
-          alignment: Alignment.bottomCenter,
-          icon: const Icon(Icons.download),
-          onPressed: () async{
-            final pdfFile = await PdfUserHistory.generate(id,name);
-            PdfAPI.openFile(pdfFile);
-
-          },
+        floatingActionButton: CircleAvatar(
+          radius: 25,
+          backgroundColor: Palette.primary,
+          child: IconButton(
+            color: Colors.white,
+            iconSize: 30,
+            alignment: Alignment.bottomCenter,
+            icon: const Icon(Icons.download),
+            onPressed: () async{
+              final pdfFile = await PdfUserHistory.generate(id,name);
+              PdfAPI.openFile(pdfFile);
+        
+            },
+          ),
         ),
         //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
         //   children: [

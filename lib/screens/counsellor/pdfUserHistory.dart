@@ -27,7 +27,7 @@ class PdfUserHistory {
 
       widgetList.add(
         Padding(
-            padding: const EdgeInsets.only(top: 20),
+            padding: const EdgeInsets.only(top: 4),
             child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -58,7 +58,7 @@ class PdfUserHistory {
           for (var docSnapshot in querySnapshot.docs) {
             var data = docSnapshot.data();
             widgetList.add(Padding(
-                padding: const EdgeInsets.only(top: 20),
+                padding: const EdgeInsets.only(top: 10),
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
