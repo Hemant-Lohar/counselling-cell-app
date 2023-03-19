@@ -47,6 +47,7 @@ class PdfUserHistory {
                   Text("Division ${data["division"]}"),
                   Text("URN: ${data["urn"]}"),
                   Text("Email ID: ${data["id"]}"),
+                  Divider()
                 ])),
       );
     });

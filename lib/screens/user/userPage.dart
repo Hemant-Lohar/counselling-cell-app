@@ -8,6 +8,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 
+import 'notifications.dart';
+
 class UserPage extends StatefulWidget {
   const UserPage({Key? key}) : super(key: key);
 
@@ -56,7 +58,14 @@ class _UserPageState extends State<UserPage> {
               Icons.notifications,
               color: Colors.white,
             ),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context,
+                // ignore: prefer_const_constructors
+                MaterialPageRoute(
+                    builder: (context) => const Notifications()),
+              );
+            },
           ),
           InkWell(
               onTap: () {

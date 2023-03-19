@@ -17,7 +17,7 @@ class PdfAnalytics {
     widgetList.add(Text("Analytics for $startDate to $endDate",
         style: const TextStyle(fontSize: 20)));
     Set<String> userList = {};
-    final genderMap = {};
+    final genderMap = {"Male":0,"Female":0,"LGBTQ+":0};
     final classMap = {};
     final deptMap = {};
     QuerySnapshot snapshot = await documentReference
@@ -92,6 +92,12 @@ class PdfAnalytics {
           children: <Widget>[
             Text("Female", textAlign: TextAlign.center),
             Text(genderMap["Female"].toString(), textAlign: TextAlign.center),
+          ],
+        ),
+        TableRow(
+          children: <Widget>[
+            Text("LGBTQ+", textAlign: TextAlign.center),
+            Text(genderMap["LGBTQ+"].toString(), textAlign: TextAlign.center),
           ],
         ),
       ])
@@ -188,7 +194,7 @@ class PdfAnalytics {
     final pdf = Document();
     pdf.addPage(MultiPage(build: (context) => widgetList));
 
-    return PdfAPI.saveDocument(name: 'Analytics.pdf', pdf: pdf);
+    return PdfAPI.saveDocument(name: "Analytics.pdf", pdf: pdf);
   }
 }
 

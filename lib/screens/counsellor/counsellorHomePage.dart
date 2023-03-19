@@ -25,6 +25,9 @@ class _CounsellorHomePageState extends State<CounsellorHomePage> {
   final username = FirebaseAuth.instance.currentUser!.email!;
   String name = "";
   String initial = "";
+  final String dateTime =
+      "${DateTime.now().day.toString().padLeft(2, "0")}/${DateTime.now().month.toString().padLeft(2, "0")}/${DateTime.now().year}";
+
   @override
   void initState() {
     super.initState();
@@ -173,7 +176,7 @@ class _CounsellorHomePageState extends State<CounsellorHomePage> {
                                           context: context,
                                           builder: (BuildContext context) {
                                             return getAlertDialog(data["user"],
-                                                snapshots.data!.docs[index].id);
+                                                snapshots.data!.docs[index].id,data["date"],data["time"]);
                                           }));
                                 },
                                 icon: const Icon(Icons.close)),
@@ -285,7 +288,7 @@ class _CounsellorHomePageState extends State<CounsellorHomePage> {
                                           context: context,
                                           builder: (BuildContext context) {
                                             return getAlertDialog(data["user"],
-                                                snapshots.data!.docs[index].id);
+                                                snapshots.data!.docs[index].id,data["date"],data["time"]);
                                           }));
                                 },
                                 icon: const Icon(Icons.close)),
@@ -314,7 +317,7 @@ class _CounsellorHomePageState extends State<CounsellorHomePage> {
         });
   }
 
-  Widget getAlertDialog(String user, String requestid) {
+  Widget getAlertDialog(String user, String requestid,String date,String time) {
     TextEditingController reasonController = TextEditingController();
     return AlertDialog(
       title: const Text("Mention reason for rejection"),
@@ -346,8 +349,8 @@ class _CounsellorHomePageState extends State<CounsellorHomePage> {
         TextButton(
           onPressed: () async {
             final notification = <String, String>{
-              "message": "Your request was denied.",
-              "reason": reasonController.text
+              "message": "Your request from $date at $time was denied on $dateTime at ${TimeOfDay.now().hour}:${TimeOfDay.now().minute}",
+
             };
             await FirebaseFirestore.instance
                 .collection("users")

@@ -11,7 +11,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:camera/camera.dart';
 import 'package:jitsi_meet_wrapper/jitsi_meet_wrapper.dart';
-import '../counsellor/userPage.dart';
+import '../user/userPage.dart';
 import 'package:universal_html/html.dart' as html;
 
 class UserHomePage extends StatefulWidget {
@@ -40,7 +40,7 @@ class _UserHomePageState extends State<UserHomePage> {
   String? selectedAction;
 
   @override
-  void initState() {
+  void initState(){
     super.initState();
     FirebaseFirestore.instance
         .collection("users")
@@ -50,13 +50,13 @@ class _UserHomePageState extends State<UserHomePage> {
       final data = doc.data() as Map<String, dynamic>;
       setState(() {
         showAssessment = data["assessment"];
-
         firstSession = data["firstTime"];
         name = data["name"];
         emotion = data["emotion"];
         initial = username[0].toUpperCase();
       });
     });
+    setShowButton();
     dateTime =
         "${DateTime.now().day.toString().padLeft(2, "0")}/${DateTime.now().month.toString().padLeft(2, "0")}/${DateTime.now().year}";
   }
@@ -105,7 +105,8 @@ class _UserHomePageState extends State<UserHomePage> {
                     ),
                   ),
                   const SizedBox(height: 30),
-                  ElevatedButton(
+                   showRequestButton
+                  ?ElevatedButton(
                           onPressed: () {
                             Future.delayed(
                                 const Duration(seconds: 0),
@@ -115,7 +116,7 @@ class _UserHomePageState extends State<UserHomePage> {
                                       return getAlertDialog();
                                     }));
                           },
-                          child: const Text("Request an appointment")),
+                          child: const Text("Request an appointment")): Container(),
                 ]);
           } else {
             return Column(
@@ -217,6 +218,7 @@ class _UserHomePageState extends State<UserHomePage> {
             color: Colors.black,
           ),
         ),
+
         ElevatedButton(
             onPressed: () async {
               final cameraList = await availableCameras();
@@ -287,6 +289,8 @@ class _UserHomePageState extends State<UserHomePage> {
               "name": name,
               "problem": _problemController.text,
               "mode": mode,
+              "date": dateTime,
+              "time": "${TimeOfDay.now().hour}:${TimeOfDay.now().minute}",
               "firstTime": firstSession ? "true" : "false",
               "emotion": emotion
             };
@@ -307,9 +311,7 @@ class _UserHomePageState extends State<UserHomePage> {
                 Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(
-                        builder: (BuildContext context) => UserPage(
-                              id: username,
-                            )),
+                        builder: (BuildContext context) => UserPage()),
                     ModalRoute.withName(
                         '/') // Replace this with your root screen's route name (usually '/')
                     );
@@ -405,6 +407,15 @@ class _UserHomePageState extends State<UserHomePage> {
     } catch (error) {
       log(error.toString());
     }
+  }
+
+  void setShowButton()async{
+    QuerySnapshot snapshot = await FirebaseFirestore.instance.collection("counsellor").doc("counsellor@adcet.in").collection("Requests").get();
+    List<QueryDocumentSnapshot> documents = snapshot.docs;
+    log("Total number of requests : ${documents.length}");
+    setState(() {
+      showRequestButton = documents.isEmpty;
+    });
   }
 }
 
