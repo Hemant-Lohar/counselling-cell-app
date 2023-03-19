@@ -44,39 +44,27 @@ class _QuizScreenState extends State<QuizScreen> {
   int _score = 0;
   late final List<int> _emotions = List<int>.filled(7, 0);
   Answer? _selectedAnswer;
-  final String high="Your score is high ! Please seek immediate help.";
-  final String moderate = "Your score is average ! You should visit the counsellor sometime";
-  final String low = "Great ! looks like you have are in a healthy mental state. Feel free to visit the counsellor anyways !";
+  final String high = "Your score is high ! Please seek immediate help.";
+  final String moderate =
+      "Your score is average ! You should visit the counsellor sometime";
+  final String low =
+      "Great ! looks like you have are in a healthy mental state. Feel free to visit the counsellor anyways !";
   @override
   void initState() {
     super.initState();
-    // To display the current output from the Camera,
-    // create a CameraController.
 
     _controller = CameraController(
-      // Get a specific camera from the list of available cameras.
       widget.camera,
-      // Define the resolution to use.
       ResolutionPreset.veryHigh,
     );
 
-    // Next, initialize the controller. This returns a Future.
     _initializeControllerFuture = _controller.initialize();
     FirebaseModelDownloader.instance
         .getModel(
       "test_model",
       FirebaseModelDownloadType.latestModel,
-      //Don't delete following lines , i'll need'em later bitch !
-      // FirebaseModelDownloadConditions(
-      //     androidChargingRequired: false,
-      //     androidWifiRequired: true,
-      //     androidDeviceIdleRequired: true,
-      //   )
     )
         .then((customModel) {
-      // Download complete. Depending on your app, you could enable the ML feature, or switch from the local model to the remote model, etc.
-      // The CustomModel object contains the local path of the model file, which you can use to instantiate a TensorFlow Lite interpreter.
-      //final localModelPath = customModel.file;
       log("Model size in bytes:${customModel.size}");
       var interpreter = Interpreter.fromFile(customModel.file);
       log(interpreter.getInputTensors().toString());
@@ -89,24 +77,22 @@ class _QuizScreenState extends State<QuizScreen> {
 
   @override
   void dispose() {
-    // Dispose of the controller when the widget is disposed.
     _controller.dispose();
 
     super.dispose();
   }
 
-  //define the data
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text(
           "Mental Health Assessment",
+          textAlign: TextAlign.center,
           style: TextStyle(
             color: Colors.black87,
-            fontSize: 16,
-            // fontWeight: FontWeight.bold,
+            // fontSize: 16,
           ),
         ),
         backgroundColor: Colors.transparent,
@@ -123,21 +109,11 @@ class _QuizScreenState extends State<QuizScreen> {
                   );
             }),
       ),
-      // backgroundColor: Palette.whi,
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal:30.0),
+        padding: const EdgeInsets.symmetric(horizontal: 30.0),
         child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-          Image.asset('assets/assessment.png', height: 200, width: 200),
-          const SizedBox(height: 20),
-
-          // const Text(
-          //   "Mental Health Assessment",
-          //   style: TextStyle(
-          //     color: Colors.black87,
-          //     fontSize: 18,
-          //     fontWeight: FontWeight.bold,
-          //   ),
-          // ),
+          Image.asset('assets/assessment.png', height: 150, width: 150),
+          const SizedBox(height: 10),
           _questionWidget(),
           _answerList(),
           _nextButton(),
@@ -159,7 +135,7 @@ class _QuizScreenState extends State<QuizScreen> {
             // fontWeight: FontWeight.w600,
           ),
         ),
-        const SizedBox(height: 20),
+        const SizedBox(height: 10),
         Container(
           alignment: Alignment.center,
           width: double.infinity,
@@ -172,11 +148,12 @@ class _QuizScreenState extends State<QuizScreen> {
             questionList[_currentQuestionIndex].questionText,
             style: const TextStyle(
               color: Colors.white,
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
+              fontSize: 18,
+              // fontWeight: FontWeight.w600,
             ),
           ),
-        )
+        ),
+         const SizedBox(height: 30),
       ],
     );
   }
@@ -201,8 +178,8 @@ class _QuizScreenState extends State<QuizScreen> {
       height: 48,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          // foregroundColor: isSelected ? Colors.white : Colors.black,
-          // backgroundColor: isSelected ? Colors.orangeAccent : Palette.tileback,
+          foregroundColor: isSelected ? Colors.white : Colors.black,
+          backgroundColor: isSelected ? Colors.green : Palette.tileback,
           elevation: 0,
           shape: const StadiumBorder(),
         ),
@@ -222,33 +199,36 @@ class _QuizScreenState extends State<QuizScreen> {
       isLastQuestion = true;
     }
 
-    return SizedBox(
-      width: MediaQuery.of(context).size.width * 0.5,
-      height: 48,
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          // foregroundColor: Colors.white,
-          // backgroundColor: Palette.primary,
-          shape: const StadiumBorder(),
-        ),
-        onPressed: () {
-          captureImage();
-          _score += _selectedAnswer!.score;
-          if (isLastQuestion) {
-            //display score
-            log(_emotions.toString());
-            log(_score.toString());
-            showDialog(context: context, builder: (_) => _showScoreDialog());
-          } else {
-            //next question
+    return Padding(
+      padding: const EdgeInsets.only(top: 20.0),
+      child: SizedBox(
+        width: MediaQuery.of(context).size.width * 0.5,
+        height: 48,
+        child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            // foregroundColor: Colors.white,
+            // backgroundColor: Palette.primary,
+            shape: const StadiumBorder(),
+          ),
+          onPressed: () {
+            captureImage();
+            _score += _selectedAnswer!.score;
+            if (isLastQuestion) {
+              //display score
+              log(_emotions.toString());
+              log(_score.toString());
+              showDialog(context: context, builder: (_) => _showScoreDialog());
+            } else {
+              //next question
 
-            setState(() {
-              _selectedAnswer = null;
-              _currentQuestionIndex++;
-            });
-          }
-        },
-        child: Text(isLastQuestion ? "Submit" : "Next"),
+              setState(() {
+                _selectedAnswer = null;
+                _currentQuestionIndex++;
+              });
+            }
+          },
+          child: Text(isLastQuestion ? "Submit" : "Next"),
+        ),
       ),
     );
   }
@@ -256,11 +236,16 @@ class _QuizScreenState extends State<QuizScreen> {
   _showScoreDialog() {
     return AlertDialog(
       title: Text(
-        "Your score is $_score",
+        "Your score is:  $_score",
         style:
             const TextStyle(color: Colors.green, fontWeight: FontWeight.bold),
+            textAlign: TextAlign.center,
       ),
-      content: _score>=24?Text(high):_score>=14?Text(moderate):Text(low),
+      content: _score >= 24
+          ? Text(high)
+          : _score >= 14
+              ? Text(moderate)
+              : Text(low),
       actions: <Widget>[
         TextButton(
           onPressed: () {
@@ -285,7 +270,7 @@ class _QuizScreenState extends State<QuizScreen> {
                     '/') // Replace this with your root screen's route name (usually '/')
                 );
           },
-          child: const Text('Home'),
+          child: const Text('Close', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),),
         ),
       ],
     );
