@@ -17,6 +17,8 @@ class _CounsellorProfileState extends State<CounsellorProfile> {
   final username = FirebaseAuth.instance.currentUser!.email!;
   String name = "";
   String initial = "";
+  String quali = "";
+  String institue="";
   @override
   void initState() {
     super.initState();
@@ -29,6 +31,8 @@ class _CounsellorProfileState extends State<CounsellorProfile> {
       setState(() {
         name = data["name"];
         initial = name[0].toString().toUpperCase();
+        quali= data["qualifications"];
+        institue=data["institute"];
       });
     });
   }
@@ -120,7 +124,7 @@ class _CounsellorProfileState extends State<CounsellorProfile> {
             elevation: 0,
           ),
           body: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 40.0),
+            padding: const EdgeInsets.symmetric(horizontal: 80.0),
             child: ListView(
               children: [
                 Center(
@@ -134,15 +138,25 @@ class _CounsellorProfileState extends State<CounsellorProfile> {
                 Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text('Name: $name',
                           textAlign: TextAlign.left,
                           style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               color: Colors.black,
-                              fontSize: 16)),
+                              fontSize: 16)),const SizedBox(height: 20),
                       Text('Email: $username',
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                              fontSize: 16)),const SizedBox(height: 20),
+                      Text('Qualifications: $quali',
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                              fontSize: 16)),const SizedBox(height: 20),
+                      Text('Institue: $institue',
                           style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               color: Colors.black,
@@ -150,30 +164,31 @@ class _CounsellorProfileState extends State<CounsellorProfile> {
                       const SizedBox(
                         height: 40,
                       ),
-                      ElevatedButton(
-                        onPressed: () {
-                          logout().then((value) => {
-                                Navigator.pushAndRemoveUntil(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (BuildContext context) =>
-                                            const LoginPage()),
-                                    ModalRoute.withName(
-                                        '/') // Replace this with your root screen's route name (usually '/')
-                                    ),
-                              });
-                        },
-                        style: ElevatedButton.styleFrom(
-                          // backgroundColor: Colors.black,
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 40, vertical: 16),
-                          shape: const StadiumBorder(),
-                        ),
-                        child: const Text('logout'),
-                      ),
+
                     ],
                   ),
                 ),
+                ElevatedButton(
+                  onPressed: () {
+                    logout().then((value) => {
+                      Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                              const LoginPage()),
+                          ModalRoute.withName(
+                              '/') // Replace this with your root screen's route name (usually '/')
+                      ),
+                    });
+                  },
+                  style: ElevatedButton.styleFrom(
+                    // backgroundColor: Colors.black,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 40, vertical: 16),
+                    shape: const StadiumBorder(),
+                  ),
+                  child: const Text('logout'),
+                )
               ],
             ),
           ));
