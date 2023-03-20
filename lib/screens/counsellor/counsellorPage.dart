@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import '../../theme/Palette.dart';
 import 'counsellorHomePage.dart';
 import 'userList.dart';
+import 'Chart.dart';
+
 class CounsellorPage extends StatefulWidget {
   const CounsellorPage({Key? key}) : super(key: key);
 
@@ -18,16 +20,17 @@ class _CounsellorPageState extends State<CounsellorPage> {
   int currentIndex = 0;
 
   final username = FirebaseAuth.instance.currentUser!.email!;
-  String name="";
+  String name = "";
   String initial = "";
   final screens = [
+    const Chart(),
     const CounsellorHomePage(),
     const UserList(),
     const Session()
   ];
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     FirebaseFirestore.instance
         .collection("counsellor")
@@ -37,25 +40,31 @@ class _CounsellorPageState extends State<CounsellorPage> {
       final data = doc.data() as Map<String, dynamic>;
       setState(() {
         name = data["name"];
-        initial=name[0].toUpperCase();
+        initial = name[0].toUpperCase();
       });
     });
   }
+
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       body: screens[currentIndex],
       bottomNavigationBar: BottomNavigationBar(
+          type: BottomNavigationBarType.fixed, // This is all you need!
           backgroundColor: Colors.white,
           selectedItemColor: Palette.primary,
           showUnselectedLabels: false,
           currentIndex: currentIndex,
           onTap: (index) => setState(() => currentIndex = index),
-          items:  const [
+          items: const [
             BottomNavigationBarItem(
               icon: Icon(Icons.home),
               label: 'Home',
+              backgroundColor: Palette.primary,
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.list_alt),
+              label: 'Requests',
               backgroundColor: Palette.primary,
             ),
             BottomNavigationBarItem(
