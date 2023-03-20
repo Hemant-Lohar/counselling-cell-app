@@ -23,7 +23,7 @@ class _CounsellorPageState extends State<CounsellorPage> {
   String name = "";
   String initial = "";
   final screens = [
-    const Chart(),
+    // const Chart(),
     const CounsellorHomePage(),
     const UserList(),
     const Session()
@@ -50,7 +50,7 @@ class _CounsellorPageState extends State<CounsellorPage> {
     return Scaffold(
       body: screens[currentIndex],
       bottomNavigationBar: BottomNavigationBar(
-          type: BottomNavigationBarType.fixed, // This is all you need!
+          // type: BottomNavigationBarType.fixed, // This is all you need!
           backgroundColor: Colors.white,
           selectedItemColor: Palette.primary,
           showUnselectedLabels: false,
@@ -62,11 +62,11 @@ class _CounsellorPageState extends State<CounsellorPage> {
               label: 'Home',
               backgroundColor: Palette.primary,
             ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.list_alt),
-              label: 'Requests',
-              backgroundColor: Palette.primary,
-            ),
+            // BottomNavigationBarItem(
+            //   icon: Icon(Icons.list_alt),
+            //   label: 'Requests',
+            //   backgroundColor: Palette.primary,
+            // ),
             BottomNavigationBarItem(
               icon: Icon(Icons.group),
               label: 'Users',
