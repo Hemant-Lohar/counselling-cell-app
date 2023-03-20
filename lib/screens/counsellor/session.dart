@@ -228,7 +228,7 @@ class _SessionState extends State<Session> {
                     .collection('counsellor')
                     .doc("counsellor@adcet.in")
                     .collection("session")
-                    .where("date", isLessThanOrEqualTo:DateFormat('yyyy/MM/dd').format(DateFormat('dd/MM/yyyy').parse(dateTime)))
+                    // .where("date", isLessThanOrEqualTo:"${DateFormat('yyyy/MM/dd').format(DateFormat('dd/MM/yyyy').parse(dateTime))}")
                     .where("timeStart", isLessThan:"${TimeOfDay.now().hour}:${TimeOfDay.now().minute}" )
                     .orderBy("timeStart")
                     .snapshots(),
