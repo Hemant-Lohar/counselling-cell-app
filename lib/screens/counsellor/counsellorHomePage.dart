@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import 'Chart.dart';
 import 'addSessionWithUser.dart';
 import 'counsellorPage.dart';
 
@@ -84,7 +85,7 @@ class _CounsellorHomePageState extends State<CounsellorHomePage> {
                 // const SizedBox(
                 //   height: 30,
                 // ),
-                Charts(),
+
                 getNewRequests(),
                 getRequests()
 
