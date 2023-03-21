@@ -75,6 +75,14 @@ class _ChartState extends State<Chart> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    genderMap;
+    deptMap;
+    classMap;
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -124,15 +132,22 @@ class _ChartState extends State<Chart> {
                     child: Text(
                       "Analytics",
                       textAlign: TextAlign.center,
-                      style:
-                          TextStyle(fontSize: 14,color: Colors.white),
+                      style: TextStyle(fontSize: 14, color: Colors.white),
                     ),
                   ),
                 ),
                 genderChart(),
+                const SizedBox(
+                  height: 20,
+                ),
                 deptChart(),
-                
-                classChart()
+                const SizedBox(
+                  height: 40,
+                ),
+                classChart(),
+                const SizedBox(
+                  height: 40,
+                ),
               ],
             ),
           ),
@@ -150,7 +165,6 @@ Widget genderChart() {
   ];
   return (SfCircularChart(
       legend: Legend(isVisible: true),
-      backgroundColor: Palette.tileback,
       title: ChartTitle(
           text: 'Gender Wise Analysis',
           alignment: ChartAlignment.near,
@@ -177,8 +191,6 @@ class ChartData {
 
 Widget deptChart() {
   return (SfCartesianChart(
-          backgroundColor: Palette.tileback,
-
     title: ChartTitle(
         text: 'Department Wise Analysis',
         alignment: ChartAlignment.near,
@@ -192,7 +204,6 @@ Widget deptChart() {
     // isTransposed: true,
     series: <BarSeries>[
       BarSeries<ChartSampleData, String>(
-        
           color: Colors.cyan,
           dataSource: <ChartSampleData>[
             ChartSampleData('Computer Science & Engineering',
@@ -221,8 +232,6 @@ class ChartSampleData {
 
 Widget classChart() {
   return (SfCartesianChart(
-      backgroundColor: Palette.tileback,
-
     title: ChartTitle(
         text: 'Class Wise Analysis',
         alignment: ChartAlignment.near,
