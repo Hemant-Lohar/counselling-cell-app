@@ -64,88 +64,7 @@ class _SessionState extends State<Session> {
                     () => showDialog(
                       context: context,
                       builder: (BuildContext context) {
-                        return AlertDialog(
-                          title: const Text("Select Time Frame"),
-                          content: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              SizedBox(
-                                width: 200,
-                                child: TextField(
-                                  style: const TextStyle(fontSize: 14),
-                                  controller: _timeStart,
-                                  decoration: const InputDecoration(
-                                    icon: Icon(Icons.calendar_month),
-                                    labelText: "Select start date",
-                                  ),
-                                  onTap: () async {
-                                    await showDatePicker(
-                                            context: context,
-                                            initialDate: DateTime.now(),
-                                            firstDate: DateTime(2022),
-                                            lastDate: DateTime(2100))
-                                        .then((pickedDate) {
-                                      if (pickedDate != null) {
-                                        setState(() {
-                                          _timeStart.text =
-                                              "${pickedDate.day.toString().padLeft(2, "0")}/${pickedDate.month.toString().padLeft(2, "0")}/${pickedDate.year}";
-                                        });
-                                      }
-                                    });
-                                  },
-                                ),
-                              ),
-                              SizedBox(
-                                width: 200,
-                                child: TextField(
-                                  style: const TextStyle(fontSize: 14),
-                                  controller: _timeEnd,
-                                  decoration: const InputDecoration(
-                                    icon: Icon(Icons.calendar_month),
-                                    labelText: "Select end date",
-                                  ),
-                                  onTap: () async {
-                                    await showDatePicker(
-                                            context: context,
-                                            initialDate: DateTime.now(),
-                                            firstDate: DateTime(2022),
-                                            lastDate: DateTime(2100))
-                                        .then((pickedDate) {
-                                      if (pickedDate != null) {
-                                        setState(() {
-                                          _timeEnd.text =
-                                              "${pickedDate.day.toString().padLeft(2, "0")}/${pickedDate.month.toString().padLeft(2, "0")}/${pickedDate.year}";
-                                        });
-                                      }
-                                    });
-                                  },
-                                ),
-                              ),
-                            ],
-                          ),
-                          actions: <Widget>[
-                            TextButton(
-                              onPressed: () {
-                                _timeStart.text = _timeEnd.text = "";
-                                Navigator.pop(context, 'Cancel');
-                              },
-                              child: const Text('Cancel'),
-                            ),
-                            TextButton(
-                              onPressed: () async {
-                                final pdfFile = await PdfAnalytics.generate(
-                                    id, _timeStart.text, _timeEnd.text);
-                                _timeStart.text = _timeEnd.text = "";
-                                if (!mounted) return;
-                                Navigator.pop(context, 'OK');
-                                PdfAPI.openFile(pdfFile);
-                              },
-                              child: const Text('OK'),
-                            ),
-                          ],
-                        );
+                        return analyticDialog();
                       },
                     ),
                   );
@@ -170,14 +89,11 @@ class _SessionState extends State<Session> {
             ),
             StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance
-                  .collection('counsellor')
+                  .collection("counsellor")
                   .doc("counsellor@adcet.in")
                   .collection("session")
-                  // .where("date", isLessThanOrEqualTo:"${DateFormat('yyyy/MM/dd').format(DateFormat('dd/MM/yyyy').parse(dateTime))}")
-                  .where("timeStart",
-                      isLessThan:
-                          "${TimeOfDay.now().hour}:${TimeOfDay.now().minute}")
-                  .orderBy("timeStart")
+                  .where("date", isLessThanOrEqualTo:DateFormat('yyyy/MM/dd').format(DateFormat('dd/MM/yyyy').parse(dateTime)))
+
                   .snapshots(),
               builder: (context, snapshots) {
                 if (snapshots.connectionState == ConnectionState.waiting) {
@@ -202,7 +118,8 @@ class _SessionState extends State<Session> {
                       itemBuilder: (context, index) {
                         var data = snapshots.data!.docs[index].data()
                             as Map<String, dynamic>;
-                        return Column(
+                        return  ( data["date"].toString().compareTo( DateFormat('yyyy/MM/dd').format(DateFormat('dd/MM/yyyy').parse(dateTime)))<0 || int.parse(data["timeStart"].toString().replaceAll(":", ""))< int.parse("${TimeOfDay.now().hour}${TimeOfDay.now().minute}"))?
+                        Column(
                           children: [
                             ListTile(
                               shape: RoundedRectangleBorder(
@@ -225,8 +142,8 @@ class _SessionState extends State<Session> {
                                     fontWeight: FontWeight.bold),
                               ),
                               subtitle: Text(
-                                "Start: ${data["timeStart"]} - End: ${data["timeEnd"]} ◾ ${data["mode"]}",
-                                // maxLines: 1,
+                                "${DateFormat('dd/MM/yyyy').format(DateFormat('yyyy/MM/dd').parse(data["date"]))}\n Start: ${data["timeStart"]} - End: ${data["timeEnd"]} ◾ ${data["mode"]}",
+                                 maxLines: 2,
                                 // overflow: TextOverflow.ellipsis,
                                 style: const TextStyle(
                                   color: Colors.black,
@@ -257,221 +174,8 @@ class _SessionState extends State<Session> {
                                           () => showDialog(
                                             context: context,
                                             builder: (BuildContext context) {
-                                              return AlertDialog(
-                                                title: const Text(
-                                                    'Postpone Session'),
-                                                content: Column(
-                                                  mainAxisSize:
-                                                      MainAxisSize.min,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.start,
-                                                  children: [
-                                                    SizedBox(
-                                                      width: 130,
-                                                      child: TextField(
-                                                        controller: _date,
-                                                        decoration:
-                                                            const InputDecoration(
-                                                          icon: Icon(Icons
-                                                              .calendar_month),
-                                                          labelText:
-                                                              "Select a date",
-                                                        ),
-                                                        onTap: () async {
-                                                          await showDatePicker(
-                                                                  context:
-                                                                      context,
-                                                                  initialDate:
-                                                                      DateTime
-                                                                          .now(),
-                                                                  firstDate:
-                                                                      DateTime
-                                                                          .now(),
-                                                                  lastDate:
-                                                                      DateTime(
-                                                                          2100))
-                                                              .then(
-                                                                  (pickedDate) {
-                                                            if (pickedDate !=
-                                                                null) {
-                                                              setState(() {
-                                                                _date.text =
-                                                                    "${pickedDate.day.toString().padLeft(2, "0")}/${pickedDate.month.toString().padLeft(2, "0")}/${pickedDate.year}";
-                                                              });
-                                                            }
-                                                          });
-                                                        },
-                                                      ),
-                                                    ),
-                                                    SizedBox(
-                                                      child: TextField(
-                                                        controller: _timeStart,
-                                                        decoration:
-                                                            const InputDecoration(
-                                                          icon: Icon(Icons
-                                                              .access_time),
-                                                          labelText:
-                                                              "Start Time",
-                                                        ),
-                                                        onTap: () async {
-                                                          await showTimePicker(
-                                                            context: context,
-                                                            initialTime: TimeOfDay
-                                                                .fromDateTime(
-                                                                    DateTime
-                                                                        .now()),
-                                                          ).then((pickedTime) {
-                                                            if (pickedTime !=
-                                                                null) {
-                                                              if (validatePickedTime(
-                                                                  pickedTime)) {
-                                                                setState(() {
-                                                                  _timeStart
-                                                                          .text =
-                                                                      "${pickedTime.hour.toString().padLeft(2, "0")}:${pickedTime.minute.toString().padLeft(2, "0")}";
-                                                                  tmd =
-                                                                      pickedTime;
-                                                                });
-                                                              } else {
-                                                                Fluttertoast
-                                                                    .showToast(
-                                                                        msg:
-                                                                            "Invalid Time");
-                                                                _timeStart
-                                                                    .text = "";
-                                                              }
-                                                            }
-                                                          });
-                                                        },
-                                                      ),
-                                                    ),
-                                                    SizedBox(
-                                                      child: TextField(
-                                                        controller: _timeEnd,
-                                                        decoration:
-                                                            const InputDecoration(
-                                                          icon: Icon(Icons
-                                                              .access_time_filled_sharp),
-                                                          labelText: "End Time",
-                                                        ),
-                                                        onTap: () async {
-                                                          await showTimePicker(
-                                                            context: context,
-                                                            initialTime: tmd!,
-                                                          ).then((pickedTime) {
-                                                            if (pickedTime !=
-                                                                null) {
-                                                              if (pickedTime.hour *
-                                                                          60 +
-                                                                      pickedTime
-                                                                          .minute <=
-                                                                  tmd!.hour *
-                                                                          60 +
-                                                                      tmd!.minute) {
-                                                                Fluttertoast
-                                                                    .showToast(
-                                                                        msg:
-                                                                            "Ending time cannot be earlier than starting time");
-                                                              } else {
-                                                                setState(() {
-                                                                  _timeEnd.text =
-                                                                      "${pickedTime.hour.toString().padLeft(2, "0")}:${pickedTime.minute.toString().padLeft(2, "0")}";
-                                                                });
-                                                              }
-                                                            }
-                                                          });
-                                                        },
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                                actions: <Widget>[
-                                                  TextButton(
-                                                    onPressed: () {
-                                                      _date.text = _timeStart
-                                                              .text =
-                                                          _timeEnd.text = "";
-                                                      Navigator.pop(
-                                                          context, 'Cancel');
-                                                    },
-                                                    child: const Text('Cancel'),
-                                                  ),
-                                                  TextButton(
-                                                    onPressed: () async {
-                                                      if (await validateSlot(
-                                                          snapshots
-                                                              .data!
-                                                              .docs[index]
-                                                              .id)) {
-                                                        await FirebaseFirestore
-                                                            .instance
-                                                            .collection(
-                                                                'counsellor')
-                                                            .doc(
-                                                                'counsellor@adcet.in')
-                                                            .collection(
-                                                                'session')
-                                                            .doc(snapshots.data!
-                                                                .docs[index].id)
-                                                            .update({
-                                                          "date": DateFormat(
-                                                                  'yyyy/MM/dd')
-                                                              .format(DateFormat(
-                                                                      'dd/MM/yyyy')
-                                                                  .parse(_date
-                                                                      .text)),
-                                                          "timeStart":
-                                                              _timeStart.text,
-                                                          "timeEnd":
-                                                              _timeEnd.text
-                                                        }).then((value) async {
-                                                          await FirebaseFirestore
-                                                              .instance
-                                                              .collection(
-                                                                  'users')
-                                                              .doc(data['user'])
-                                                              .collection(
-                                                                  'session')
-                                                              .doc(snapshots
-                                                                  .data!
-                                                                  .docs[index]
-                                                                  .id
-                                                                  .toString())
-                                                              .update({
-                                                            "date": DateFormat(
-                                                                    'yyyy/MM/dd')
-                                                                .format(DateFormat(
-                                                                        'dd/MM/yyyy')
-                                                                    .parse(_date
-                                                                        .text)),
-                                                            "timeStart":
-                                                                _timeStart.text,
-                                                            "timeEnd":
-                                                                _timeEnd.text
-                                                          }).then((value) {
-                                                            Fluttertoast.showToast(
-                                                                msg:
-                                                                    "Modified successfully !");
-                                                          });
-                                                        });
-                                                        _date.text = _timeStart
-                                                                .text =
-                                                            _timeEnd.text = "";
-                                                        if (!mounted) return;
-                                                        Navigator.pop(
-                                                            context, 'OK');
-                                                      } else {
-                                                        Fluttertoast.showToast(
-                                                            msg:
-                                                                "Invalid timeslot");
-                                                      }
-                                                    },
-                                                    child: const Text('OK'),
-                                                  ),
-                                                ],
-                                              );
+                                              return postponeDialog(snapshots.data!
+                                                  .docs[index].id,data["user"]);
                                             },
                                           ),
                                         );
@@ -479,27 +183,8 @@ class _SessionState extends State<Session> {
                                   PopupMenuItem<String>(
                                     value: "Cancel",
                                     child: const Text("Cancel"),
-                                    onTap: () async {
-                                      await FirebaseFirestore.instance
-                                          .collection('counsellor')
-                                          .doc('counsellor@adcet.in')
-                                          .collection('session')
-                                          .doc(snapshots.data!.docs[index].id
-                                              .toString())
-                                          .delete()
-                                          .then((value) async {
-                                        await FirebaseFirestore.instance
-                                            .collection('users')
-                                            .doc(data['user'])
-                                            .collection('session')
-                                            .doc(snapshots.data!.docs[index].id
-                                                .toString())
-                                            .delete()
-                                            .then((value) {
-                                          Fluttertoast.showToast(
-                                              msg: "Session Cancelled");
-                                        });
-                                      });
+                                    onTap: () {
+                                      cancelSession(snapshots.data!.docs[index].id,data['user']);
                                     },
                                   ),
                                 ],
@@ -509,15 +194,12 @@ class _SessionState extends State<Session> {
                               height: 10,
                             )
                           ],
-                        );
+                        ):Container();
                       });
                 }
               },
             ),
-            const Text(
-              "Today",
-              style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-            ),
+            const Text("Today", style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
             const SizedBox(
               height: 10,
             ),
@@ -628,221 +310,8 @@ class _SessionState extends State<Session> {
                                           () => showDialog(
                                             context: context,
                                             builder: (BuildContext context) {
-                                              return AlertDialog(
-                                                title: const Text(
-                                                    'Postpone Session'),
-                                                content: Column(
-                                                  mainAxisSize:
-                                                      MainAxisSize.min,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.start,
-                                                  children: [
-                                                    SizedBox(
-                                                      width: 130,
-                                                      child: TextField(
-                                                        controller: _date,
-                                                        decoration:
-                                                            const InputDecoration(
-                                                          icon: Icon(Icons
-                                                              .calendar_month),
-                                                          labelText:
-                                                              "Select a date",
-                                                        ),
-                                                        onTap: () async {
-                                                          await showDatePicker(
-                                                                  context:
-                                                                      context,
-                                                                  initialDate:
-                                                                      DateTime
-                                                                          .now(),
-                                                                  firstDate:
-                                                                      DateTime
-                                                                          .now(),
-                                                                  lastDate:
-                                                                      DateTime(
-                                                                          2100))
-                                                              .then(
-                                                                  (pickedDate) {
-                                                            if (pickedDate !=
-                                                                null) {
-                                                              setState(() {
-                                                                _date.text =
-                                                                    "${pickedDate.day.toString().padLeft(2, "0")}/${pickedDate.month.toString().padLeft(2, "0")}/${pickedDate.year}";
-                                                              });
-                                                            }
-                                                          });
-                                                        },
-                                                      ),
-                                                    ),
-                                                    SizedBox(
-                                                      child: TextField(
-                                                        controller: _timeStart,
-                                                        decoration:
-                                                            const InputDecoration(
-                                                          icon: Icon(Icons
-                                                              .access_time),
-                                                          labelText:
-                                                              "Start Time",
-                                                        ),
-                                                        onTap: () async {
-                                                          await showTimePicker(
-                                                            context: context,
-                                                            initialTime: TimeOfDay
-                                                                .fromDateTime(
-                                                                    DateTime
-                                                                        .now()),
-                                                          ).then((pickedTime) {
-                                                            if (pickedTime !=
-                                                                null) {
-                                                              if (validatePickedTime(
-                                                                  pickedTime)) {
-                                                                setState(() {
-                                                                  _timeStart
-                                                                          .text =
-                                                                      "${pickedTime.hour.toString().padLeft(2, "0")}:${pickedTime.minute.toString().padLeft(2, "0")}";
-                                                                  tmd =
-                                                                      pickedTime;
-                                                                });
-                                                              } else {
-                                                                Fluttertoast
-                                                                    .showToast(
-                                                                        msg:
-                                                                            "Invalid Time");
-                                                                _timeStart
-                                                                    .text = "";
-                                                              }
-                                                            }
-                                                          });
-                                                        },
-                                                      ),
-                                                    ),
-                                                    SizedBox(
-                                                      child: TextField(
-                                                        controller: _timeEnd,
-                                                        decoration:
-                                                            const InputDecoration(
-                                                          icon: Icon(Icons
-                                                              .access_time_filled_sharp),
-                                                          labelText: "End Time",
-                                                        ),
-                                                        onTap: () async {
-                                                          await showTimePicker(
-                                                            context: context,
-                                                            initialTime: tmd!,
-                                                          ).then((pickedTime) {
-                                                            if (pickedTime !=
-                                                                null) {
-                                                              if (pickedTime.hour *
-                                                                          60 +
-                                                                      pickedTime
-                                                                          .minute <=
-                                                                  tmd!.hour *
-                                                                          60 +
-                                                                      tmd!.minute) {
-                                                                Fluttertoast
-                                                                    .showToast(
-                                                                        msg:
-                                                                            "Ending time cannot be earlier than starting time");
-                                                              } else {
-                                                                setState(() {
-                                                                  _timeEnd.text =
-                                                                      "${pickedTime.hour.toString().padLeft(2, "0")}:${pickedTime.minute.toString().padLeft(2, "0")}";
-                                                                });
-                                                              }
-                                                            }
-                                                          });
-                                                        },
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                                actions: <Widget>[
-                                                  TextButton(
-                                                    onPressed: () {
-                                                      _date.text = _timeStart
-                                                              .text =
-                                                          _timeEnd.text = "";
-                                                      Navigator.pop(
-                                                          context, 'Cancel');
-                                                    },
-                                                    child: const Text('Cancel'),
-                                                  ),
-                                                  TextButton(
-                                                    onPressed: () async {
-                                                      if (await validateSlot(
-                                                          snapshots
-                                                              .data!
-                                                              .docs[index]
-                                                              .id)) {
-                                                        await FirebaseFirestore
-                                                            .instance
-                                                            .collection(
-                                                                'counsellor')
-                                                            .doc(
-                                                                'counsellor@adcet.in')
-                                                            .collection(
-                                                                'session')
-                                                            .doc(snapshots.data!
-                                                                .docs[index].id)
-                                                            .update({
-                                                          "date": DateFormat(
-                                                                  'yyyy/MM/dd')
-                                                              .format(DateFormat(
-                                                                      'dd/MM/yyyy')
-                                                                  .parse(_date
-                                                                      .text)),
-                                                          "timeStart":
-                                                              _timeStart.text,
-                                                          "timeEnd":
-                                                              _timeEnd.text
-                                                        }).then((value) async {
-                                                          await FirebaseFirestore
-                                                              .instance
-                                                              .collection(
-                                                                  'users')
-                                                              .doc(data['user'])
-                                                              .collection(
-                                                                  'session')
-                                                              .doc(snapshots
-                                                                  .data!
-                                                                  .docs[index]
-                                                                  .id
-                                                                  .toString())
-                                                              .update({
-                                                            "date": DateFormat(
-                                                                    'yyyy/MM/dd')
-                                                                .format(DateFormat(
-                                                                        'dd/MM/yyyy')
-                                                                    .parse(_date
-                                                                        .text)),
-                                                            "timeStart":
-                                                                _timeStart.text,
-                                                            "timeEnd":
-                                                                _timeEnd.text
-                                                          }).then((value) {
-                                                            Fluttertoast.showToast(
-                                                                msg:
-                                                                    "Modified successfully !");
-                                                          });
-                                                        });
-                                                        _date.text = _timeStart
-                                                                .text =
-                                                            _timeEnd.text = "";
-                                                        if (!mounted) return;
-                                                        Navigator.pop(
-                                                            context, 'OK');
-                                                      } else {
-                                                        Fluttertoast.showToast(
-                                                            msg:
-                                                                "Invalid timeslot");
-                                                      }
-                                                    },
-                                                    child: const Text('OK'),
-                                                  ),
-                                                ],
-                                              );
+                                              return postponeDialog(snapshots.data!
+                                                  .docs[index].id,data["user"]);
                                             },
                                           ),
                                         );
@@ -850,27 +319,9 @@ class _SessionState extends State<Session> {
                                   PopupMenuItem<String>(
                                     value: "Cancel",
                                     child: const Text("Cancel"),
-                                    onTap: () async {
-                                      await FirebaseFirestore.instance
-                                          .collection('counsellor')
-                                          .doc('counsellor@adcet.in')
-                                          .collection('session')
-                                          .doc(snapshots.data!.docs[index].id
-                                              .toString())
-                                          .delete()
-                                          .then((value) async {
-                                        await FirebaseFirestore.instance
-                                            .collection('users')
-                                            .doc(data['user'])
-                                            .collection('session')
-                                            .doc(snapshots.data!.docs[index].id
-                                                .toString())
-                                            .delete()
-                                            .then((value) {
-                                          Fluttertoast.showToast(
-                                              msg: "Session Cancelled");
-                                        });
-                                      });
+                                    onTap: () {
+                                      cancelSession(snapshots.data!.docs[index].id,data['user']);
+
                                     },
                                   ),
                                 ],
@@ -983,221 +434,8 @@ class _SessionState extends State<Session> {
                                           () => showDialog(
                                             context: context,
                                             builder: (BuildContext context) {
-                                              return AlertDialog(
-                                                title: const Text(
-                                                    'Modify Session',
-                                                    style: TextStyle(
-                                                        fontSize: 16)),
-                                                content: Column(
-                                                  mainAxisSize:
-                                                      MainAxisSize.min,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.start,
-                                                  children: [
-                                                    SizedBox(
-                                                      width: 130,
-                                                      child: TextField(
-                                                        controller: _date,
-                                                        decoration:
-                                                            const InputDecoration(
-                                                          hintStyle: TextStyle(
-                                                              fontSize: 14),
-                                                          icon: Icon(Icons
-                                                              .calendar_month),
-                                                          labelText:
-                                                              "Select a date",
-                                                        ),
-                                                        onTap: () async {
-                                                          await showDatePicker(
-                                                                  context:
-                                                                      context,
-                                                                  initialDate:
-                                                                      DateTime
-                                                                          .now(),
-                                                                  firstDate:
-                                                                      DateTime
-                                                                          .now(),
-                                                                  lastDate:
-                                                                      DateTime(
-                                                                          2100))
-                                                              .then(
-                                                                  (pickedDate) {
-                                                            if (pickedDate !=
-                                                                null) {
-                                                              setState(() {
-                                                                _date.text =
-                                                                    "${pickedDate.day.toString().padLeft(2, "0")}/${pickedDate.month.toString().padLeft(2, "0")}/${pickedDate.year}";
-                                                              });
-                                                            }
-                                                          });
-                                                        },
-                                                      ),
-                                                    ),
-                                                    SizedBox(
-                                                      child: TextField(
-                                                        controller: _timeStart,
-                                                        decoration:
-                                                            const InputDecoration(
-                                                          icon: Icon(Icons
-                                                              .access_time),
-                                                          labelText:
-                                                              "Start Time",
-                                                        ),
-                                                        onTap: () async {
-                                                          await showTimePicker(
-                                                            context: context,
-                                                            initialTime: TimeOfDay
-                                                                .fromDateTime(
-                                                                    DateTime
-                                                                        .now()),
-                                                          ).then((pickedTime) {
-                                                            if (pickedTime !=
-                                                                null) {
-                                                              if (validatePickedTime(
-                                                                  pickedTime)) {
-                                                                setState(() {
-                                                                  _timeStart
-                                                                          .text =
-                                                                      "${pickedTime.hour.toString().padLeft(2, "0")}:${pickedTime.minute.toString().padLeft(2, "0")}";
-                                                                  tmd =
-                                                                      pickedTime;
-                                                                });
-                                                              } else {
-                                                                Fluttertoast
-                                                                    .showToast(
-                                                                        msg:
-                                                                            "Invalid Time");
-                                                                _timeStart
-                                                                    .text = "";
-                                                              }
-                                                            }
-                                                          });
-                                                        },
-                                                      ),
-                                                    ),
-                                                    SizedBox(
-                                                      child: TextField(
-                                                        controller: _timeEnd,
-                                                        decoration:
-                                                            const InputDecoration(
-                                                          icon: Icon(Icons
-                                                              .access_time_filled_sharp),
-                                                          labelText: "End Time",
-                                                        ),
-                                                        onTap: () async {
-                                                          await showTimePicker(
-                                                            context: context,
-                                                            initialTime: tmd!,
-                                                          ).then((pickedTime) {
-                                                            if (pickedTime !=
-                                                                null) {
-                                                              if (pickedTime.hour *
-                                                                          60 +
-                                                                      pickedTime
-                                                                          .minute <=
-                                                                  tmd!.hour *
-                                                                          60 +
-                                                                      tmd!.minute) {
-                                                                Fluttertoast
-                                                                    .showToast(
-                                                                        msg:
-                                                                            "Ending time cannot be earlier than starting time");
-                                                              } else {
-                                                                setState(() {
-                                                                  _timeEnd.text =
-                                                                      "${pickedTime.hour.toString().padLeft(2, "0")}:${pickedTime.minute.toString().padLeft(2, "0")}";
-                                                                });
-                                                              }
-                                                            }
-                                                          });
-                                                        },
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                                actions: <Widget>[
-                                                  TextButton(
-                                                    onPressed: () {
-                                                      _date.text = _timeStart
-                                                              .text =
-                                                          _timeEnd.text = "";
-                                                      Navigator.pop(
-                                                          context, 'Cancel');
-                                                    },
-                                                    child: const Text('Cancel'),
-                                                  ),
-                                                  TextButton(
-                                                    onPressed: () async {
-                                                      if (await validateSlot(
-                                                          snapshots
-                                                              .data!
-                                                              .docs[index]
-                                                              .id)) {
-                                                        await FirebaseFirestore
-                                                            .instance
-                                                            .collection(
-                                                                'counsellor')
-                                                            .doc(
-                                                                'counsellor@adcet.in')
-                                                            .collection(
-                                                                'session')
-                                                            .doc(snapshots.data!
-                                                                .docs[index].id)
-                                                            .update({
-                                                          "date": DateFormat(
-                                                                  'yyyy/MM/dd')
-                                                              .format(DateFormat(
-                                                                      'dd/MM/yyyy')
-                                                                  .parse(_date
-                                                                      .text)),
-                                                          "timeStart":
-                                                              _timeStart.text,
-                                                          "timeEnd":
-                                                              _timeEnd.text
-                                                        }).then((value) async {
-                                                          await FirebaseFirestore
-                                                              .instance
-                                                              .collection(
-                                                                  'users')
-                                                              .doc(data['user'])
-                                                              .collection(
-                                                                  'session')
-                                                              .doc(snapshots
-                                                                  .data!
-                                                                  .docs[index]
-                                                                  .id
-                                                                  .toString())
-                                                              .update({
-                                                            "date": DateFormat(
-                                                                    'yyyy/MM/dd')
-                                                                .format(DateFormat(
-                                                                        'dd/MM/yyyy')
-                                                                    .parse(_date
-                                                                        .text)),
-                                                            "timeStart":
-                                                                _timeStart.text,
-                                                            "timeEnd":
-                                                                _timeEnd.text
-                                                          });
-                                                        });
-                                                        _date.text = _timeStart
-                                                                .text =
-                                                            _timeEnd.text = "";
-                                                        if (!mounted) return;
-                                                        Navigator.pop(
-                                                            context, 'OK');
-                                                      } else {
-                                                        Fluttertoast.showToast(
-                                                            msg:
-                                                                "Invalid time slot");
-                                                      }
-                                                    },
-                                                    child: const Text('OK'),
-                                                  ),
-                                                ],
-                                              );
+                                              return postponeDialog(snapshots.data!
+                                                  .docs[index].id,data["user"]);
                                             },
                                           ),
                                         );
@@ -1207,27 +445,8 @@ class _SessionState extends State<Session> {
                                   PopupMenuItem<String>(
                                     value: "Cancel",
                                     child: const Text("Cancel"),
-                                    onTap: () async {
-                                      await FirebaseFirestore.instance
-                                          .collection('counsellor')
-                                          .doc('counsellor@adcet.in')
-                                          .collection('session')
-                                          .doc(snapshots.data!.docs[index].id
-                                              .toString())
-                                          .delete()
-                                          .then((value) async {
-                                        await FirebaseFirestore.instance
-                                            .collection('users')
-                                            .doc(data['user'])
-                                            .collection('session')
-                                            .doc(snapshots.data!.docs[index].id
-                                                .toString())
-                                            .delete()
-                                            .then((value) {
-                                          Fluttertoast.showToast(
-                                              msg: "Session Cancelled");
-                                        });
-                                      });
+                                    onTap: () {
+                                      cancelSession(snapshots.data!.docs[index].id,data['user']);
                                     },
                                   ),
                                 ],
@@ -1310,6 +529,333 @@ class _SessionState extends State<Session> {
 
     return true;
   }
+
+  Widget analyticDialog() {
+    return AlertDialog(
+      title: const Text("Select Time Frame"),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          SizedBox(
+            width: 200,
+            child: TextField(
+              style: const TextStyle(fontSize: 14),
+              controller: _timeStart,
+              decoration: const InputDecoration(
+                icon: Icon(Icons.calendar_month),
+                labelText: "Select start date",
+              ),
+              onTap: () async {
+                await showDatePicker(
+                    context: context,
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime(2022),
+                    lastDate: DateTime(2100))
+                    .then((pickedDate) {
+                  if (pickedDate != null) {
+                    setState(() {
+                      _timeStart.text =
+                      "${pickedDate.day.toString().padLeft(2, "0")}/${pickedDate.month.toString().padLeft(2, "0")}/${pickedDate.year}";
+                    });
+                  }
+                });
+              },
+            ),
+          ),
+          SizedBox(
+            width: 200,
+            child: TextField(
+              style: const TextStyle(fontSize: 14),
+              controller: _timeEnd,
+              decoration: const InputDecoration(
+                icon: Icon(Icons.calendar_month),
+                labelText: "Select end date",
+              ),
+              onTap: () async {
+                await showDatePicker(
+                    context: context,
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime(2022),
+                    lastDate: DateTime(2100))
+                    .then((pickedDate) {
+                  if (pickedDate != null) {
+                    setState(() {
+                      _timeEnd.text =
+                      "${pickedDate.day.toString().padLeft(2, "0")}/${pickedDate.month.toString().padLeft(2, "0")}/${pickedDate.year}";
+                    });
+                  }
+                });
+              },
+            ),
+          ),
+        ],
+      ),
+      actions: <Widget>[
+        TextButton(
+          onPressed: () {
+            _timeStart.text = _timeEnd.text = "";
+            Navigator.pop(context, 'Cancel');
+          },
+          child: const Text('Cancel'),
+        ),
+        TextButton(
+          onPressed: () async {
+            final pdfFile = await PdfAnalytics.generate(
+                id, _timeStart.text, _timeEnd.text);
+            _timeStart.text = _timeEnd.text = "";
+            if (!mounted) return;
+            Navigator.pop(context, 'OK');
+            PdfAPI.openFile(pdfFile);
+          },
+          child: const Text('OK'),
+        ),
+      ],
+    );
+  }
+
+  Widget postponeDialog(String id,String user) {
+    return AlertDialog(
+      title: const Text(
+          'Postpone Session'),
+      content: Column(
+        mainAxisSize:
+        MainAxisSize.min,
+        crossAxisAlignment:
+        CrossAxisAlignment.start,
+        mainAxisAlignment:
+        MainAxisAlignment.start,
+        children: [
+          SizedBox(
+            width: 130,
+            child: TextField(
+              controller: _date,
+              decoration:
+              const InputDecoration(
+                icon: Icon(Icons
+                    .calendar_month),
+                labelText:
+                "Select a date",
+              ),
+              onTap: () async {
+                await showDatePicker(
+                    context:
+                    context,
+                    initialDate:
+                    DateTime
+                        .now(),
+                    firstDate:
+                    DateTime
+                        .now(),
+                    lastDate:
+                    DateTime(
+                        2100))
+                    .then(
+                        (pickedDate) {
+                      if (pickedDate !=
+                          null) {
+                        setState(() {
+                          _date.text =
+                          "${pickedDate.day.toString().padLeft(2, "0")}/${pickedDate.month.toString().padLeft(2, "0")}/${pickedDate.year}";
+                        });
+                      }
+                    });
+              },
+            ),
+          ),
+          SizedBox(
+            child: TextField(
+              controller: _timeStart,
+              decoration:
+              const InputDecoration(
+                icon: Icon(Icons
+                    .access_time),
+                labelText:
+                "Start Time",
+              ),
+              onTap: () async {
+                await showTimePicker(
+                  context: context,
+                  initialTime: TimeOfDay
+                      .fromDateTime(
+                      DateTime
+                          .now()),
+                ).then((pickedTime) {
+                  if (pickedTime !=
+                      null) {
+                    if (validatePickedTime(
+                        pickedTime)) {
+                      setState(() {
+                        _timeStart
+                            .text =
+                        "${pickedTime.hour.toString().padLeft(2, "0")}:${pickedTime.minute.toString().padLeft(2, "0")}";
+                        tmd =
+                            pickedTime;
+                      });
+                    } else {
+                      Fluttertoast
+                          .showToast(
+                          msg:
+                          "Invalid Time");
+                      _timeStart
+                          .text = "";
+                    }
+                  }
+                });
+              },
+            ),
+          ),
+          SizedBox(
+            child: TextField(
+              controller: _timeEnd,
+              decoration:
+              const InputDecoration(
+                icon: Icon(Icons
+                    .access_time_filled_sharp),
+                labelText: "End Time",
+              ),
+              onTap: () async {
+                await showTimePicker(
+                  context: context,
+                  initialTime: tmd!,
+                ).then((pickedTime) {
+                  if (pickedTime !=
+                      null) {
+                    if (pickedTime.hour *
+                        60 +
+                        pickedTime
+                            .minute <=
+                        tmd!.hour *
+                            60 +
+                            tmd!.minute) {
+                      Fluttertoast
+                          .showToast(
+                          msg:
+                          "Ending time cannot be earlier than starting time");
+                    } else {
+                      setState(() {
+                        _timeEnd.text =
+                        "${pickedTime.hour.toString().padLeft(2, "0")}:${pickedTime.minute.toString().padLeft(2, "0")}";
+                      });
+                    }
+                  }
+                });
+              },
+            ),
+          ),
+        ],
+      ),
+      actions: <Widget>[
+        TextButton(
+          onPressed: () {
+            _date.text = _timeStart
+                .text =
+                _timeEnd.text = "";
+            Navigator.pop(
+                context, 'Cancel');
+          },
+          child: const Text('Cancel'),
+        ),
+        TextButton(
+          onPressed: () async {
+            if (await validateSlot(id)) {
+              await FirebaseFirestore
+                  .instance
+                  .collection(
+                  'counsellor')
+                  .doc(
+                  'counsellor@adcet.in')
+                  .collection(
+                  'session')
+                  .doc(id)
+                  .update({
+                "date": DateFormat(
+                    'yyyy/MM/dd')
+                    .format(DateFormat(
+                    'dd/MM/yyyy')
+                    .parse(_date
+                    .text)),
+                "timeStart":
+                _timeStart.text,
+                "timeEnd":
+                _timeEnd.text
+              }).then((value) async {
+                await FirebaseFirestore
+                    .instance
+                    .collection(
+                    'users')
+                    .doc(user)
+                    .collection(
+                    'session')
+                    .doc(id)
+                    .update({
+                  "date": DateFormat(
+                      'yyyy/MM/dd')
+                      .format(DateFormat(
+                      'dd/MM/yyyy')
+                      .parse(_date
+                      .text)),
+                  "timeStart":
+                  _timeStart.text,
+                  "timeEnd":
+                  _timeEnd.text
+                }).then((value) {
+                  // final notification = <String, String>{
+                  //   "message":
+                  //   "Your session on $date at $time was denied on $dateTime at ${TimeOfDay.now().hour}:${TimeOfDay.now().minute}",
+                  // };
+                  // await FirebaseFirestore.instance
+                  //     .collection("users")
+                  //     .doc(user)
+                  //     .collection("notifications")
+                  //     .doc(DateTime.now().toString())
+                  //     .set(notification)
+                  Fluttertoast.showToast(
+                      msg:
+                      "Modified successfully !");
+                });
+              });
+              _date.text = _timeStart
+                  .text =
+                  _timeEnd.text = "";
+              if (!mounted) return;
+              Navigator.pop(
+                  context, 'OK');
+            } else {
+              Fluttertoast.showToast(
+                  msg:
+                  "Invalid timeslot");
+            }
+          },
+          child: const Text('OK'),
+        ),
+      ],
+    );
+  }
+
+  void cancelSession(String id, String user)async{
+
+    await FirebaseFirestore.instance
+        .collection('counsellor')
+        .doc('counsellor@adcet.in')
+        .collection('session')
+        .doc(id)
+        .delete()
+        .then((value) async {
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc('user')
+          .collection('session')
+          .doc(id)
+          .delete()
+          .then((value) {
+        Fluttertoast.showToast(
+            msg: "Session Cancelled");
+      });
+    });
+  }
+
 
   // _joinMeeting() async {
   //

@@ -17,9 +17,24 @@ class PdfAnalytics {
     widgetList.add(Text("Analytics for $startDate to $endDate",
         style: const TextStyle(fontSize: 20)));
     Set<String> userList = {};
-    final genderMap = {"Male":0,"Female":0,"LGBTQ+":0};
-    final classMap = {};
-    final deptMap = {};
+    final genderMap = {"Male": 0, "Female": 0, "LGBTQ+": 0};
+    final classMap = {
+      "F.Y.B.Tech.": 0,
+      "S.Y.B.Tech.": 0,
+      "T.Y.B.Tech.": 0,
+      "B.Tech.": 0
+    };
+    final deptMap = {
+      "Computer Science & Engineering": 0,
+      "Mechanical Engineering": 0,
+      "Civil Engineering": 0,
+      "Electrical Engineering": 0,
+      "Aeronautical Engineering": 0,
+      "Food Technology": 0,
+      "AI & DS": 0,
+      "IoT & Cyber Security": 0,
+      "Agriculture Engineering": 0
+    };
     QuerySnapshot snapshot = await documentReference
         .collection("completedSession")
         .where("date",
@@ -153,6 +168,26 @@ class PdfAnalytics {
                 textAlign: TextAlign.center),
           ],
         ),
+        TableRow(
+          children: <Widget>[
+            Text("AI & DS", textAlign: TextAlign.center),
+            Text(deptMap["AI & DS"].toString(), textAlign: TextAlign.center),
+          ],
+        ),
+        TableRow(
+          children: <Widget>[
+            Text("IoT & Cyber Security", textAlign: TextAlign.center),
+            Text(deptMap["IoT & Cyber Security"].toString(),
+                textAlign: TextAlign.center),
+          ],
+        ),
+        TableRow(
+          children: <Widget>[
+            Text("Agriculture Engineering", textAlign: TextAlign.center),
+            Text(deptMap["Agriculture Engineering"].toString(),
+                textAlign: TextAlign.center),
+          ],
+        ),
       ])
     ]));
 
@@ -166,19 +201,22 @@ class PdfAnalytics {
         TableRow(
           children: <Widget>[
             Text("F.Y.B.Tech.", textAlign: TextAlign.center),
-            Text(classMap["F.Y.B.Tech."].toString(), textAlign: TextAlign.center),
+            Text(classMap["F.Y.B.Tech."].toString(),
+                textAlign: TextAlign.center),
           ],
         ),
         TableRow(
           children: <Widget>[
             Text("S.Y.B.Tech.", textAlign: TextAlign.center),
-            Text(classMap["S.Y.B.Tech."].toString(), textAlign: TextAlign.center),
+            Text(classMap["S.Y.B.Tech."].toString(),
+                textAlign: TextAlign.center),
           ],
         ),
         TableRow(
           children: <Widget>[
             Text("T.Y.B.Tech.", textAlign: TextAlign.center),
-            Text(classMap["T.Y.B.Tech."].toString(), textAlign: TextAlign.center),
+            Text(classMap["T.Y.B.Tech."].toString(),
+                textAlign: TextAlign.center),
           ],
         ),
         TableRow(
@@ -187,7 +225,6 @@ class PdfAnalytics {
             Text(classMap["B.Tech."].toString(), textAlign: TextAlign.center),
           ],
         ),
-        
       ])
     ]));
 

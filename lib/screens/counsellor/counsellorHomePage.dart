@@ -338,7 +338,7 @@ class _CounsellorHomePageState extends State<CounsellorHomePage> {
           onPressed: () async {
             final notification = <String, String>{
               "message":
-                  "Your request from $date at $time was denied on $dateTime at ${TimeOfDay.now().hour}:${TimeOfDay.now().minute}",
+                  "Your request from $date at $time was denied on $dateTime at ${TimeOfDay.now().hour}:${TimeOfDay.now().minute}\n Reason:${reasonController.text}",
             };
             await FirebaseFirestore.instance
                 .collection("users")

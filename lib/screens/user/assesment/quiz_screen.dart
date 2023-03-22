@@ -38,6 +38,8 @@ class _QuizScreenState extends State<QuizScreen> {
   late CameraController _controller;
   late Future<void> _initializeControllerFuture;
   late File _customModel;
+  XFile? demoImg;
+  String demoEmotion="";
   final _username = FirebaseAuth.instance.currentUser!.email!;
   List<Question> questionList = getQuestions();
   int _currentQuestionIndex = 0;
@@ -223,6 +225,7 @@ class _QuizScreenState extends State<QuizScreen> {
 
               setState(() {
                 _selectedAnswer = null;
+                showImageDialog();
                 _currentQuestionIndex++;
               });
             }
@@ -282,10 +285,12 @@ class _QuizScreenState extends State<QuizScreen> {
       _initializeControllerFuture;
       // Attempt to take a picture and get the file `image` where it was saved.
       var image = _controller.takePicture();
+      demoImg = await image;
       final arr = await convertImage(await image);
       final prediction = predict(arr);
       _emotions[prediction]++;
       log(labels[prediction]);
+      demoEmotion=labels[prediction];
       //final arr = await readImage(await image);
       //log(arr.shape.toString());
       /*var decodedImage = await decodeImageFromList(File(image.path).readAsBytesSync());
@@ -350,5 +355,27 @@ class _QuizScreenState extends State<QuizScreen> {
     log("label of max value: ${labels[max].toString()}");
     interpreter.close();
     return max;
+  }
+
+  void showImageDialog() {
+    showDialog<String>(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: const Text('Image classification alert dialog'),
+        content: Column(
+          mainAxisSize:MainAxisSize.min,
+          children: [
+            demoImg!=null?Image.file(File(demoImg!.path)):const Text("Image not loaded"),
+            Text(demoEmotion)
+          ],
+        ),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.pop(context, 'OK'),
+            child: const Text('OK'),
+          ),
+        ],
+      ),
+    );
   }
 }
