@@ -63,6 +63,7 @@ class _ViewUserState extends State<ViewUser> {
                   var division =  output['division'];
                   var urn =       output["urn"];
                   var emotion = output["emotion"];
+                  var score = output["score"];
                   var initial = name[0].toUpperCase();
                   // print(output.containsValue('referral'));
 
@@ -104,6 +105,11 @@ class _ViewUserState extends State<ViewUser> {
                             ),
 
                             Text('Dominant emotion: $emotion',
+                                style: dataStyle),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Text('Assessment score: $score',
                                 style: dataStyle),
                             const SizedBox(
                               height: 10,
