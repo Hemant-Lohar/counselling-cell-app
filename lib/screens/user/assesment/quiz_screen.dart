@@ -14,7 +14,7 @@ import 'package:firebase_ml_model_downloader/firebase_ml_model_downloader.dart';
 
 List<String> labels = [
   "Angry",
-  "Disgust",
+  "Noface",
   "Fear",
   "Happy",
   "Sad",

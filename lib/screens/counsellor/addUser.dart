@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:counselling_cell_application/theme/palette.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

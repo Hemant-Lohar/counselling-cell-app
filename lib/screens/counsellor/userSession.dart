@@ -1,6 +1,7 @@
 import 'dart:developer';
 // import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 import 'pdfUserHistory.dart';
 import 'pdfAPI.dart';
@@ -8,6 +9,7 @@ import 'package:printing/printing.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:universal_html/html.dart' as html;
 import 'package:path_provider/path_provider.dart';
 import '../../theme/Palette.dart';
 import 'addSessionWithUser.dart';
@@ -24,7 +26,7 @@ class _UserSessionState extends State<UserSession> {
   late final String id;
   String initial = "";
   String name = "";
-  // String username="";
+  var anchor;
   final String dateTime =
       "${DateTime.now().day.toString().padLeft(2, "0")}/${DateTime.now().month.toString().padLeft(2, "0")}/${DateTime.now().year}";
   PrintingInfo? printingInfo;
@@ -90,9 +92,26 @@ class _UserSessionState extends State<UserSession> {
             alignment: Alignment.bottomCenter,
             icon: const Icon(Icons.download),
             onPressed: () async{
-              final pdfFile = await PdfUserHistory.generate(id,name);
-              PdfAPI.openFile(pdfFile);
-        
+
+              if(kIsWeb){
+                final pdf = await PdfUserHistory.generate(id,name);
+                Uint8List pdfInBytes = await pdf.save();
+                final blob = html.Blob([pdfInBytes], 'application/pdf');
+                final url = html.Url.createObjectUrlFromBlob(blob);
+                anchor = html.document.createElement('a') as html.AnchorElement
+                  ..href = url
+                  ..style.display = 'none'
+                  ..download = '$name history.pdf';
+                html.document.body!.children.add(anchor);
+                anchor.click();
+              }
+              else{
+                final pdf = await PdfUserHistory.generate(id,name);
+                final pdfFile =await PdfAPI.saveDocument(name: '${name}_history.pdf', pdf: pdf);
+                PdfAPI.openFile(pdfFile);
+
+              }
+
             },
           ),
         ),

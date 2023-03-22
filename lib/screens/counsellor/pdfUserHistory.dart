@@ -11,7 +11,7 @@ import 'package:pdf/widgets.dart';
 String _user = "";
 
 class PdfUserHistory {
-  static Future<File> generate(String user, String name) async {
+  static Future<Document> generate(String user, String name) async {
     _user = user;
     List<Widget> widgetList = [];
     final pdf = Document();
@@ -86,6 +86,6 @@ class PdfUserHistory {
     // final pdf = Document();
     pdf.addPage(MultiPage(build: (context) => widgetList));
 
-    return PdfAPI.saveDocument(name: '${name}_history.pdf', pdf: pdf);
+    return pdf;
   }
 }

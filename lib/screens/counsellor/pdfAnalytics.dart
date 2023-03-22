@@ -8,7 +8,7 @@ import 'pdfAPI.dart';
 import 'package:intl/intl.dart';
 
 class PdfAnalytics {
-  static Future<File> generate(
+  static Future<Document> generate(
       String id, String startDate, String endDate) async {
     List<Widget> widgetList = [];
     final documentReference =
@@ -231,7 +231,7 @@ class PdfAnalytics {
     final pdf = Document();
     pdf.addPage(MultiPage(build: (context) => widgetList));
 
-    return PdfAPI.saveDocument(name: "Analytics.pdf", pdf: pdf);
+    return pdf;
   }
 }
 

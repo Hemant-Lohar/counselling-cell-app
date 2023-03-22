@@ -1,7 +1,7 @@
 import 'dart:developer';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:get/get.dart';
+import 'package:universal_html/html.dart' as html;
 import 'package:intl/intl.dart';
 import 'package:counselling_cell_application/theme/Palette.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -26,11 +26,11 @@ class Session extends StatefulWidget {
 
 class _SessionState extends State<Session> {
   final TextEditingController _date = TextEditingController();
-
   final TextEditingController _timeStart = TextEditingController();
   final TextEditingController _timeEnd = TextEditingController();
   String? selectedAction;
   String id = FirebaseAuth.instance.currentUser!.email!;
+  var anchor;
   final String dateTime =
       "${DateTime.now().day.toString().padLeft(2, "0")}/${DateTime.now().month.toString().padLeft(2, "0")}/${DateTime.now().year}";
   TimeOfDay? tmd;
@@ -606,12 +606,30 @@ class _SessionState extends State<Session> {
         ),
         TextButton(
           onPressed: () async {
-            final pdfFile = await PdfAnalytics.generate(
-                id, _timeStart.text, _timeEnd.text);
+            if(kIsWeb){
+              final pdf = await PdfAnalytics.generate(
+                  id, _timeStart.text, _timeEnd.text);
+              Uint8List pdfInBytes = await pdf.save();
+              final blob = html.Blob([pdfInBytes], 'application/pdf');
+              final url = html.Url.createObjectUrlFromBlob(blob);
+              anchor = html.document.createElement('a') as html.AnchorElement
+                ..href = url
+                ..style.display = 'none'
+                ..download = 'Analytics.pdf';
+              html.document.body!.children.add(anchor);
+              anchor.click();
+            }
+            else{
+              final pdf = await PdfAnalytics.generate(
+                  id, _timeStart.text, _timeEnd.text);
+              final pdfFile =await PdfAPI.saveDocument(name: "Analytics.pdf", pdf: pdf);
+              PdfAPI.openFile(pdfFile);
+
+            }
+
             _timeStart.text = _timeEnd.text = "";
             if (!mounted) return;
             Navigator.pop(context, 'OK');
-            PdfAPI.openFile(pdfFile);
           },
           child: const Text('OK'),
         ),
