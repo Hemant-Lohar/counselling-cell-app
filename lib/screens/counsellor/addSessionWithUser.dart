@@ -191,22 +191,26 @@ class _AddSessionWithUserState extends State<AddSessionWithUser> {
                             "agenda": _agenda.text,
                             "mode": selectedMode ? "Online" : "Offline",
                           };
-                          final docId =
-                              DateTime.now().toString();
-
-                          if (await validate(docId, session)) {
-                            await FirebaseFirestore.instance
+                          final notification = <String, String>{
+                            "message":
+                            "Your have a session scheduled on ${_date.text} at ${_timeStart.text}",
+                          };
+                          final docId = DateTime.now().toString();
+                          if (await validate( session)) {
+                            final userRef = FirebaseFirestore.instance
                                 .collection("users")
-                                .doc(user)
-                                .collection("session")
+                                .doc(user);
+                            userRef.collection("session")
                                 .doc(docId)
                                 .set(session);
+                            userRef.collection("notifications").doc(docId).set(notification);
                             await FirebaseFirestore.instance
                                 .collection("counsellor")
                                 .doc("counsellor@adcet.in")
                                 .collection("session")
                                 .doc(docId)
                                 .set(session);
+
                             Fluttertoast.showToast(
                                 msg: "Session added successfully");
                             if (request == "") {
@@ -251,7 +255,7 @@ class _AddSessionWithUserState extends State<AddSessionWithUser> {
     );
   }
 
-  Future<bool> validate(String docId, Map<String, String> session) async {
+  Future<bool> validate( Map<String, String> session) async {
     final start = int.parse(session["timeStart"]!.replaceAll(":", ""));
     final end = int.parse(session["timeEnd"]!.replaceAll(":", ""));
     // log(docId);
@@ -259,7 +263,7 @@ class _AddSessionWithUserState extends State<AddSessionWithUser> {
         .collection('counsellor')
         .doc("counsellor@adcet.in")
         .collection("session")
-        .where("date", isEqualTo: session["date"])
+        .where("date", isEqualTo: DateFormat('yyyy/MM/dd').format(DateFormat('dd/MM/yyyy').parse(session["date"]!)))
         .get();
     final List<DocumentSnapshot> documents = snapShot.docs;
     for (var doc in documents) {

@@ -93,7 +93,6 @@ class _SessionState extends State<Session> {
                   .doc("counsellor@adcet.in")
                   .collection("session")
                   .where("date", isLessThanOrEqualTo:DateFormat('yyyy/MM/dd').format(DateFormat('dd/MM/yyyy').parse(dateTime)))
-
                   .snapshots(),
               builder: (context, snapshots) {
                 if (snapshots.connectionState == ConnectionState.waiting) {
@@ -118,8 +117,12 @@ class _SessionState extends State<Session> {
                       itemBuilder: (context, index) {
                         var data = snapshots.data!.docs[index].data()
                             as Map<String, dynamic>;
-                        return  ( data["date"].toString().compareTo( DateFormat('yyyy/MM/dd').format(DateFormat('dd/MM/yyyy').parse(dateTime)))<0 || int.parse(data["timeStart"].toString().replaceAll(":", ""))< int.parse("${TimeOfDay.now().hour}${TimeOfDay.now().minute}"))?
-                        Column(
+                        // log(data.toString());
+                        // log(DateFormat('yyyy/MM/dd').format(DateFormat('dd/MM/yyyy').parse(dateTime)));
+                        // log("${TimeOfDay.now().hour}${TimeOfDay.now().minute}");
+                        // log(int.parse(data["timeStart"].toString().replaceAll(":", "")).toString());
+                        return ( data["date"].toString().compareTo( DateFormat('yyyy/MM/dd').format(DateFormat('dd/MM/yyyy').parse(dateTime)))<0 || int.parse(data["timeStart"].toString().replaceAll(":", ""))< int.parse("${TimeOfDay.now().hour.toString().padLeft(2, "0")}${TimeOfDay.now().minute.toString().padLeft(2, "0")}"))?
+                         Column(
                           children: [
                             ListTile(
                               shape: RoundedRectangleBorder(
@@ -174,8 +177,8 @@ class _SessionState extends State<Session> {
                                           () => showDialog(
                                             context: context,
                                             builder: (BuildContext context) {
-                                              return postponeDialog(snapshots.data!
-                                                  .docs[index].id,data["user"]);
+                                              return postponeDialog(context,snapshots.data!
+                                                  .docs[index].id,data["user"],data["date"],data["timeStart"]);
                                             },
                                           ),
                                         );
@@ -184,7 +187,7 @@ class _SessionState extends State<Session> {
                                     value: "Cancel",
                                     child: const Text("Cancel"),
                                     onTap: () {
-                                      cancelSession(snapshots.data!.docs[index].id,data['user']);
+                                      cancelSession(snapshots.data!.docs[index].id,data['user'],data["date"],data["timeStart"]);
                                     },
                                   ),
                                 ],
@@ -194,7 +197,8 @@ class _SessionState extends State<Session> {
                               height: 10,
                             )
                           ],
-                        ):Container();
+                        )
+                        :Container();
                       });
                 }
               },
@@ -310,8 +314,8 @@ class _SessionState extends State<Session> {
                                           () => showDialog(
                                             context: context,
                                             builder: (BuildContext context) {
-                                              return postponeDialog(snapshots.data!
-                                                  .docs[index].id,data["user"]);
+                                              return postponeDialog(context,snapshots.data!
+                                                  .docs[index].id,data["user"],data["date"],data["timeStart"]);
                                             },
                                           ),
                                         );
@@ -320,7 +324,7 @@ class _SessionState extends State<Session> {
                                     value: "Cancel",
                                     child: const Text("Cancel"),
                                     onTap: () {
-                                      cancelSession(snapshots.data!.docs[index].id,data['user']);
+                                      cancelSession(snapshots.data!.docs[index].id,data['user'],data["date"],data["timeStart"]);
 
                                     },
                                   ),
@@ -434,8 +438,8 @@ class _SessionState extends State<Session> {
                                           () => showDialog(
                                             context: context,
                                             builder: (BuildContext context) {
-                                              return postponeDialog(snapshots.data!
-                                                  .docs[index].id,data["user"]);
+                                              return postponeDialog(context,snapshots.data!
+                                                  .docs[index].id,data["user"],data["date"],data["timeStart"]);
                                             },
                                           ),
                                         );
@@ -446,7 +450,7 @@ class _SessionState extends State<Session> {
                                     value: "Cancel",
                                     child: const Text("Cancel"),
                                     onTap: () {
-                                      cancelSession(snapshots.data!.docs[index].id,data['user']);
+                                      cancelSession(snapshots.data!.docs[index].id,data['user'],data["date"],data["timeStart"]);
                                     },
                                   ),
                                 ],
@@ -615,7 +619,7 @@ class _SessionState extends State<Session> {
     );
   }
 
-  Widget postponeDialog(String id,String user) {
+  Widget postponeDialog(BuildContext ctx,String id,String user,String date,String time) {
     return AlertDialog(
       title: const Text(
           'Postpone Session'),
@@ -753,7 +757,7 @@ class _SessionState extends State<Session> {
                 .text =
                 _timeEnd.text = "";
             Navigator.pop(
-                context, 'Cancel');
+                ctx, 'Cancel');
           },
           child: const Text('Cancel'),
         ),
@@ -800,28 +804,29 @@ class _SessionState extends State<Session> {
                   _timeStart.text,
                   "timeEnd":
                   _timeEnd.text
-                }).then((value) {
-                  // final notification = <String, String>{
-                  //   "message":
-                  //   "Your session on $date at $time was denied on $dateTime at ${TimeOfDay.now().hour}:${TimeOfDay.now().minute}",
-                  // };
-                  // await FirebaseFirestore.instance
-                  //     .collection("users")
-                  //     .doc(user)
-                  //     .collection("notifications")
-                  //     .doc(DateTime.now().toString())
-                  //     .set(notification)
-                  Fluttertoast.showToast(
-                      msg:
-                      "Modified successfully !");
+                }).then((value)async{
+                  final notification = <String, String>{
+                    "message":
+                    "Your session on $date at $time is rescheduled on ${_date.text} at ${_timeStart.text}",
+                  };
+                  await FirebaseFirestore.instance
+                      .collection("users")
+                      .doc(user)
+                      .collection("notifications")
+                      .doc(DateTime.now().toString())
+                      .set(notification).then((value){
+                    Fluttertoast.showToast(
+                        msg:
+                        "Modified successfully !");
+                  });
                 });
               });
               _date.text = _timeStart
                   .text =
                   _timeEnd.text = "";
-              if (!mounted) return;
+              if (!mounted) {log("mounted");return;}
               Navigator.pop(
-                  context, 'OK');
+                  ctx, 'OK');
             } else {
               Fluttertoast.showToast(
                   msg:
@@ -834,7 +839,7 @@ class _SessionState extends State<Session> {
     );
   }
 
-  void cancelSession(String id, String user)async{
+  void cancelSession(String id, String user,String date,String time)async{
 
     await FirebaseFirestore.instance
         .collection('counsellor')
@@ -849,9 +854,21 @@ class _SessionState extends State<Session> {
           .collection('session')
           .doc(id)
           .delete()
-          .then((value) {
-        Fluttertoast.showToast(
-            msg: "Session Cancelled");
+          .then((value)async{
+        final notification = <String, String>{
+          "message":
+          "Your session on $date at $time is cancelled.",
+        };
+        await FirebaseFirestore.instance
+            .collection("users")
+            .doc(user)
+            .collection("notifications")
+            .doc(DateTime.now().toString())
+            .set(notification).then((value){
+          Fluttertoast.showToast(
+              msg: "Session Cancelled");
+        });
+
       });
     });
   }

@@ -90,26 +90,30 @@ class _NotificationsState extends State<Notifications> {
                           as Map<String, dynamic>;
                       return Column(
                         children: [
-                          ListTile(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10)),
-                              tileColor: Palette.tileback,
-                              title: Text(
-                                data["message"],
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
-                                    color: Colors.black54,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold),
-                              ),
+                              ListTile(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10)),
+                                  tileColor: Palette.tileback,
 
-                              onTap: () {}
+                                  title: Text(
+                                    data["message"],
+                                    maxLines: 3,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(
+                                        color: Colors.black54,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold),
+                                  ),
 
-                              // leading: CircleAvatar(
-                              //   backgroundImage: NetworkImage(data['image']),
-                              // ),
-                              ),
+
+                                  onTap: () {}
+
+                                  // leading: CircleAvatar(
+                                  //   backgroundImage: NetworkImage(data['image']),
+                                  // ),
+                                  ),
+                              // IconButton(onPressed: (){}, icon: const Icon(Icons.add))
+
 
                           const SizedBox(height: 10),
                         ],
