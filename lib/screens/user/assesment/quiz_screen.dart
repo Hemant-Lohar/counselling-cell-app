@@ -37,7 +37,7 @@ class QuizScreen extends StatefulWidget {
 class _QuizScreenState extends State<QuizScreen> {
   late CameraController _controller;
   late Future<void> _initializeControllerFuture;
-  late File _customModel;
+  var _customModel;
   XFile? demoImg;
   String demoEmotion="";
   final _username = FirebaseAuth.instance.currentUser!.email!;
@@ -225,7 +225,7 @@ class _QuizScreenState extends State<QuizScreen> {
 
               setState(() {
                 _selectedAnswer = null;
-                showImageDialog();
+
                 _currentQuestionIndex++;
               });
             }
@@ -291,6 +291,7 @@ class _QuizScreenState extends State<QuizScreen> {
       _emotions[prediction]++;
       log(labels[prediction]);
       demoEmotion=labels[prediction];
+      showImageDialog();
       //final arr = await readImage(await image);
       //log(arr.shape.toString());
       /*var decodedImage = await decodeImageFromList(File(image.path).readAsBytesSync());
@@ -331,7 +332,7 @@ class _QuizScreenState extends State<QuizScreen> {
     return imgArray;
   }
 
-  int predict(List ip) {
+  int predict(List ip){
     final interpreter = Interpreter.fromFile(_customModel);
     interpreter.allocateTensors();
     interpreter.invoke();

@@ -223,14 +223,14 @@ class _UserHomePageState extends State<UserHomePage> {
             onPressed: () async {
               final cameraList = await availableCameras();
               final x = cameraList.last;
-              // setState(() {
-              //   Navigator.push(
-              //     context,
-              //     // ignore: prefer_const_constructors
-              //     MaterialPageRoute(
-              //         builder: (context) => QuizScreen(camera: x)),
-              //   );
-              // });
+              setState(() {
+                Navigator.push(
+                  context,
+                  // ignore: prefer_const_constructors
+                  MaterialPageRoute(
+                      builder: (context) => QuizScreen(camera: x)),
+                );
+              });
             },
             child: const Text("Take Assessment")),
       ],
