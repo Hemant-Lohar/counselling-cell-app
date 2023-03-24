@@ -221,16 +221,22 @@ class _UserHomePageState extends State<UserHomePage> {
 
         ElevatedButton(
             onPressed: () async {
-              final cameraList = await availableCameras();
-              final x = cameraList.last;
-              setState(() {
-                Navigator.push(
-                  context,
-                  // ignore: prefer_const_constructors
-                  MaterialPageRoute(
-                      builder: (context) => QuizScreen(camera: x)),
-                );
-              });
+              if(kIsWeb){
+                Fluttertoast.showToast(msg: "Use mobile version to give assessment");
+              }
+              else{
+                // final cameraList = await availableCameras();
+                // final x = cameraList.last;
+                // setState(() {
+                //   Navigator.push(
+                //     context,
+                //     // ignore: prefer_const_constructors
+                //     MaterialPageRoute(
+                //         builder: (context) => QuizScreen(camera: x)),
+                //   );
+                // });
+              }
+
             },
             child: const Text("Take Assessment")),
       ],

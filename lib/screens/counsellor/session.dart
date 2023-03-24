@@ -217,9 +217,9 @@ class _SessionState extends State<Session> {
                     isEqualTo: DateFormat('yyyy/MM/dd')
                         .format(DateFormat('dd/MM/yyyy').parse(dateTime)),
                   )
-                  .where("timeStart",
-                      isGreaterThanOrEqualTo:
-                          "${TimeOfDay.now().hour}:${TimeOfDay.now().minute}")
+                  // .where("timeStart",
+                  //     isGreaterThanOrEqualTo:
+                  //         "${TimeOfDay.now().hour}:${TimeOfDay.now().minute}")
                   .orderBy("timeStart")
                   .snapshots(),
               builder: (context, snapshots) {
@@ -245,7 +245,11 @@ class _SessionState extends State<Session> {
                       itemBuilder: (context, index) {
                         var data = snapshots.data!.docs[index].data()
                             as Map<String, dynamic>;
-                        return Column(
+                        // log(data.toString());
+                        // log(DateFormat('yyyy/MM/dd').format(DateFormat('dd/MM/yyyy').parse(dateTime)));
+
+                        return
+                          Column(
                           children: [
                             ListTile(
                               shape: RoundedRectangleBorder(
