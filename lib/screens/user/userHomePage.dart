@@ -416,7 +416,7 @@ class _UserHomePageState extends State<UserHomePage> {
   }
 
   void setShowButton()async{
-    QuerySnapshot snapshot = await FirebaseFirestore.instance.collection("counsellor").doc("counsellor@adcet.in").collection("Requests").get();
+    QuerySnapshot snapshot = await FirebaseFirestore.instance.collection("counsellor").doc("counsellor@adcet.in").collection("Requests").where("user",isEqualTo: username).get();
     List<QueryDocumentSnapshot> documents = snapshot.docs;
     log("Total number of requests : ${documents.length}");
     setState(() {

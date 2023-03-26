@@ -184,7 +184,8 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                   LengthRangeValidator(
                       min: 10,
                       max: 10,
-                      errorText: "Mobile number must be 10 digits")
+                      errorText: "Mobile number must be 10 digits"),
+                  RangeValidator(min: 0, max: 9999999999, errorText: "Invalid number")
                 ])),
             const SizedBox(
               height: 30,
@@ -399,7 +400,8 @@ class _EducationDetailsState extends State<EducationDetails> {
                 validator: MultiValidator([
                   RequiredValidator(errorText: "Required"),
                   LengthRangeValidator(
-                      min: 8, max: 8, errorText: "URN must be 8 digits")
+                      min: 8, max: 8, errorText: "URN must be 8 digits"),
+                  RangeValidator(min: 18000000, max: 23999999, errorText: "Invalid URN")
                 ])),
             const SizedBox(
               height: 40,
@@ -658,6 +660,7 @@ Future signUp(String email, String password) async {
   // builder: (context) => const Center(child: CircularProgressIndicator()));
 
   try {
+
     await FirebaseAuth.instance.createUserWithEmailAndPassword(
       email: email,
       password: password,
